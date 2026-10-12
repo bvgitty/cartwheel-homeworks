@@ -109,7 +109,58 @@ def search_products(
         Use `with db.connection() as conn:` to close the database automatically.
     """
     # YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement search_products")
+    words = query.strip().lower().split()
+    if not words:
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": "Query is empty",
+        }
+
+    if max_price_usd is not None and max_price_usd <= 0:
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": "max_price_usd must be positive",
+        }
+
+    limit = max(1, min(limit, MAX_SEARCH_LIMIT))
+
+    with db.connection() as conn:
+        store_id = None
+        if store is not None:
+            found = db.get_store_by_name(conn, store)
+            if found is None:
+                return {
+                    "ok": False,
+                    "error": "not_found",
+                    "reason": f"no store named {store}",
+                }
+            store_id = found.id
+        candidates = db.list_products(conn, store_id)
+
+    matches = []
+    for product in candidates:
+        title = product.title.lower()
+        description = product.description.lower()
+        if not all(word in title or word in description for word in words):
+            continue
+        if max_price_usd is not None and product.price_usd > max_price_usd:
+            continue
+        matches.append(product)
+
+    matches = sorted(matches, key=lambda p: (p.price_usd, p.id))[:limit]
+
+    products = [
+        {"product_id": p.id, "store_id": p.store_id,
+            "title": p.title, "price_usd": p.price_usd}
+        for p in matches
+    ]
+    return {
+        "ok": True,
+        "products": products,
+        "count": len(products),
+    }
 
 
 def list_my_orders(ctx: AuthContext) -> dict[str, Any]:
