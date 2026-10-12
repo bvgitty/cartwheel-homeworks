@@ -52,8 +52,21 @@ def get_policy(ctx: AuthContext, policy_id: str) -> dict[str, Any]:
     Implementation notes:
         agent.helpcenter.load_policy_docs() returns every parsed doc.
     """
-    ### YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement get_policy")
+    # YOUR CODE HERE (HW1)
+    for doc in load_policy_docs():
+        if doc.policy_id == policy_id:
+            return {
+                "ok": True,
+                "policy_id": doc.policy_id,
+                "title": doc.title,
+                "audience": doc.audience,
+                "body": doc.body,
+            }
+    return {
+        "ok": False,
+        "error": "not_found",
+        "reason": f"Policy not found: {policy_id}",
+    }
 
 
 def search_products(
@@ -95,7 +108,7 @@ def search_products(
         agent.db.list_products(conn, store_id) gives the candidate set.
         Use `with db.connection() as conn:` to close the database automatically.
     """
-    ### YOUR CODE HERE (HW1)
+    # YOUR CODE HERE (HW1)
     raise NotImplementedError("HW1: implement search_products")
 
 
@@ -121,7 +134,7 @@ def list_my_orders(ctx: AuthContext) -> dict[str, Any]:
         scope is baked into which query you run. That is the point of the
         tool: the model cannot ask for someone else's orders through it.
     """
-    ### YOUR CODE HERE (HW1)
+    # YOUR CODE HERE (HW1)
     raise NotImplementedError("HW1: implement list_my_orders")
 
 
@@ -167,7 +180,7 @@ def cancel_order(ctx: AuthContext, order_id: int, reason: str) -> dict[str, Any]
     paused = kill_switch("cancel_order")
     if paused is not None:
         return {"ok": False, "error": "paused", "reason": paused}
-    ### YOUR CODE HERE (HW1)
+    # YOUR CODE HERE (HW1)
     raise NotImplementedError("HW1: implement cancel_order")
 
 
@@ -202,5 +215,5 @@ def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
         (at most 5), each as the dict returned by agent.db. If no orders
         match, return {"ok": True, "orders": []}.
     """
-    ### YOUR CODE HERE (HW1)
+    # YOUR CODE HERE (HW1)
     raise NotImplementedError("HW1: implement find_order")
