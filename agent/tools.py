@@ -135,7 +135,25 @@ def list_my_orders(ctx: AuthContext) -> dict[str, Any]:
         tool: the model cannot ask for someone else's orders through it.
     """
     # YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement list_my_orders")
+    if ctx.role == "support":
+        return {
+            "ok": False,
+            "error": "invalid_argument",
+            "reason": "support staff have no orders of their own and should use get_order",
+        }
+
+    with db.connection() as conn:
+        if ctx.role == "shopper":
+            orders = db.list_orders_for_user(conn, ctx.user_id)
+        else:
+            orders = db.list_orders_for_store(conn, ctx.store_id)
+
+    public_orders = [order.to_public_dict() for order in orders]
+    return {
+        "ok": True,
+        "orders": public_orders,
+        "count": len(public_orders),
+    }
 
 
 def cancel_order(ctx: AuthContext, order_id: int, reason: str) -> dict[str, Any]:
