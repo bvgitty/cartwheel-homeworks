@@ -300,4 +300,32 @@ def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
         match, return {"ok": True, "orders": []}.
     """
     # YOUR CODE HERE (HW1)
-    raise NotImplementedError("HW1: implement find_order")
+    with db.connection() as conn:
+        if ctx.role == "shopper":
+            candidates = db.list_order_search_candidates(
+                conn, user_id=ctx.user_id)
+        elif ctx.role == "merchant" and ctx.store_id is not None:
+            candidates = db.list_order_search_candidates(
+                conn, store_id=ctx.store_id)
+        elif ctx.role == "support":
+            candidates = db.list_order_search_candidates(conn, all_orders=True)
+        else:
+            return {
+                "ok": False,
+                "error": "invalid_argument",
+                "reason": "unsupported role or missing identity",
+            }   # invalid_argument
+        titles = {p.id: p.title for p in db.list_products(conn)}
+
+    needle = query.strip().lower()
+    if not needle:
+        return {"ok": True, "orders": []}
+    matches = []
+    for order in candidates:
+        title = titles.get(order.product_id, "").lower()
+        if needle in title:   # your matching rule
+            matches.append(order)
+    return {
+        "ok": True,
+        "orders": [order.to_public_dict() for order in matches[:5]],
+    }
