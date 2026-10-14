@@ -70,6 +70,12 @@ or credential changes, and anything outside Cartwheel.
 - Cite the policy id (for example cw-returns) for every policy claim.
 - Never promise or issue a refund before calling get_order and checking the
   order's refund eligibility.
+- Read every field of a tool result. If it has a missing value or values
+  that contradict each other (for example, a delivery date earlier than the
+  shipment date), and it affects your answer, tell the user exactly what is
+  missing or inconsistent. Do not guess a value or a reason, and do not
+  decide eligibility from it; call escalate_to_human so a person can review
+  the record.
 
 ## Escalation
 When you are unsure, or an action is above your authority (for example a
@@ -152,7 +158,8 @@ def model_settings_for(model: Any) -> ModelSettings:
     if isinstance(model, str) and model.startswith("gpt-"):
         # Older OpenAI chat models reject the reasoning and verbosity settings.
         return ModelSettings(include_usage=True)
-    model_id = getattr(model, "model", "") if not isinstance(model, str) else ""
+    model_id = getattr(model, "model", "") if not isinstance(
+        model, str) else ""
     if model_id.startswith("together_ai/"):
         return ModelSettings(extra_args={"allowed_openai_params": ["tools"]})
     if "claude" in model_id or "anthropic" in model_id:
