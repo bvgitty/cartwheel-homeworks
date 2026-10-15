@@ -8,6 +8,7 @@
 - **Part B.** Ran 16 manual conversations across all three roles, writing the expected behaviour from `SPEC.md` **before** any run (`4ac26c1`). **9 met the requirement and 7 did not**: 5 failures came from the prompt, 1 from a tool, and 1 is a specification gap.
 - **Part C.** The prompt only partly covers RESP-3 (state missing or inconsistent data; don't invent a reason). Two conversations failed on it, so I added one instruction. **After the change, all 4 reruns flagged the data problem on the first turn without inventing a reason** (before: 0 of 2). A clean refund conversation was unchanged, so the instruction didn't cause false alarms.
 - **Beyond the required work.** Found and fixed a refund bug in code: refunds on one order could add up to more than the order total, and splitting a refund got around the $100 approval limit. Before the fix, **$300 was refunded on a $240 order**. After it, the third request is rejected and the agent offers the $40 that remains.
+- **Own tool: `check_return_eligibility`.** It works out the return deadline in code and reports missing or contradictory dates as "can't tell" (`eligible: None`) instead of guessing. With it, row 2 (a failure Part C didn't touch) now gives the exact deadline and cites the policy, and row 14 goes straight to the tool and escalates with nothing invented. The tool comes with 6 tests and was checked against all 10,000 orders.
 
 Setup: model `claude-haiku-4-5`, world date 2026-07-01, database reseeded before every recorded conversation, `--debug` on.
 
@@ -105,7 +106,7 @@ The reruns used the same identity and opening request, with the database reseede
 - **Escalation style varies under the same prompt.** In row 13 the agent asks before escalating; in row 14 it escalates directly.
 - **Method note.** The later turns from the original script weren't typed in the reruns, because the agent changed course at turn 1 and they no longer made sense. That change is the result. Row 13 run 2 ended before the user answered the escalation offer, so no escalation call was made.
 
-**A second prompt finding, not acted on: row 7 (ESC-2).** The prompt tells the agent to refuse "credential changes" (SPEC: *payment* credentials) and never says that account changes should be escalated, so the agent refused an email change. It's a real gap, but it rests on one conversation, and the homework asks for one evidence-backed edit. It's listed under next steps.
+**A second prompt finding, not acted on: row 7 (ESC-2).** The prompt tells the agent to refuse "credential changes" (SPEC: *payment* credentials) and never says that account changes should be escalated, so the agent refused an email change. It's a real gap, but it rests on one conversation, and the homework asks for one evidence-backed edit. It's listed under open findings.
 
 ---
 
@@ -133,29 +134,70 @@ Note: the system prompt also changed between the two row 8 runs, but the rejecti
 
 ---
 
+## Own tool: `check_return_eligibility` (rows 2, 13, 14)
+
+**The gap.** `get_order` returns only `refund_eligible: true/false`, with no reason. In rows 2, 13 and 14 the model filled that gap with invented explanations: "may be outside the window", "the window has passed", and a deadline counted from the order date. Part C's prompt instruction made the model *notice* bad data, but it still had to work out deadlines and reasons itself.
+
+**The tool** (`a74e17d`, import fix and tests `c6e233c`) works out the answer in code:
+
+1. Checks the order exists (`not_found`), then the caller's permission (`permission_denied`), the same as `get_order`.
+2. Finds the return window. The store's window applies if it sets one, whether shorter or longer; otherwise it's the platform's 30 days. It records which policy to cite.
+3. Collects **data issues**: delivered but no delivery date; delivered before shipped; delivery date in the future.
+4. Decides the answer:
+   - **`None`** ("can't tell") if there are any data issues;
+   - **`False`** with the status if the order hasn't been delivered;
+   - otherwise, deadline = delivery date + window, and eligible = days left ≥ 0.
+5. **Cross-checks the stored flag.** If the stored `refund_eligible` disagrees with the calculation, it reports a data issue and returns `None`. It doesn't pick a side, because `issue_refund` trusts the stored flag.
+6. Returns the same fields every time: `eligible`, `reason`, `deadline`, `days_left`, `return_window_days`, `window_source`, `policy_id` and `data_issues`.
+
+The key design choice is that **`None` is a third answer**. In rows 13 and 14, the model collapsed "can't tell" into "no" and then explained the "no".
+
+The tool is available to all roles. Its docstring tells the model to use it before answering any return question, and what to do with `None`.
+
+**Verification**
+- `tests/test_check_return_eligibility.py` has 6 tests: eligible, expired, reversed dates, missing date, permission and not found.
+- I ran it against **all 10,000 orders**. It never crashed, and the calculated answer agreed with the stored flag everywhere except orders 8001 and 8002, the two broken records, which it flags.
+- Store windows are correct: Juniper 14, Saltbox 7, Meridian 21 and Northwind 45 days, each citing its own policy.
+- The first commit passed the full test suite but **crashed on the first real call** (a missing import), because no test exercised the new function. The tests in `c6e233c` close that gap.
+
+**Rerun results** (`transcripts/02-tool-run1.txt`, `14-tool-run1.txt`). The prompt is unchanged from Part C (`prompt_version` is still `11bf9b5e1b26`); only the tool list changed.
+
+| Row | Baseline | Prompt fix only | Prompt fix + tool |
+|---|---|---|---|
+| 2: order 3980, past the window | "**May be** outside our window", no citation; ticket invents "damage is a valid reason" | (not rerun) | "That window ended on **June 16, 2026, 15 days ago**", cites **cw-returns**, invents nothing ✅ |
+| 14: order 8002, no delivery date | Counted from the order date; found the missing date only when asked | Caught on turn 1 after 3–4 tool calls; one run invented a "future date" | Goes **straight to the new tool**, 2 tool calls, escalates with an accurate note, invents nothing |
+
+**What this shows**
+- **The docstring changed which tool the model chose.** It skipped `get_order` entirely in row 14, so tool descriptions are effectively instructions to the model.
+- **Facts worked out in code beat asking the model to be careful.** The prompt fix narrowed the failure; giving the model the facts removed the need to guess.
+- **One small gap remains.** In row 14, the reply to the user says the team will "verify the delivery date" rather than plainly saying the date is missing from the record. The escalation note is exact. This is a wording choice in the model's reply, not a tool problem.
+
+---
+
 ## Specification gaps found
 
 | Gap | Where it showed up | Handling |
 |---|---|---|
 | Partial and cumulative refunds | Row 8 | Closed in code (above) |
 | Merchant cancellation after shipment: the access table has no pre-shipment rule, but the code and `cw-cancellations` apply one | Row 11 | Recorded as `specification`; the code's rule seems right |
-| "Credentials" in SCOPE-2 means payment credentials; the prompt drops "payment" | Row 7 | Prompt fix proposed (next steps) |
+| "Credentials" in SCOPE-2 means payment credentials; the prompt drops "payment" | Row 7 | Recorded as an open finding |
 
 ## Open findings (recorded, not addressed in HW1)
 
 - **Row 7 (ESC-2).** The prompt refuses "credential changes" where SPEC means *payment* credentials, and never says to escalate account changes.
 - **Row 4 (RESP-4).** Denials confirm that the order exists and who owns it.
-- **Rows 2, 13, 14.** `get_order` exposes a bare `refund_eligible` flag with no reason, which invites the model to invent one. A tool that computes return eligibility in code would remove the guesswork.
 - **Single runs.** Most rows ran once. Rows 4 and 11 behaved differently on a second run, so the verdicts are evidence, not measurements.
 
 ## Files
 
 | Path | What |
 |---|---|
-| `agent/tools.py` | Part A tools |
-| `agent/agent.py` | Part C prompt instruction; refund guard in `issue_refund_logic` |
+| `agent/tools.py` | Part A tools; `check_return_eligibility` |
+| `agent/agent.py` | Part C prompt instruction; refund guard in `issue_refund_logic`; `check_return_eligibility` wrapper |
+| `tests/test_check_return_eligibility.py` | 6 tests for the new tool |
 | `hw1-plan.md` | 16-row plan with expected behaviour, committed before the runs |
 | `hw1-session.jsonl` | 16 Part B records (baseline, before any fixes) |
 | `hw1_build_jsonl.py` | Builds the JSONL from the transcripts and plan |
 | `transcripts/NN.txt` | Part B transcripts |
 | `transcripts/*-afterfix-*.txt` | Reruns after the Part C and refund fixes |
+| `transcripts/*-tool-*.txt` | Reruns with `check_return_eligibility` |
