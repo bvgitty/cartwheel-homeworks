@@ -18,12 +18,15 @@ They are marked xfail and flip to passing as you implement each function.
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Any
 
 from agent import db
 from agent.auth import AuthContext, can_cancel_order, permission_denied
+from agent.config import load_facts
 from agent.helpcenter import load_policy_docs
 from agent.killswitch import kill_switch
+from seed.eligibility import effective_return_window_days
 
 MAX_SEARCH_LIMIT = 25
 DEFAULT_ORDER_LIMIT = 20
@@ -329,3 +332,85 @@ def find_order(ctx: AuthContext, query: str) -> dict[str, Any]:
         "ok": True,
         "orders": [order.to_public_dict() for order in matches[:5]],
     }
+
+def check_return_eligibility(ctx: AuthContext, order_id: int) -> dict[str, Any]:
+    """Check whether an order can still be returned, and until when. Risk tier: read.
+
+    Computes eligibility in code from the delivery date and the return window
+    (the store's override if it has one, otherwise the platform default), so the
+    model never has to guess a deadline or a reason.
+
+    Returns {"ok": True, ...} with:
+      eligible: True, False, or None. None means the record has data problems
+        and eligibility cannot be determined; tell the user what is wrong and
+        escalate instead of guessing.
+      reason, status, delivered_at, return_window_days, window_source
+      ("store" or "platform"), policy_id, deadline, days_left, data_issues.
+    Errors: not_found, permission_denied.
+    """
+    with db.connection() as conn:
+        order = db.get_order(conn, order_id)
+        if order is None:
+            return {"ok": False, "error": "not_found", "reason": f"no order #{order_id}"}
+        if not can_view_order(ctx, order.user_id, order.store_id):
+            return permission_denied(
+                f"role '{ctx.role}' (user {ctx.user_id}) may not view order #{order_id}"
+            )
+        platform_days = load_facts()["return_window_days"]
+        store = db.get_store(conn, order.store_id)
+        override_days = store.return_window_days_override
+        window_days = effective_return_window_days(platform_days, override_days)
+        if override_days is None: 
+            window_source = "platform"
+            policy_id = "cw-returns"
+        else:
+            window_source = "store"
+            policy_id = f"store-{store.slug}-policy"
+
+        today = db.world_asof(conn)
+
+        data_issues = []
+        if order.status == "delivered" and order.delivered_at is None:
+            data_issues.append("status is delivered but delivered_at is missing")
+        if order.delivered_at is not None and order.shipped_at is not None and order.delivered_at < order.shipped_at:
+            data_issues.append(f"delivered_at {order.delivered_at} is earlier than shipped_at {order.shipped_at}")
+        if order.delivered_at is not None and order.delivered_at > today:
+            data_issues.append(f"delivered_at {order.delivered_at} is after today ({today})")
+
+        eligible = None
+        deadline = None
+        days_left = None
+
+        if data_issues:
+            reason = "cannot determine eligibility: " + "; ".join(data_issues)
+        elif order.status != "delivered":
+            eligible = False
+            reason = f"order status is '{order.status}'; returns open only after delivery"  
+        else:
+            deadline = order.delivered_at + timedelta(days=window_days)
+            days_left = (deadline - today).days
+            eligible = days_left >= 0
+            reason = f"delivered {order.delivered_at}; the {window_days}-day return window ({policy_id}) ends {deadline}" 
+            if eligible:
+                reason += f" ({days_left} days left)"
+            else:
+                reason += f" (closed {-days_left} days ago)"
+            if eligible != order.refund_eligible:
+                data_issues.append(f"stored refund_eligible is {order.refund_eligible} but the dates give {eligible}")  
+                eligible = None
+                reason = "cannot determine eligibility: " + "; ".join(data_issues)
+
+        return {
+            "ok": True,
+            "order_id": order_id,
+            "eligible": eligible,
+            "reason": reason,
+            "status": order.status,
+            "delivered_at": order.delivered_at.isoformat() if order.delivered_at else None,
+            "return_window_days": window_days,
+            "window_source": window_source,
+            "policy_id": policy_id,
+            "deadline": deadline.isoformat() if deadline else None,
+            "days_left": days_left,
+            "data_issues": data_issues,
+        }

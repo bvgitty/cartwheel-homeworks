@@ -447,6 +447,16 @@ def find_order(
     """Search your orders by product name (fuzzy match)."""
     return _call(wrapper, hw_tools.find_order, query)
 
+@function_tool
+def check_return_eligibility(
+    wrapper: RunContextWrapper[AuthContext], order_id: int
+) -> dict[str, Any]:
+    """Check whether an order can be returned and the exact deadline, computed from
+    the delivery date and the store's or platform's return window. Use this before
+    answering any question about returns, return deadlines or refund eligibility.
+    eligible is True, False, or None; None means the order record has missing or
+    inconsistent data: tell the user what is wrong (data_issues) and escalate."""
+    return _call(wrapper, hw_tools.check_return_eligibility, order_id)
 
 # Progressive disclosure: a session exposes only the tools its role can use.
 # Fewer tools mean fewer wrong choices and cleaner evals. At dev scale the
@@ -457,6 +467,7 @@ _COMMON_TOOLS = [
     get_policy,
     search_products,
     get_order,
+    check_return_eligibility,
     issue_refund,
     cancel_order,
     escalate_to_human,
