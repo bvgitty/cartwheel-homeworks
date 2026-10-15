@@ -158,8 +158,7 @@ def model_settings_for(model: Any) -> ModelSettings:
     if isinstance(model, str) and model.startswith("gpt-"):
         # Older OpenAI chat models reject the reasoning and verbosity settings.
         return ModelSettings(include_usage=True)
-    model_id = getattr(model, "model", "") if not isinstance(
-        model, str) else ""
+    model_id = getattr(model, "model", "") if not isinstance(model, str) else ""
     if model_id.startswith("together_ai/"):
         return ModelSettings(extra_args={"allowed_openai_params": ["tools"]})
     if "claude" in model_id or "anthropic" in model_id:
