@@ -22,7 +22,7 @@ from datetime import timedelta
 from typing import Any
 
 from agent import db
-from agent.auth import AuthContext, can_cancel_order, permission_denied
+from agent.auth import AuthContext, can_cancel_order, can_view_order, permission_denied
 from agent.config import load_facts
 from agent.helpcenter import load_policy_docs
 from agent.killswitch import kill_switch
