@@ -238,18 +238,32 @@ def issue_refund_logic(
         }
     with db.connection() as conn:
         order = db.get_order(conn, order_id)
+
         if order is None:
             return {"ok": False, "error": "not_found", "reason": f"no order #{order_id}"}
         if not can_refund_order(ctx, order.user_id, order.store_id):
             return permission_denied(
                 f"role '{ctx.role}' (user {ctx.user_id}) may not refund order #{order_id}"
             )
-        if amount_usd > order.total_usd:
+        
+        already_refunded = conn.execute(
+            "SELECT COALESCE(SUM(amount_cents), 0) FROM refunds WHERE order_id = ?",
+            (order_id,),
+        ).fetchone()[0] / 100
+        new_total = round(already_refunded + amount_usd, 2)
+
+        if new_total > order.total_usd:
             return {
                 "ok": False,
                 "error": "invalid_argument",
-                "reason": f"refund amount ${amount_usd:.2f} exceeds order total ${order.total_usd:.2f}",
+                "reason": (
+                    f"refund of ${amount_usd:.2f} would bring total refunds on order "
+                    f"#{order_id} to ${new_total:.2f}, above the order total "
+                    f"${order.total_usd:.2f}; ${already_refunded:.2f} already refunded, "
+                    f"${order.total_usd - already_refunded:.2f} remaining"
+                ),
             }
+
         if not order.refund_eligible:
             return {
                 "ok": False,
@@ -262,7 +276,7 @@ def issue_refund_logic(
             }
         today = db.world_asof(conn).isoformat()
         threshold = facts["refund_auto_approve_threshold_usd"]
-        if refund_needs_approval(amount_usd, threshold):
+        if refund_needs_approval(new_total, threshold):
             refund_id = db.insert_refund(
                 conn,
                 order_id=order_id,
@@ -277,9 +291,10 @@ def issue_refund_logic(
                 "refund_id": refund_id,
                 "order_id": order_id,
                 "amount_usd": amount_usd,
+                "total_refunded_usd": new_total,
                 "note": (
-                    f"amount is above the ${threshold} auto-approval threshold; "
-                    f"a human support agent will review it"
+                    f"total refunds on this order (${new_total:.2f}) would be above the "
+                    f"${threshold} auto-approval threshold; a human support agent will review it"
                 ),
             }
         refund_id = db.insert_refund(
