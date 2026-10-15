@@ -259,7 +259,7 @@ def issue_refund_logic(
                 "reason": (
                     f"refund of ${amount_usd:.2f} would bring total refunds on order "
                     f"#{order_id} to ${new_total:.2f}, above the order total "
-                    f"${order.total_usd:.2f}; ${already_refunded:.2f} already refunded, "
+                    f"${order.total_usd:.2f}; ${already_refunded:.2f} already refunded or pending approval, "
                     f"${order.total_usd - already_refunded:.2f} remaining"
                 ),
             }
