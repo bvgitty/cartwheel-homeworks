@@ -1,5 +1,5 @@
 
-Summary of conversation 13 after prompt fix - Run 12 (Same behavior as run 1)
+Summary of conversation 13 after prompt fix - Run 2 (Same agent behaviour as run 1 (flagged the date contradiction, offered escalation). Conversation ended before the user replied, so no escalation call was made.)
 - support - order delivery enquiry, return check
 - agent - tool call get_order
 - agent - notices discrepancy and alerts user of discrepancy and asks for ticket follow up
