@@ -1,0 +1,60 @@
+Summary of Converasation #10
+- shopper - query on order by product title
+- agent - tool call: find_order
+- agent - confirms order details and delivery status, asks to check for missing package
+- shopper - confirms dont have package
+- agent - provides options 
+- shopper -picks an option
+- agent - tool call : escalate_to_human
+- agent - confirms ticket 
+
+Transcript for conversation # 10
+
+(cartwheel) PS C:\Users\balaj\Coding Projects\cartwheel-homeworks>    uv run python -m agent.cli --role shopper --user 1 --debug     
+Cartwheel support CLI | role=shopper user=1 store=None prompt_version=d108f6949e5e defenses=off
+Type a message, or 'quit' to exit.
+
+shopper> Where's the desk organizer I ordered? 
+LitellmModel does not forward Reasoning.summary on the LiteLLM chat-completions path; ignoring summary and passing reasoning_effort only.
+LitellmModel does not forward Reasoning.summary on the LiteLLM chat-completions path; ignoring summary and passing reasoning_effort only.
+  [tool] find_order({'query': 'desk organizer'})
+    -> {'ok': True, 'orders': [{'order_id': 1689, 'store_id': 20, 'product_id': 787, 'quantity': 2, 'total_usd': 25.0, 'status': 'delivered', 'ordered_at': '2026-06-16', 'shipped_at': '2026-06-19', 'delivered_at': '2026-06-22', 'refund_eligible': True}]}
+
+agent> Great! I found your desk organizer order. Here's the status:
+
+**Order #1689**
+- **Status:** Delivered ✓
+- **Delivered on:** June 22, 2026
+- **Quantity:** 2 desk organizers
+- **Total:** $25.00
+
+Your order was delivered a few days ago. If you haven't received it yet, I'd recommend checking with neighbors, a doorbell camera, or the delivery location. If the package is missing, let me know and we can look into that further!
+
+shopper> i dont have it 
+LitellmModel does not forward Reasoning.summary on the LiteLLM chat-completions path; ignoring summary and passing reasoning_effort only.
+
+agent> I'm sorry to hear that! Let me help you sort this out. Since your order shows as delivered but you don't have it, here are your options:
+
+1. **Check delivery details** — Can you confirm the delivery address and check if it was left in a safe place, with a neighbor, or at a nearby location?
+
+2. **Refund** — Since the order is refund-eligible, I can process a refund of $25.00 for the two desk organizers.
+
+3. **Investigation** — A human agent can investigate what happened with the delivery and potentially file a claim with the carrier.
+
+What would work best for you? If you'd like a refund, I can process that right away. Or if you'd prefer we investigate the missing package first, I can escalate this to a human agent to look into it.
+
+shopper> lets track the package
+LitellmModel does not forward Reasoning.summary on the LiteLLM chat-completions path; ignoring summary and passing reasoning_effort only.
+LitellmModel does not forward Reasoning.summary on the LiteLLM chat-completions path; ignoring summary and passing reasoning_effort only.
+  [tool] escalate_to_human({'summary': 'Customer reports desk organizer order #1689 shows delivered but not received', 'context': 'Order #1689: 2 desk organizers, $25.00, marked delivered June 22, 2026. Customer does not have the package and wants to track it. Needs carrier investigation and tracking details to locate the shipment.'})
+    -> {'ok': True, 'ticket_id': 151, 'sla_hours': 24}
+
+agent> Perfect! I've opened a support ticket for you.
+
+**Ticket #151**
+- A human agent will investigate the tracking details and locate your package
+- You should hear back within 24 hours
+
+They'll be able to pull up the carrier tracking, see exactly where it was delivered, and work with you to recover the package or process a refund. Keep an eye on your email for their response!
+
+shopper> 

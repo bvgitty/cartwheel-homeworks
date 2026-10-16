@@ -70,6 +70,12 @@ or credential changes, and anything outside Cartwheel.
 - Cite the policy id (for example cw-returns) for every policy claim.
 - Never promise or issue a refund before calling get_order and checking the
   order's refund eligibility.
+- Read every field of a tool result. If it has a missing value or values
+  that contradict each other (for example, a delivery date earlier than the
+  shipment date), and it affects your answer, tell the user exactly what is
+  missing or inconsistent. Do not guess a value or a reason, and do not
+  decide eligibility from it; call escalate_to_human so a person can review
+  the record.
 
 ## Escalation
 When you are unsure, or an action is above your authority (for example a
@@ -232,18 +238,32 @@ def issue_refund_logic(
         }
     with db.connection() as conn:
         order = db.get_order(conn, order_id)
+
         if order is None:
             return {"ok": False, "error": "not_found", "reason": f"no order #{order_id}"}
         if not can_refund_order(ctx, order.user_id, order.store_id):
             return permission_denied(
                 f"role '{ctx.role}' (user {ctx.user_id}) may not refund order #{order_id}"
             )
-        if amount_usd > order.total_usd:
+        
+        already_refunded = conn.execute(
+            "SELECT COALESCE(SUM(amount_cents), 0) FROM refunds WHERE order_id = ?",
+            (order_id,),
+        ).fetchone()[0] / 100
+        new_total = round(already_refunded + amount_usd, 2)
+
+        if new_total > order.total_usd:
             return {
                 "ok": False,
                 "error": "invalid_argument",
-                "reason": f"refund amount ${amount_usd:.2f} exceeds order total ${order.total_usd:.2f}",
+                "reason": (
+                    f"refund of ${amount_usd:.2f} would bring total refunds on order "
+                    f"#{order_id} to ${new_total:.2f}, above the order total "
+                    f"${order.total_usd:.2f}; ${already_refunded:.2f} already refunded or pending approval, "
+                    f"${order.total_usd - already_refunded:.2f} remaining"
+                ),
             }
+
         if not order.refund_eligible:
             return {
                 "ok": False,
@@ -256,7 +276,7 @@ def issue_refund_logic(
             }
         today = db.world_asof(conn).isoformat()
         threshold = facts["refund_auto_approve_threshold_usd"]
-        if refund_needs_approval(amount_usd, threshold):
+        if refund_needs_approval(new_total, threshold):
             refund_id = db.insert_refund(
                 conn,
                 order_id=order_id,
@@ -271,9 +291,10 @@ def issue_refund_logic(
                 "refund_id": refund_id,
                 "order_id": order_id,
                 "amount_usd": amount_usd,
+                "total_refunded_usd": new_total,
                 "note": (
-                    f"amount is above the ${threshold} auto-approval threshold; "
-                    f"a human support agent will review it"
+                    f"total refunds on this order (${new_total:.2f}) would be above the "
+                    f"${threshold} auto-approval threshold; a human support agent will review it"
                 ),
             }
         refund_id = db.insert_refund(
@@ -426,6 +447,16 @@ def find_order(
     """Search your orders by product name (fuzzy match)."""
     return _call(wrapper, hw_tools.find_order, query)
 
+@function_tool
+def check_return_eligibility(
+    wrapper: RunContextWrapper[AuthContext], order_id: int
+) -> dict[str, Any]:
+    """Check whether an order can be returned and the exact deadline, computed from
+    the delivery date and the store's or platform's return window. Use this before
+    answering any question about returns, return deadlines or refund eligibility.
+    eligible is True, False, or None; None means the order record has missing or
+    inconsistent data: tell the user what is wrong (data_issues) and escalate."""
+    return _call(wrapper, hw_tools.check_return_eligibility, order_id)
 
 # Progressive disclosure: a session exposes only the tools its role can use.
 # Fewer tools mean fewer wrong choices and cleaner evals. At dev scale the
@@ -436,6 +467,7 @@ _COMMON_TOOLS = [
     get_policy,
     search_products,
     get_order,
+    check_return_eligibility,
     issue_refund,
     cancel_order,
     escalate_to_human,
