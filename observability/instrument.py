@@ -151,9 +151,8 @@ def _set_permission_denied_attributes(
     the smoke report counts them and Module 3 asserts on them. This is the one place in the
     course where you touch instrumentation by hand.
     """
-    ### YOUR CODE HERE (HW2)
     if result.get("error") == "permission_denied":
         span.set_attribute("cartwheel.permission_denied", True)
-        ...
+        span.set_attribute("cartwheel.permission_denied.reason", result.get("reason", ""))
     else:
         span.set_attribute("cartwheel.permission_denied", False)

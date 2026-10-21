@@ -33,3 +33,35 @@ def test_token_cannot_authorize_another_session(world: dict) -> None:
 
     assert exc.value.status_code == 403
 
+
+class FakeSpan:
+    """A stand-in for an OpenTelemetry span that records every attribute set on it."""
+
+    def __init__(self) -> None:
+        self.attributes: dict = {}
+
+    def set_attribute(self, key, value) -> None:
+        self.attributes[key] = value
+
+
+def test_permission_denied_span_records_reason() -> None:
+    from observability.instrument import _set_permission_denied_attributes
+
+    span = FakeSpan()
+    _set_permission_denied_attributes(
+        span,
+        {"ok": False, "error": "permission_denied", "reason": "role 'merchant' may not view order #4127"},
+    )
+
+    assert span.attributes["cartwheel.permission_denied"] is True
+    assert span.attributes["cartwheel.permission_denied.reason"] == "role 'merchant' may not view order #4127"
+
+
+def test_allowed_or_other_errors_are_not_permission_denied() -> None:
+    from observability.instrument import _set_permission_denied_attributes
+
+    for result in ({"ok": True, "order": {}}, {"ok": False, "error": "not_found", "reason": "no order"}):
+        span = FakeSpan()
+        _set_permission_denied_attributes(span, result)
+        assert span.attributes["cartwheel.permission_denied"] is False
+        assert "cartwheel.permission_denied.reason" not in span.attributes
