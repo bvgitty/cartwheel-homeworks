@@ -97,8 +97,29 @@ refund-eligible, 7151 orders > $100.
   0170 (reject: "should not return unnamed product, ask instead") PENDING Balaji: revise criterion vs reject.
   Revisions applied; `--final` passes.
 
+- 2026-10-22: 0170 -> option (a), criterion clarified (asking or id/description-only both OK; inventing
+  a name fails). support_review.jsonl: 11 accept / 3 revise / 1 reject. monitoring_scenarios.jsonl: 50
+  (35 cov / 15 chal; 25 shopper / 13 merchant / 12 support; 10 intents; 6 dq; 8 multi-turn).
+  Part C committed (90c0a9b). Reseeded; final run started -> scenarios/final-results.jsonl.
+
+- 2026-10-22: Final run DONE: scenarios/final-results.jsonl 250/250 completed (coverage 175, challenge 75),
+  250 unique ids, no errors, no reruns needed.
+
+- 2026-10-22: Part E: reports/smoke-output.txt written (whole project incl. pilot: roles shopper 252 /
+  merchant 73 / support 47; 41 escalations; 13 permission denials; tokens/cost 0 as noted in B0; the 2
+  errors + 2 blank-role traces are HW2 dev traces from 2026-10-20, NameError 'ctx', no scenario id).
+  Export: traces/support_traces.json, 320 traces, 250/250 unique support-* ids.
+  Observations for HW4 (not judged): issue_refund called only 7 times across all runs; 0014 T1 escalated
+  the shears before the correction; 0075 merchant refund made no issue_refund call.
+- 2026-10-22: Balaji checked 3 traces (0014, 0101, 0075): scenario id, model, tool activity all present.
+  Balaji spotted in 0075: agent says a $35 refund "may go through human review" (false: cw-refunds, <=$100
+  auto) and re-asks amount + reason the merchant already gave. Hypothesis for HW4: system prompt
+  (agent/agent.py "Escalation") mentions "the auto-approval threshold" but never states $100 (only code +
+  cw-refunds do), so the model hedges or escalates (cf. pilot-0025 $99.75). Do NOT fix before HW4.
+
 ## Next (RESUME HERE)
-- Resolve 0170, write scenarios/support_review.jsonl, monitoring 50, commit Part C, reseed, final run.
+- Balaji opens 3 traces (0014 multi-turn challenge, 0101 dq challenge, 0075 coverage). Then commit
+  Parts D+E, video, PR into fork main, merge, Discord.
 
 ## Day plan (target Fri 2026-10-23); stopped Wed night after Part A
 - Thu 10-22 (~4 h): B0 smoke test; B1 30 pilot scenarios + sample review; reseed; run pilot;
@@ -119,7 +140,9 @@ All shown live from committed files / Langfuse; no screenshots. Never `docker co
 - (2) revised final scenario candidates: **support-0070** (before: "Show me my bar listings NOW...",
   key = cheapest 5 'bar' items; after: shampoo bar listings, key = all 8 with prices) or **support-0058**
   (dropped "does someone have to approve it?"). Show the support_review.jsonl line + the scenario line.
-- (3) final trace candidates (challenge + multi-turn): _pending Part E_
+- (3) final trace candidates: **support-0101** (one trace e7ce7830dc20b867b5f70ef9d493cc99; get_order +
+  escalate_to_human; dq store mismatch) is the cleanest single trace for the video; **support-0014**
+  (4 traces: 522ee256..., 42aea1a6... has cancel_order, df035289..., eb987ba9...) for multi-turn.
 - Write-up notes: B0 token usage/cost empty for Anthropic in Langfuse (smoke report rows read 0).
 
 ## Deliverables checklist
@@ -127,10 +150,10 @@ All shown live from committed files / Langfuse; no screenshots. Never `docker co
 - [x] B: scenarios/pilot_scenarios.jsonl (30, validated)
 - [x] B: scenarios/pilot-results.jsonl (30/30 completed)
 - [x] B: scenarios/pilot_review.jsonl (12 reviewed, 9 confirmed failures)
-- [ ] C: scenarios/support_scenarios.jsonl (175 cov / 75 chal, 5 per dq case, new ids, `--final` passes)
-- [ ] C: scenarios/support_review.jsonl (15; both groups, 3 roles, every intent; revisions applied)
-- [ ] C: scenarios/monitoring_scenarios.jsonl (50; both groups, 3 roles)
-- [ ] D: reseed, then scenarios/final-results.jsonl (250 completed)
-- [ ] E: reports/smoke-output.txt
-- [ ] E: traces/support_traces.json (250 unique scenario ids) + 3 traces opened
+- [x] C: scenarios/support_scenarios.jsonl (175 cov / 75 chal, 5 per dq case, new ids, `--final` passes)
+- [x] C: scenarios/support_review.jsonl (15; both groups, 3 roles, every intent; revisions applied)
+- [x] C: scenarios/monitoring_scenarios.jsonl (50; both groups, 3 roles)
+- [x] D: reseed, then scenarios/final-results.jsonl (250 completed)
+- [x] E: reports/smoke-output.txt
+- [x] E: traces/support_traces.json (250 unique scenario ids); [ ] 3 traces opened (Balaji)
 - [ ] Video (Balaji), PR into fork main, Discord post
