@@ -118,8 +118,10 @@ refund-eligible, 7151 orders > $100.
   cw-refunds do), so the model hedges or escalates (cf. pilot-0025 $99.75). Do NOT fix before HW4.
 
 ## Next (RESUME HERE)
-- Balaji opens 3 traces (0014 multi-turn challenge, 0101 dq challenge, 0075 coverage). Then commit
-  Parts D+E, video, PR into fork main, merge, Discord.
+- 2026-10-22: Parts D+E committed (9d1e1ee). Re-verified: 9 files tracked, 250/250 completed,
+  jq count = 250 (works as-is in PowerShell), Langfuse up.
+- 2026-10-23: Video recorded (Balaji): https://www.loom.com/share/361a2a251a2d4bc380287dacfd46a2b7
+- Remaining: PR into fork main, merge, Discord.
 
 ## Day plan (target Fri 2026-10-23); stopped Wed night after Part A
 - Thu 10-22 (~4 h): B0 smoke test; B1 30 pilot scenarios + sample review; reseed; run pilot;
@@ -155,5 +157,6 @@ All shown live from committed files / Langfuse; no screenshots. Never `docker co
 - [x] C: scenarios/monitoring_scenarios.jsonl (50; both groups, 3 roles)
 - [x] D: reseed, then scenarios/final-results.jsonl (250 completed)
 - [x] E: reports/smoke-output.txt
-- [x] E: traces/support_traces.json (250 unique scenario ids); [ ] 3 traces opened (Balaji)
-- [ ] Video (Balaji), PR into fork main, Discord post
+- [x] E: traces/support_traces.json (250 unique scenario ids); [x] 3 traces opened (Balaji)
+- [x] Video (Balaji)
+- [ ] PR into fork main, merge, Discord post
