@@ -77,8 +77,28 @@ refund-eligible, 7151 orders > $100.
   HW4 notes (do NOT group in HW3): agent mirrors user tone/length; offers unrequested options/escalations;
   attributes invented rules to policies; deflects instead of searching help center.
 
+- 2026-10-22: Part B committed (76d9d65). Part C distribution APPROVED by Balaji ("distribution and
+  coverage is key"). Monitoring = selection of 50 for HW7 rerun, not a manual review (scripted).
+  Store-mismatch mix approved: 2 merchant + 2 shopper notice the conflict, 1 support plain.
+- 2026-10-22: Reseeded; scratchpad `hw3/build_final.py` builds 250 grounded plans (seeded rng, no order
+  reused, pilot orders excluded, expected from SQL/eligibility/policy docs/dq table). Swapped Juniper
+  day-15 edge (no such order) for Saltbox day 8. Turns: 195x1, 42x2, 11x3, 2x4. Generation running ->
+  `hw3/final_raw.jsonl`.
+
+- 2026-10-22: Generated 250 (generate.py now caches per scenario + parses first JSON object; fallback to
+  draft when critic changes turn count). lint.py flagged template openers (11x "I need a refund", 11x
+  "Hi there, so I'm"...); diversify.py rewrote 47 openings. Fixed 0040 ("my account" -> roommate's account).
+  scenarios/support_scenarios.jsonl written; `--final` passes.
+- 2026-10-22: REVIEW POINT 3 (Balaji, 15 reviewed: 0002 0075 0020 0022 0059 0070 0013 0099 0031 0081 0014
+  0101 0040 0058 0170). Accept 10. Revise 0070 (vague "bar" query; key said "cheapest" but merchant asked
+  for all) -> "shampoo bar" listings, key lists all 8. Revise 0058 (approval question unnatural) -> plain
+  refund ask, same key ($98.50 auto). Reject 0099 (key led with days, not the double charge) -> replaced
+  by support-0251 (duplicate-charge dispute, key leads with escalate + no reversal claim; order 22).
+  0170 (reject: "should not return unnamed product, ask instead") PENDING Balaji: revise criterion vs reject.
+  Revisions applied; `--final` passes.
+
 ## Next (RESUME HERE)
-- Part C: generate 250 final scenarios (175 cov / 75 chal, 5 per dq case, new ids `support-NNNN`).
+- Resolve 0170, write scenarios/support_review.jsonl, monitoring 50, commit Part C, reseed, final run.
 
 ## Day plan (target Fri 2026-10-23); stopped Wed night after Part A
 - Thu 10-22 (~4 h): B0 smoke test; B1 30 pilot scenarios + sample review; reseed; run pilot;
@@ -96,7 +116,9 @@ All shown live from committed files / Langfuse; no screenshots. Never `docker co
 - (1) pilot failure candidates: **0025** (trace 06bd21d5d083b42a05a28c4030472aa4; $99.75 escalated, clean
   objective metadata: threshold $100) or **0027** (traces 9ac43e32..., d9dd7f63...; "Done" + promised
   cross-store refund). Both single clear evidence lines in pilot_review.jsonl.
-- (2) revised final scenario candidates (id, what changed): _pending Part C_
+- (2) revised final scenario candidates: **support-0070** (before: "Show me my bar listings NOW...",
+  key = cheapest 5 'bar' items; after: shampoo bar listings, key = all 8 with prices) or **support-0058**
+  (dropped "does someone have to approve it?"). Show the support_review.jsonl line + the scenario line.
 - (3) final trace candidates (challenge + multi-turn): _pending Part E_
 - Write-up notes: B0 token usage/cost empty for Anthropic in Langfuse (smoke report rows read 0).
 
