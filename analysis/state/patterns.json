@@ -1,1 +1,184 @@
-{"modes": []}
+{
+  "modes": [
+    {
+      "name": "deflects_instead_of_escalating",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-3, ESC-4",
+      "definition": "Fail if the agent tells the user to contact the store, merchant or another support channel for an issue it should escalate itself (open a ticket and say a human will follow up).",
+      "boundary": "Pass if the agent escalates and also mentions the merchant as context. Pointing to the store for things outside SCOPE-1 is not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-dxc2a6wq",
+        "ann-yi2fuaoq"
+      ],
+      "example_trace_ids": [
+        "6cb5126076af88604beab932916b9c94",
+        "c0ba1dfbb0477344b0e2a221b26c8289"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "skips_available_tool",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "System prompt tool guidance; RESP-3",
+      "definition": "Fail if the agent guesses, asks the user, or stops when a call to an available tool (e.g. check_return_eligibility, list_orders) would have answered the question.",
+      "boundary": "Pass if the tool was called and its result was used, even if the reply is otherwise weak. Missing tools that do not exist are spec gaps, not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-774vbtr9",
+        "ann-cmwh5eg5",
+        "ann-ul56g50q"
+      ],
+      "example_trace_ids": [
+        "229ea9c4d87b9ecc1e87068bfc2bcbdb",
+        "c8a507aaaf4c7c3d1f6e392e4dda2324",
+        "435a2b18b455f975550b5f6e85037cfa"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "denial_not_explained",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-4",
+      "definition": "Fail if a refusal or escalation reply omits the policy and the reason for the decision, or implies an exception may be granted.",
+      "boundary": "Pass if the reason and policy are stated even when the user disagrees. A reply that is merely long or unclear belongs to unclear_reply.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-34gviftu"
+      ],
+      "example_trace_ids": [
+        "522ee25660dc8049242928032142e51f"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "promises_queued_refund",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-1, RESP-2",
+      "definition": "Fail if the agent promises or confirms a refund that is above the auto-approve threshold or that the tool only queued.",
+      "boundary": "Pass if the agent says the refund is queued for approval and a human will follow up.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-ikje54a9",
+        "ann-lzfusqsg"
+      ],
+      "example_trace_ids": [
+        "b62178d3d997d83540d18ae1f318ddbd",
+        "887b7dea65a66d8ce453dc6ada016cb3"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "acts_on_unverified_claim",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-3",
+      "definition": "Fail if the agent commits to an outcome (correction, refund, change) based only on the user's assertion, with no tool evidence supporting it.",
+      "boundary": "Pass if the agent opens a ticket to investigate the claim without promising the outcome.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-6sworoev"
+      ],
+      "example_trace_ids": [
+        "78d05d397b6c5c969896aa58fbd453bb"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "tone_mismatch",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5",
+      "definition": "Fail if the reply's tone conflicts with the user's evident emotional state (cheerful openers to a frustrated user, mirroring hostile phrasing).",
+      "boundary": "Pass if the tone is neutral-respectful. Missing a personal greeting is a spec gap, not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5fn59h5g",
+        "ann-fvc0ej2r"
+      ],
+      "example_trace_ids": [
+        "f5d31e646306154d2a023d54eb5b7b34",
+        "6cb5126076af88604beab932916b9c94"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "unclear_reply",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5",
+      "definition": "Fail if, after reading the reply, the user cannot tell the decision/reason and the next step, or the agent re-asks something already settled.",
+      "boundary": "Pass if the reply is long but the decision and next step are clear. A missing denial reason is denial_not_explained.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5numnldv",
+        "ann-1i7chj93"
+      ],
+      "example_trace_ids": [
+        "3e0719044ba29ee157b1166706318046",
+        "236efa310982b6b840867c76d57faa15"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    }
+  ]
+}
