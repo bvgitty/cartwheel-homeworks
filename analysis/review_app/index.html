@@ -96,6 +96,7 @@
   .note { border-left: 3px solid var(--note); background: var(--note-bg); padding: 6px 8px; border-radius: 4px; margin: 6px 0; cursor: pointer; }
   .note.ff { border-color: var(--bad); }
   .note.nf { border-color: var(--ok); background: var(--agent-bg); }
+  .note.gap { border-color: var(--warn); background: var(--warn-bg); border-left-style: dashed; }
   .note .q { font-style: italic; color: var(--dim); font-size: 12px; }
   .note .acts { display: flex; gap: 6px; margin-top: 4px; }
   .note .acts button { font-size: 11px; padding: 0 6px; }
@@ -262,6 +263,8 @@ function hasFirstFailure(sessionId) { return sessionNotes(sessionId).some((a) =>
 /* ---------- review view ---------- */
 function curSession() { return S.byScenario[S.list[S.cur]]; }
 
+const countRole = (s, role) => s.turns.reduce((n, t) => n + t.messages.filter((m) => m.role === role).length, 0);
+
 function renderHeader(s) {
   const t = s.tuple || {};
   const b = batchOf(s.scenario_id);
@@ -283,7 +286,7 @@ function renderHeader(s) {
       <span class="dim mono">${S.cur + 1} / ${S.list.length}</span>
     </div>
     <div class="row">${dims}</div>
-    <div class="row dim">${s.n_turns} turn${s.n_turns > 1 ? "s" : ""} · ${s.n_messages} msgs · ${s.n_tool_calls} tool calls ·
+    <div class="row dim">${s.n_turns} turn${s.n_turns > 1 ? "s" : ""} · ${countRole(s, "user")} user · ${countRole(s, "assistant")} agent · ${s.n_tool_calls} tool calls ·
       ${fmtTime(s.start)} → ${fmtTime(s.end)} (${s.duration_s}s) · ${badges}</div>
     ${b ? `<div class="row dim">batch <b>${esc(b.batch.id)}</b> · ${esc(b.item.reason || b.batch.method || "")}</div>` : `<div class="row dim">not in the review set (browse only)</div>`}
     <div class="row" style="margin-top:4px">
@@ -399,11 +402,11 @@ function renderNotes() {
   const s = curSession();
   const notes = sessionNotes(s.session_id).sort((a, b) => (a.turn ?? 99) - (b.turn ?? 99) || (a.msg_index ?? 0) - (b.msg_index ?? 0));
   $("notes").innerHTML = notes.length ? notes.map((a) => `
-    <div class="note${a.first_failure ? " ff" : ""}${a.kind === "no_failure" ? " nf" : ""}" data-id="${a.id}">
-      <div class="dim" style="font-size:11px">${a.kind === "no_failure" ? "SESSION" : `turn ${a.turn + 1} · msg ${a.msg_index}`}${a.first_failure ? " · <b style='color:var(--bad)'>FIRST FAILURE</b>" : ""}${a.from_suggestion ? " · from AI suggestion" : ""}</div>
+    <div class="note${a.first_failure ? " ff" : ""}${a.spec_gap ? " gap" : ""}${a.kind === "no_failure" ? " nf" : ""}" data-id="${a.id}">
+      <div class="dim" style="font-size:11px">${a.kind === "no_failure" ? "SESSION" : `turn ${a.turn + 1} · msg ${a.msg_index}`}${a.first_failure ? " · <b style='color:var(--bad)'>FIRST FAILURE</b>" : ""}${a.spec_gap ? " · <b style='color:var(--warn)'>SPEC GAP</b>" : ""}${a.from_suggestion ? " · from AI suggestion" : ""}</div>
       ${a.quote ? `<div class="q">“${esc(a.quote)}”</div>` : ""}
       <div>${esc(a.note)}</div>
-      ${(a.history || []).length ? `<details><summary>${a.history.length} earlier version(s)</summary>${a.history.map((h) => `<div class="dim" style="font-size:12px">${fmtTime(h.ts)}: ${esc(h.note)}</div>`).join("")}</details>` : ""}
+      ${(a.history || []).length ? `<details><summary>${a.history.length} earlier version(s)</summary>${a.history.map((h) => `<div class="dim" style="font-size:12px">${fmtTime(h.ts)}${h.first_failure ? " [first failure]" : ""}${h.spec_gap ? " [spec gap]" : ""}:${esc(h.note)}</div>`).join("")}</details>` : ""}
       <div class="acts"><button data-act="edit">edit</button><button data-act="retract">retract</button></div>
     </div>`).join("") : `<div class="dim">No notes yet. Read until the first failure, then use “+ note” on that message (or select text).</div>`;
   document.querySelectorAll("#notes .note").forEach((el) => {
@@ -426,13 +429,17 @@ function openComposer(turn, idx, quote) { S.composer = { turn, idx, quote }; ren
 function renderComposer() {
   const c = S.composer, s = curSession();
   if (!c || !s) { $("composer").innerHTML = ""; return; }
-  const ff = !hasFirstFailure(s.session_id);
+  const ff = c.editing ? !!c.firstFailure : !hasFirstFailure(s.session_id);
   $("composer").innerHTML = `<div class="composer" style="margin-top:8px">
     <div class="dim" style="font-size:11px">${c.editing ? "editing note (the earlier text is kept in history)" : `new note · turn ${c.turn + 1} · msg ${c.idx}`}</div>
     ${c.quote ? `<div class="q dim" style="font-style:italic;font-size:12px">“${esc(c.quote)}”</div>` : ""}
     <textarea id="cmp-note" rows="4" placeholder="Describe what went wrong, specifically, in your own words">${esc(c.text || "")}</textarea>
-    ${c.editing ? "" : `<label><input type="checkbox" id="cmp-ff" ${ff ? "checked" : ""}> this is the first failure in the session</label>`}
+    <label><input type="checkbox" id="cmp-ff" ${ff && !c.specGap ? "checked" : ""}> this is the first failure in the session</label>
+    <label><input type="checkbox" id="cmp-gap" ${c.specGap ? "checked" : ""}> possible spec gap (desirable, but not required by SPEC.md; not a failure)</label>
     <div style="display:flex;gap:6px"><button class="primary" id="cmp-save">Save</button><button id="cmp-cancel">Cancel</button></div></div>`;
+  // A spec gap is not a failure, so the two flags exclude each other.
+  $("cmp-ff").onchange = () => { if ($("cmp-ff").checked) $("cmp-gap").checked = false; };
+  $("cmp-gap").onchange = () => { if ($("cmp-gap").checked) $("cmp-ff").checked = false; };
   $("cmp-save").onclick = saveComposer;
   $("cmp-cancel").onclick = () => { S.composer = null; renderComposer(); };
 }
@@ -441,27 +448,36 @@ async function saveComposer() {
   const c = S.composer, s = curSession();
   const text = $("cmp-note").value.trim();
   if (!text) return;
+  const ff = $("cmp-ff").checked, gap = $("cmp-gap").checked;
+  // One first failure per session: ticking it here clears it elsewhere.
+  const clearOthers = (d, keepId) => {
+    for (const x of d.annotations) if (x.session_id === s.session_id && x.id !== keepId && x.first_failure && active(x)) {
+      x.history = [...(x.history || []), { note: x.note, first_failure: true, ts: x.edited_at || x.ts }];
+      x.first_failure = false; x.edited_at = now();
+    }
+  };
   if (c.editing) {
     await mutate("annotations", (d) => {
       const a = d.annotations.find((x) => x.id === c.editing);
-      a.history = [...(a.history || []), { note: a.note, ts: a.edited_at || a.ts }];
-      a.note = text; a.edited_at = now();
+      if (a.note === text && a.first_failure === ff && !!a.spec_gap === gap) return;
+      a.history = [...(a.history || []), { note: a.note, first_failure: a.first_failure, spec_gap: !!a.spec_gap, ts: a.edited_at || a.ts }];
+      a.note = text; a.first_failure = ff; a.spec_gap = gap; a.edited_at = now();
+      if (ff) clearOthers(d, a.id);
     });
   } else {
-    const ff = $("cmp-ff") && $("cmp-ff").checked;
     const b = batchOf(s.scenario_id);
     const ann = {
       id: newId("ann"), kind: "open_code", author: "human", ts: now(),
       session_id: s.session_id, scenario_id: s.scenario_id, trace_id: s.turns[c.turn].trace_id,
-      turn: c.turn, msg_index: c.idx, quote: c.quote || "", note: text, first_failure: !!ff,
+      turn: c.turn, msg_index: c.idx, quote: c.quote || "", note: text, first_failure: !!ff, spec_gap: gap,
       batch: b ? b.batch.id : null, status: "active", history: [],
     };
-    await mutate("annotations", (d) => { d.annotations.push(ann); });
+    await mutate("annotations", (d) => { if (ff) clearOthers(d, ann.id); d.annotations.push(ann); });
   }
   S.composer = null; status("note saved"); renderReview();
 }
 
-function editNote(a) { S.composer = { turn: a.turn, idx: a.msg_index, quote: a.quote, text: a.note, editing: a.id }; renderComposer(); }
+function editNote(a) { S.composer = { turn: a.turn, idx: a.msg_index, quote: a.quote, text: a.note, editing: a.id, firstFailure: a.first_failure, specGap: !!a.spec_gap }; renderComposer(); }
 async function retractNote(a) {
   const why = prompt("Retract this note? It stays in the saved history. Reason (optional):", "");
   if (why === null) return;
@@ -564,7 +580,8 @@ function renderTaxonomy() {
   const modes = S.patterns.modes;
   const codes = S.annotations.filter((a) => a.kind === "open_code" && active(a));
   const assigned = new Set(modes.flatMap((m) => m.annotation_ids || []));
-  const shown = codes.filter((a) => S.codeFilter === "all" || !assigned.has(a.id));
+  const shown = codes.filter((a) => S.codeFilter === "all"
+    || (S.codeFilter === "gaps" ? a.spec_gap : !a.spec_gap && !assigned.has(a.id)));
   const modeCards = modes.map((m, mi) => `
     <div class="mode${m.status === "rejected" ? " rejected" : ""}" data-mi="${mi}">
       <div class="grid">
@@ -588,8 +605,8 @@ function renderTaxonomy() {
     <div><div style="display:flex;justify-content:space-between;align-items:center"><h2>Failure modes (${modes.filter((m) => m.status !== "rejected").length} active)</h2><button id="addmode">+ New mode</button></div>
       ${modeCards || '<p class="dim">No modes yet. Axial coding starts after the first review batch: group open codes that one product change would fix.</p>'}</div>
     <div><div style="display:flex;justify-content:space-between;align-items:center"><h2>Open codes (${shown.length} of ${codes.length})</h2>
-      <select id="codefilter"><option value="unassigned"${S.codeFilter === "unassigned" ? " selected" : ""}>unassigned only</option><option value="all"${S.codeFilter === "all" ? " selected" : ""}>all</option></select></div>
-      ${shown.map((a) => `<div class="code"><div class="meta"><a class="lnk" data-goto="${esc(a.scenario_id)}">${esc(a.scenario_id)}</a> · turn ${(a.turn ?? 0) + 1} · ${esc(a.batch || "")}${a.first_failure ? " · first failure" : ""}</div>
+      <select id="codefilter"><option value="unassigned"${S.codeFilter === "unassigned" ? " selected" : ""}>unassigned failures</option><option value="gaps"${S.codeFilter === "gaps" ? " selected" : ""}>spec gaps</option><option value="all"${S.codeFilter === "all" ? " selected" : ""}>all</option></select></div>
+      ${shown.map((a) => `<div class="code"><div class="meta"><a class="lnk" data-goto="${esc(a.scenario_id)}">${esc(a.scenario_id)}</a> · turn ${(a.turn ?? 0) + 1} · ${esc(a.batch || "")}${a.first_failure ? " · first failure" : ""}${a.spec_gap ? " · <b style='color:var(--warn)'>spec gap</b>" : ""}</div>
         <div>${esc(a.note)}</div>
         <div class="assign">${modes.filter((m) => m.name && m.status !== "rejected").map((m) => `<button class="${(m.annotation_ids || []).includes(a.id) ? "on" : ""}" data-assign="${esc(a.id)}" data-mode="${esc(m.name)}">${esc(m.name)}</button>`).join("")}</div></div>`).join("") || '<p class="dim">Nothing here.</p>'}</div></div>`;
 
@@ -711,7 +728,8 @@ function renderProgress() {
     <div class="kpis">
       <div class="kpi"><div class="v">${traces}</div><div class="l">traces in review set (${sessions.length} sessions)</div></div>
       <div class="kpi"><div class="v">${reviewed.reduce((n, s) => n + s.turns.length, 0)}</div><div class="l">traces open-coded (${reviewed.length} sessions)</div></div>
-      <div class="kpi"><div class="v">${codes.length}</div><div class="l">open codes</div></div>
+      <div class="kpi"><div class="v">${codes.filter((a) => !a.spec_gap).length}</div><div class="l">open codes</div></div>
+      <div class="kpi"><div class="v">${codes.filter((a) => a.spec_gap).length}</div><div class="l">possible spec gaps</div></div>
       <div class="kpi"><div class="v">${nofail.length}</div><div class="l">no failure observed</div></div>
       <div class="kpi"><div class="v">${modes.length}</div><div class="l">active modes</div></div>
       <div class="kpi"><div class="v">${sg("pending").length} / ${sg("accepted").length} / ${sg("rejected").length}</div><div class="l">suggestions pending / accepted / rejected</div></div>
