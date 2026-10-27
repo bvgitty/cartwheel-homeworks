@@ -262,6 +262,264 @@
           "reason": "cluster 15/15 representative (cluster size 10): shopper/order_status/challenge, 1 turn(s), 3 tool call(s)"
         }
       ]
+    },
+    {
+      "id": "B2",
+      "name": "Batch 2: stratified by user role (10 per value)",
+      "method": "stratified on role, 10 per value",
+      "seed": 4,
+      "selected_at": "2026-10-27T22:04:46.171807+00:00",
+      "items": [
+        {
+          "scenario_id": "support-0218",
+          "session_id": "4a0790b4-28ff-4b38-bfc6-ffd60a76760f",
+          "trace_ids": [
+            "f630c51b7071815f5f5a3706f8ef44a1"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0012",
+          "session_id": "7d9d421c-cf43-4db4-a9ee-56d84fba08f2",
+          "trace_ids": [
+            "af797c3038ff763131b26ef3987008d7"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0137",
+          "session_id": "3306acd2-0ed1-4897-8b56-5ef0bd044202",
+          "trace_ids": [
+            "9a485107096419e1c7a9d4078ed38227"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0105",
+          "session_id": "10df52f8-dc06-406c-b485-28f6d1b8fefb",
+          "trace_ids": [
+            "6d5b67cc629a6d76f909796e2dfb1944",
+            "4b6311e7a89663bb6a7efdc55f16cafb"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0237",
+          "session_id": "7689aaaa-8641-4c66-bb1e-283b2bf7c767",
+          "trace_ids": [
+            "76b4ec0499aa7cc1a70eb49950ca9f3a"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0238",
+          "session_id": "1dc579b4-95bf-4324-8811-cba1e5a2fcbd",
+          "trace_ids": [
+            "363618d681e724253e6a948930403a61"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0065",
+          "session_id": "db532fac-6619-4403-a3e1-938a3697d161",
+          "trace_ids": [
+            "1b8f80a7d7806d84d39a8991b03754f0",
+            "890f86121e256f580c4d0f49a5ecd929",
+            "09250de3fc0ceb02594bc43c184fff1b"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0234",
+          "session_id": "43382e3a-cb36-431c-847d-92e2196603b5",
+          "trace_ids": [
+            "10467096b35793def6eb04a7f5c14aeb"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0003",
+          "session_id": "fde191e8-f95b-4438-a290-2b3567fb2f17",
+          "trace_ids": [
+            "747ce1560e72006555efd2e721319978"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0095",
+          "session_id": "5445d290-d336-4842-a362-05c96b2ade3e",
+          "trace_ids": [
+            "bf9694987cb6a5c7081fa0a691d5abe8"
+          ],
+          "reason": "stratified on role=merchant (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0251",
+          "session_id": "c5a82092-d882-4db7-8209-629faa31826d",
+          "trace_ids": [
+            "27d82b72dd592e6dee85ce6b3b60692f",
+            "f1919c4193d3011cdf21bc73a543d680",
+            "040fdec8af9fcdf768c350d10d8d4670"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0090",
+          "session_id": "cc3ea45a-fe85-4443-8458-e1ada1f8ed12",
+          "trace_ids": [
+            "42fef58a7289b41b3829297b52fcfd67"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0133",
+          "session_id": "6d9dbf58-678c-47d2-b8c8-83175792624d",
+          "trace_ids": [
+            "98c8ae25811ff587225601b57025e6b7",
+            "0f2de685431cd6b259df9973b83746c2"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0227",
+          "session_id": "4d96b41f-f6ab-47df-805a-c9888047f420",
+          "trace_ids": [
+            "408affeebe640f9af3b156ec723369bc"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0031",
+          "session_id": "3fe83e2a-e075-47ac-9af6-b9014c12380f",
+          "trace_ids": [
+            "f5d5d7ebd9208e3982fc7b64f12fe3c7"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0078",
+          "session_id": "1aec6b90-a542-40a0-884d-463f57a6eb06",
+          "trace_ids": [
+            "c91b939216dd4aa781bb9a5293be9ab9"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0132",
+          "session_id": "f0ef0362-97f4-4bf0-917b-f18d4c60fea8",
+          "trace_ids": [
+            "1da2337da9eb9b5e120bdc76ffbc2a88"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0002",
+          "session_id": "109dd140-4679-4e2c-aa7e-c22b800e4c85",
+          "trace_ids": [
+            "46c3c48c7b9ec35f854fc21b5b69e548",
+            "c1ec8fa2cfd434f5cda63e1baef4cb61"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0217",
+          "session_id": "d2ca9ef6-8ff0-42f8-a488-1f8043f6a300",
+          "trace_ids": [
+            "cb0391a3cbd8ce4e8b268591f5b237b8"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0094",
+          "session_id": "a6ae1fb7-378e-4879-95eb-2e5d2b7aa59e",
+          "trace_ids": [
+            "683a005ea6db47535d27a6967f148881",
+            "855acb99f6c5c3040726ff44d71b19b0"
+          ],
+          "reason": "stratified on role=shopper (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0121",
+          "session_id": "7b6ce3e2-c9f0-492c-838f-63f72cbca7c4",
+          "trace_ids": [
+            "0c9fed02e54cb8e6014dc9c2e45e60fc"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0122",
+          "session_id": "b51ac415-c703-4a3c-809e-d4580924599c",
+          "trace_ids": [
+            "b1c3274a3bed18a94f8dc228daefcc8a"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0134",
+          "session_id": "80a565b8-fe0d-4c5a-8a6d-f97212cace64",
+          "trace_ids": [
+            "629cd210be6a95d9a523b6be6df545a4"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0086",
+          "session_id": "81fdb46f-05b7-4d67-b509-a4a8cfdf0e3f",
+          "trace_ids": [
+            "935294e2bfb733c4bfafd9c6d877f5cf"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0046",
+          "session_id": "bc46da09-66f5-492e-8320-01062015bf4c",
+          "trace_ids": [
+            "73b718f2c3653f690402e31fb2c9ee66",
+            "9f5eec36cf00956d44a5577a0418df17"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0049",
+          "session_id": "7d03de1d-45a2-4e94-ae49-8870626cb619",
+          "trace_ids": [
+            "6725cd5dd43fc4fcc6fd89722a9ddc13"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0025",
+          "session_id": "5644aaee-0dd0-48df-8fab-ddfd54404c9d",
+          "trace_ids": [
+            "558da6e77e7a55f1cd10d37bc4c14c13"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0059",
+          "session_id": "71dcec5e-673a-4c9a-8e52-03b5881145ca",
+          "trace_ids": [
+            "584e66a77e0a1fcc0dcb6de3d7d5f72f"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0057",
+          "session_id": "a19bf928-ba86-44f2-a277-49dc5344099e",
+          "trace_ids": [
+            "16e6b42fe6d50cb393deeb763b749a46"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        },
+        {
+          "scenario_id": "support-0088",
+          "session_id": "688dfa2e-d53c-443e-bd46-ed25ba9d4f99",
+          "trace_ids": [
+            "7f2a627ca97bd29e389b60e2a4167353"
+          ],
+          "reason": "stratified on role=support (10 per value, random within value)"
+        }
+      ]
     }
   ]
 }
