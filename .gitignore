@@ -12,6 +12,8 @@ data/cartwheel.db
 scenarios/results/
 replay/results/
 .harbor/
+# HW4 review cache, rebuilt from Langfuse by analysis.review_app.build_cache
+analysis/review_app/cache/
 
 # Python
 __pycache__/

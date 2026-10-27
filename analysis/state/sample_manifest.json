@@ -1,0 +1,267 @@
+{
+  "source": "langfuse",
+  "unit": "Sampling per scenario (one session each); every turn-trace of a picked session is reviewed and labeled.",
+  "batches": [
+    {
+      "id": "B1",
+      "name": "uniform + cluster representatives",
+      "method": "15 uniform; 15 k-means cluster representatives",
+      "seed": 4,
+      "selected_at": "2026-10-27T03:37:35.865436+00:00",
+      "items": [
+        {
+          "scenario_id": "support-0153",
+          "session_id": "66639c1a-3066-477f-b827-8294a4553370",
+          "trace_ids": [
+            "93d9ceed5f546684ba644ea0cddc5fe4"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0215",
+          "session_id": "44511c03-d8bf-421f-b19d-a7bce493d5f0",
+          "trace_ids": [
+            "f5d31e646306154d2a023d54eb5b7b34"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0020",
+          "session_id": "10f59b59-5b44-4ae1-96ba-464f487a7e58",
+          "trace_ids": [
+            "6f8888754a6b083637cec5bc79fdf446"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0249",
+          "session_id": "5280d9f1-3807-481f-8cd7-fd1110312adf",
+          "trace_ids": [
+            "435a2b18b455f975550b5f6e85037cfa",
+            "87eb1128a032f0922b1629a7d6398032"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0039",
+          "session_id": "c8b3499f-d893-4e55-814b-f498ac2ad3eb",
+          "trace_ids": [
+            "7295714377871ebceb78a56018a97d94",
+            "2d0f2b0463d973978a77dd1778f7faff"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0225",
+          "session_id": "53e5e75c-805a-4ff6-b395-1d9bd1822807",
+          "trace_ids": [
+            "b62178d3d997d83540d18ae1f318ddbd"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0042",
+          "session_id": "0c00af31-9f55-4540-8822-9b6942d305cf",
+          "trace_ids": [
+            "229ea9c4d87b9ecc1e87068bfc2bcbdb"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0014",
+          "session_id": "971be4ae-7874-4a25-bfd6-d95a3dc0eaf3",
+          "trace_ids": [
+            "522ee25660dc8049242928032142e51f",
+            "42aea1a64b8ae3f2b4f46c9a5b6e5c5f",
+            "df035289e5845d8e75e767768e381ad1",
+            "eb987ba9d3f5f05279e2117996336e8e"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0110",
+          "session_id": "9bb1582d-0905-4051-b78d-3ea2f3d63de3",
+          "trace_ids": [
+            "887b7dea65a66d8ce453dc6ada016cb3",
+            "bdc0ab91ae9090a00f797cd05e7a8fa0"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0179",
+          "session_id": "bbfed9fe-1661-4b84-8980-d2e4ab3603e5",
+          "trace_ids": [
+            "c0ba1dfbb0477344b0e2a221b26c8289"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0170",
+          "session_id": "63ee4196-7119-477f-944a-a65ed01d5cca",
+          "trace_ids": [
+            "54db72013da724601d126d06ec259500"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0205",
+          "session_id": "f64a876e-f346-4bf2-975e-74e9595db411",
+          "trace_ids": [
+            "369418ca4c622781e5106109eaf05b81"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0142",
+          "session_id": "c4f94039-7d9d-47af-b039-e3b8372b7a3b",
+          "trace_ids": [
+            "abce16727f546ba9bb60f6fe7740cb86"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0172",
+          "session_id": "34266afa-6859-421f-b4bc-e9b47bb5a34b",
+          "trace_ids": [
+            "c876872b25dc9a29aadd22feac69745b"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0007",
+          "session_id": "0c3d18f3-7c44-452e-9462-c65ab8eb40c6",
+          "trace_ids": [
+            "791c95a9e9c090ea3937c6398a34b253",
+            "3e0719044ba29ee157b1166706318046"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0203",
+          "session_id": "166922ec-a8cd-4733-accb-4002e18b60cd",
+          "trace_ids": [
+            "bec29f6b6f0d293d4eec45acde22c151",
+            "a0ab60e6d084aa30ac9a1a73e0d346ea"
+          ],
+          "reason": "cluster 1/15 representative (cluster size 17): shopper/return_eligibility/coverage, 2 turn(s), 3 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0021",
+          "session_id": "0eff1266-c2ca-4b55-a1e4-15f799da061d",
+          "trace_ids": [
+            "db404fa0505e88031baeacf170ec4724"
+          ],
+          "reason": "cluster 2/15 representative (cluster size 23): shopper/order_status/coverage, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0017",
+          "session_id": "58b24a61-ea26-46f5-8d9f-1b4ce89c91b5",
+          "trace_ids": [
+            "b2ce435617b023a8411aeac735daade6"
+          ],
+          "reason": "cluster 3/15 representative (cluster size 19): shopper/product_search/challenge, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0018",
+          "session_id": "9251dcf4-5022-448d-830a-0d0d32fb3fc2",
+          "trace_ids": [
+            "93e64ea2edd0386cf66d58eb603cdb6f"
+          ],
+          "reason": "cluster 4/15 representative (cluster size 18): shopper/policy_question/coverage, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0013",
+          "session_id": "ff7714bd-bd59-494f-a8b5-d8707209d252",
+          "trace_ids": [
+            "482432c9d816298da5fcd7731c4fc0da"
+          ],
+          "reason": "cluster 5/15 representative (cluster size 33): shopper/out_of_scope/coverage, 1 turn(s), 0 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0006",
+          "session_id": "584d6fb6-62bf-4b72-9f66-95fd38b4b107",
+          "trace_ids": [
+            "60d8f80fbedebe1e204537fcca912891"
+          ],
+          "reason": "cluster 6/15 representative (cluster size 26): shopper/return_eligibility/coverage, 1 turn(s), 2 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0041",
+          "session_id": "aece9c8b-b7f7-448a-ba60-0c287829f8c0",
+          "trace_ids": [
+            "2611d71bbef3cb18cf55b3c9ae247e16"
+          ],
+          "reason": "cluster 7/15 representative (cluster size 15): shopper/product_search/coverage, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0001",
+          "session_id": "57d07ef7-33a7-4214-b199-0b7e7d720e67",
+          "trace_ids": [
+            "6cb5126076af88604beab932916b9c94"
+          ],
+          "reason": "cluster 8/15 representative (cluster size 20): shopper/refund/challenge, 1 turn(s), 2 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0087",
+          "session_id": "c0b369a4-6f40-4d9f-be0a-b4b47a10be9c",
+          "trace_ids": [
+            "c8a507aaaf4c7c3d1f6e392e4dda2324",
+            "b9d32f9c75948604859cf19e0110ff04",
+            "6b640d068758c9bce17e4072f472fa76"
+          ],
+          "reason": "cluster 9/15 representative (cluster size 13): shopper/refund/challenge, 3 turn(s), 4 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0140",
+          "session_id": "d813fe5b-db83-46d1-8725-d2135dab7777",
+          "trace_ids": [
+            "d4e6245918781b94555e8c81414548f3",
+            "236efa310982b6b840867c76d57faa15"
+          ],
+          "reason": "cluster 10/15 representative (cluster size 12): shopper/policy_question/coverage, 2 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0027",
+          "session_id": "3a8a61cb-06f3-4949-9dfd-02d480c44bd9",
+          "trace_ids": [
+            "c7467f72816d688f91a0ac1f0b3f8ea3"
+          ],
+          "reason": "cluster 11/15 representative (cluster size 15): support/order_status/coverage, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0156",
+          "session_id": "1477712a-108d-4499-b9d6-d50cd2974916",
+          "trace_ids": [
+            "927e2b0e6683bf17f3e3d6b0b003fc75",
+            "b87b619243ae3a1838c9dbc0f59fcb7f"
+          ],
+          "reason": "cluster 12/15 representative (cluster size 10): shopper/product_search/challenge, 2 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0075",
+          "session_id": "bc2a1714-d6fd-4de4-9523-093e6cb35177",
+          "trace_ids": [
+            "4217b3a6de2f24e8b9736b446242dd7a"
+          ],
+          "reason": "cluster 13/15 representative (cluster size 11): merchant/refund/coverage, 1 turn(s), 2 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0081",
+          "session_id": "191735b1-bd73-4206-9342-03807b89d2df",
+          "trace_ids": [
+            "b25c80ed73083a48308e3482ba732254"
+          ],
+          "reason": "cluster 14/15 representative (cluster size 8): merchant/payout_question/coverage, 1 turn(s), 1 tool call(s)"
+        },
+        {
+          "scenario_id": "support-0032",
+          "session_id": "23eeee77-b7a4-406a-972f-026623737e87",
+          "trace_ids": [
+            "78d05d397b6c5c969896aa58fbd453bb"
+          ],
+          "reason": "cluster 15/15 representative (cluster size 10): shopper/order_status/challenge, 1 turn(s), 3 tool call(s)"
+        }
+      ]
+    }
+  ]
+}

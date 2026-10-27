@@ -145,7 +145,13 @@ def fetch_traces(
         trace_id = str(full.id)
         if trace_id in seen:
             continue
-        normalized = normalize_trace(full)
+        try:
+            normalized = normalize_trace(full)
+        except ValueError as exc:
+            # A trace with no messages (e.g. a request that errored before the
+            # agent ran) has nothing to review; skip it instead of aborting.
+            print(f"fetch_traces: skipping {trace_id}: {exc}")
+            continue
         if tag is None and not normalized.get("meta", {}).get("scenario_id"):
             continue
         seen[trace_id] = normalized
@@ -327,6 +333,7 @@ def write_label_score(
     label: int,
     comment: str | None = None,
     client: Any | None = None,
+    score_id: str | None = None,
 ) -> str:
     """Write a human label back to Langfuse as a numeric score.
 
@@ -342,6 +349,8 @@ def write_label_score(
         label: 0 or 1.
         comment: optional free-text note stored alongside the score.
         client: an existing Langfuse client.
+        score_id: optional stable id; writing the same id again updates the
+            score in place, so a relabel does not leave a duplicate score.
 
     Returns:
         The Langfuse trace id the score was written against.
@@ -354,6 +363,7 @@ def write_label_score(
         trace_id=langfuse_id,
         data_type="NUMERIC",
         comment=comment,
+        score_id=score_id,
     )
     lf.flush()
     return langfuse_id
