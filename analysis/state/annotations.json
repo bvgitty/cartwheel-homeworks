@@ -1757,7 +1757,7 @@
     },
     {
       "id": "ann-5horbt2x",
-      "kind": "no_failure",
+      "kind": "open_code",
       "author": "human",
       "ts": "2026-10-28T16:47:48.539Z",
       "session_id": "e78810e1-64fe-4245-8f17-2fbcf93a1e0c",
@@ -1778,6 +1778,12 @@
           "first_failure": false,
           "spec_gap": false,
           "ts": "2026-10-28T16:47:48.539Z"
+        },
+        {
+          "note": "Do not match the tone of the user and avoid repeating what the user said, like \"even if the roommate asked you to\" etc. keep the denials   strictly to policy",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-28T18:36:41.029056+00:00"
         }
       ],
       "spec_gap": false,
@@ -1866,12 +1872,26 @@
       "turn": 2,
       "msg_index": 1,
       "quote": "",
-      "note": "again - rambling and too verbose",
-      "first_failure": true,
-      "spec_gap": false,
+      "note": "again - rambling and too verbose. spec  needs adjustment",
+      "first_failure": false,
+      "spec_gap": true,
       "batch": "B3",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "again - rambling and too verbose",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-28T18:04:39.909Z"
+        },
+        {
+          "note": "again - rambling and too verbose. spec  needs adjustment",
+          "first_failure": false,
+          "spec_gap": false,
+          "ts": "2026-10-28T18:30:03.276Z"
+        }
+      ],
+      "edited_at": "2026-10-28T18:30:06.407Z"
     },
     {
       "id": "ann-xco1p03q",
@@ -1884,12 +1904,20 @@
       "turn": 0,
       "msg_index": 5,
       "quote": "",
-      "note": "Issue refund shouldn't have been called. it should have been escalate dto human.",
-      "first_failure": true,
+      "note": "Issue refund shouldn't have been called. it should have been escalate dto human. though it is not a failure as per spec",
+      "first_failure": false,
       "spec_gap": false,
       "batch": "B3",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "Issue refund shouldn't have been called. it should have been escalate dto human.",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-28T18:06:32.510Z"
+        }
+      ],
+      "edited_at": "2026-10-28T18:25:48.254Z"
     },
     {
       "id": "ann-40lffbgv",
