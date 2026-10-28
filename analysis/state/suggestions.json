@@ -5,12 +5,15 @@
     "author": "agent",
     "mode": "access_overreach",
     "signal": "a tool returned permission_denied",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "e18f1fd9-28e8-4144-9c69-2ec5181a568e",
     "scenario_id": "support-0169",
     "trace_id": "e902dfe148e03ad702044b0a17dcfb1d",
-    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:00:07.916Z",
+    "decision_note": "Agent correctly rejected access and didnt share any order information that didnt belong to the user",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-02",
@@ -18,12 +21,15 @@
     "author": "agent",
     "mode": "access_overreach",
     "signal": "a tool returned permission_denied",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "2be7fdb1-4dd0-4ded-9972-e3be939cbf59",
     "scenario_id": "support-0019",
     "trace_id": "c4e3554f4ed31576fe93e0d3c57a229d",
-    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:01:43.329Z",
+    "decision_note": "Agent correctly handled the access denied part and didnt share additional info",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-03",
@@ -31,12 +37,15 @@
     "author": "agent",
     "mode": "access_overreach",
     "signal": "a tool returned permission_denied",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "16e614f0-fb0a-4dcb-94d0-5801d93ac226",
     "scenario_id": "support-0066",
     "trace_id": "7a1c9715d5522e7818cde21278cfe13a",
-    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:08:46.687Z",
+    "decision_note": "While access denied is true all this additional promises about exception review is not needed",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-04",
@@ -44,12 +53,15 @@
     "author": "agent",
     "mode": "access_overreach",
     "signal": "a tool returned permission_denied",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "62b4153e-d069-4c6e-ac88-b04a7604b8f0",
     "scenario_id": "support-0231",
     "trace_id": "82a0c628620ce3dc301f252d29eda1c0",
-    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for access_overreach: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:22:15.539Z",
+    "decision_note": "Agent denied access and didnt share any non user information",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-05",
@@ -57,12 +69,15 @@
     "author": "agent",
     "mode": "denial_not_explained",
     "signal": "check_return_eligibility returned eligible=false",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "27070e19-9559-4878-89e1-848b610a9094",
     "scenario_id": "support-0043",
     "trace_id": "9a752d906c56904137a49551d4af1471",
-    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:25:34.807Z",
+    "decision_note": "No reason or context is provided about return window expiry. ",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-06",
@@ -70,12 +85,15 @@
     "author": "agent",
     "mode": "denial_not_explained",
     "signal": "check_return_eligibility returned eligible=false",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "373d1855-9d31-42f0-ae8f-4acb050e52e1",
     "scenario_id": "support-0056",
     "trace_id": "d09f8c4887834b2cac9fcd407c64c39c",
-    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:29:21.242Z",
+    "decision_note": "Provides reason clearly as to why the product cannot be returned",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-07",
@@ -83,12 +101,15 @@
     "author": "agent",
     "mode": "denial_not_explained",
     "signal": "check_return_eligibility returned eligible=false",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "cddea99c-d405-4f33-b320-0b1412d29931",
     "scenario_id": "support-0165",
     "trace_id": "299c538ae5287e05c3f2f48ef8af3879",
-    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:30:58.860Z",
+    "decision_note": "Reason provided with clear details",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-08",
@@ -96,12 +117,15 @@
     "author": "agent",
     "mode": "denial_not_explained",
     "signal": "check_return_eligibility returned eligible=false",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "53d819e0-a3f6-4b5c-90c7-e9a1ac490a33",
     "scenario_id": "support-0022",
     "trace_id": "d51af6c880287727360103a6ceeda482",
-    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for denial_not_explained: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:32:55.682Z",
+    "decision_note": "Clear details provided for denial",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-09",
@@ -109,12 +133,15 @@
     "author": "agent",
     "mode": "tone_mismatch",
     "signal": "user_style is frustrated_impatient or repetitive_pressuring",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "7f11491e-631e-45fe-a6cc-5b745077d51c",
     "scenario_id": "support-0155",
     "trace_id": "a74f9522f3e6724d4e06750d7c351f16",
-    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:33:38.002Z",
+    "decision_note": "Clear reason provided for denial",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-10",
@@ -122,12 +149,15 @@
     "author": "agent",
     "mode": "tone_mismatch",
     "signal": "user_style is frustrated_impatient or repetitive_pressuring",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "c472b131-4c81-4d0f-910f-93040c6abd99",
     "scenario_id": "support-0076",
     "trace_id": "98b97cd995ee40c577babbb5968b025a",
-    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T07:35:56.688Z",
+    "decision_note": "no tone issue noted in reply.",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-11",

@@ -80,7 +80,8 @@
         "ann-34gviftu"
       ],
       "example_trace_ids": [
-        "522ee25660dc8049242928032142e51f"
+        "522ee25660dc8049242928032142e51f",
+        "9a752d906c56904137a49551d4af1471"
       ],
       "close_negative_trace_ids": [],
       "history": [
@@ -361,7 +362,8 @@
         "ann-pmqsktvx"
       ],
       "example_trace_ids": [
-        "1b8f80a7d7806d84d39a8991b03754f0"
+        "1b8f80a7d7806d84d39a8991b03754f0",
+        "7a1c9715d5522e7818cde21278cfe13a"
       ],
       "close_negative_trace_ids": [],
       "history": [
