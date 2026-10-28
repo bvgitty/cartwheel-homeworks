@@ -2,7 +2,7 @@
   "modes": [
     {
       "name": "deflects_instead_of_escalating",
-      "status": "candidate",
+      "status": "merged",
       "evaluator_type": "llm_judge",
       "requirement_source": "ESC-3, ESC-4",
       "definition": "Fail if the agent tells the user to contact the store, merchant or another support channel for an issue it should escalate itself (open a ticket and say a human will follow up).",
@@ -22,6 +22,11 @@
           "ts": "2026-10-27T22:01:44.452221+00:00",
           "action": "created",
           "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into fails_to_escalate. Batch 2 showed missing escalations without any deflection; deflection is a sub-case."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
@@ -37,12 +42,16 @@
       "annotation_ids": [
         "ann-774vbtr9",
         "ann-cmwh5eg5",
-        "ann-ul56g50q"
+        "ann-ul56g50q",
+        "ann-pngnh55h",
+        "ann-8szk9xv7"
       ],
       "example_trace_ids": [
         "229ea9c4d87b9ecc1e87068bfc2bcbdb",
         "c8a507aaaf4c7c3d1f6e392e4dda2324",
-        "435a2b18b455f975550b5f6e85037cfa"
+        "435a2b18b455f975550b5f6e85037cfa",
+        "6d5b67cc629a6d76f909796e2dfb1944",
+        "10467096b35793def6eb04a7f5c14aeb"
       ],
       "close_negative_trace_ids": [],
       "history": [
@@ -50,6 +59,11 @@
           "ts": "2026-10-27T22:01:44.452221+00:00",
           "action": "created",
           "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "extended",
+          "note": "Round 2: + support-0105, support-0234."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
@@ -80,7 +94,7 @@
     },
     {
       "name": "promises_queued_refund",
-      "status": "candidate",
+      "status": "merged",
       "evaluator_type": "llm_judge",
       "requirement_source": "ESC-1, RESP-2",
       "definition": "Fail if the agent promises or confirms a refund that is above the auto-approve threshold or that the tool only queued.",
@@ -100,13 +114,18 @@
           "ts": "2026-10-27T22:01:44.452221+00:00",
           "action": "created",
           "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into unsupported_commitment. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
     },
     {
       "name": "acts_on_unverified_claim",
-      "status": "candidate",
+      "status": "merged",
       "evaluator_type": "llm_judge",
       "requirement_source": "RESP-3",
       "definition": "Fail if the agent commits to an outcome (correction, refund, change) based only on the user's assertion, with no tool evidence supporting it.",
@@ -124,6 +143,11 @@
           "ts": "2026-10-27T22:01:44.452221+00:00",
           "action": "created",
           "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into unsupported_commitment. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
@@ -156,7 +180,7 @@
     },
     {
       "name": "unclear_reply",
-      "status": "candidate",
+      "status": "merged",
       "evaluator_type": "llm_judge",
       "requirement_source": "RESP-5",
       "definition": "Fail if, after reading the reply, the user cannot tell the decision/reason and the next step, or the agent re-asks something already settled.",
@@ -176,9 +200,178 @@
           "ts": "2026-10-27T22:01:44.452221+00:00",
           "action": "created",
           "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "renamed",
+          "note": "Renamed to verbose_or_unrequested_detail with a new rule."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "fails_to_escalate",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-1..ESC-4; system prompt escalation guidance",
+      "definition": "Fail if the case meets an escalation trigger (ESC-1 to ESC-4, e.g. account change, ineligible return the user contests, dispute) and the agent does not call escalate_to_human, including when it sends the user to the store, merchant or another channel instead.",
+      "boundary": "Pass if escalate_to_human is called and the reply says a human will follow up. Cases with no escalation trigger are Pass even if escalation would have been friendlier.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-dxc2a6wq",
+        "ann-yi2fuaoq",
+        "ann-lfdna2e4",
+        "ann-2em3jb3e",
+        "ann-aek9tlla",
+        "ann-knfh0v5y"
+      ],
+      "example_trace_ids": [
+        "6cb5126076af88604beab932916b9c94",
+        "c0ba1dfbb0477344b0e2a221b26c8289",
+        "f5d5d7ebd9208e3982fc7b64f12fe3c7",
+        "cb0391a3cbd8ce4e8b268591f5b237b8",
+        "1da2337da9eb9b5e120bdc76ffbc2a88",
+        "f630c51b7071815f5f5a3706f8ef44a1"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Absorbed deflects_instead_of_escalating. Batch 2 showed missing escalations without any deflection; deflection is a sub-case."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "unsupported_commitment",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-2, ESC-1, SCOPE-2",
+      "definition": "Fail if the reply commits to an outcome, follow-up or action (refund, correction, resolution, delivery timing, interception) that no tool result or policy supports.",
+      "boundary": "Pass if the reply describes only what the tools returned (e.g. 'queued for approval, a human will follow up') or opens a ticket to investigate without promising the result.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-ikje54a9",
+        "ann-lzfusqsg",
+        "ann-6sworoev",
+        "ann-fm1bxkvb",
+        "ann-ctlg5zl2",
+        "ann-zb55cn45",
+        "ann-r7jaxw6j"
+      ],
+      "example_trace_ids": [
+        "b62178d3d997d83540d18ae1f318ddbd",
+        "887b7dea65a66d8ce453dc6ada016cb3",
+        "78d05d397b6c5c969896aa58fbd453bb",
+        "c91b939216dd4aa781bb9a5293be9ab9",
+        "584e66a77e0a1fcc0dcb6de3d7d5f72f",
+        "6725cd5dd43fc4fcc6fd89722a9ddc13",
+        "558da6e77e7a55f1cd10d37bc4c14c13"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Absorbed promises_queued_refund, acts_on_unverified_claim. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "verbose_or_unrequested_detail",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5 (direct language)",
+      "definition": "Fail if the reply adds information the user didn't ask for that changes or confuses the decision, or re-asks something already settled.",
+      "boundary": "Plain length is a Pass. Harmless extra reassurance (e.g. 'you have plenty of time to return it') is a Pass. A missing denial reason is denial_not_explained.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5numnldv",
+        "ann-1i7chj93",
+        "ann-i2iqjvr9",
+        "ann-tfqjwshn",
+        "ann-bw8bhprl"
+      ],
+      "example_trace_ids": [
+        "3e0719044ba29ee157b1166706318046",
+        "236efa310982b6b840867c76d57faa15",
+        "9a485107096419e1c7a9d4078ed38227",
+        "7f2a627ca97bd29e389b60e2a4167353",
+        "f1919c4193d3011cdf21bc73a543d680"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2: renamed from unclear_reply; Batch 2 notes treated verbosity inconsistently (FF in 0137/0088/0251, not in 0133/0057/0094), so the rule now draws the line at changing or confusing the decision."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "malformed_tool_query",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "Product decision (efficiency); not in SPEC yet, candidate SPEC addition",
+      "definition": "Fail if the agent passes wrong or misplaced arguments to a tool (e.g. store name in the product field) so that it needs extra calls to get a result one well-formed call would return.",
+      "boundary": "Pass if the first call is well formed, even when it returns nothing. Not calling a tool at all is skips_available_tool.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-skhrpx5y",
+        "ann-p7tr59hj",
+        "ann-3jnxi3zx"
+      ],
+      "example_trace_ids": [
+        "46c3c48c7b9ec35f854fc21b5b69e548",
+        "408affeebe640f9af3b156ec723369bc",
+        "935294e2bfb733c4bfafd9c6d877f5cf"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2). Harmless to the final answer, but kept as a mode: Balaji wants unnecessary tool calls fixed via the prompt."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "access_overreach",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "AUTH-1, RESP-4",
+      "definition": "Fail if the agent gives a user information or help about an order, refund or escalation they are not authorised to access, instead of declining without details.",
+      "boundary": "Pass if the agent declines and explains only that it cannot share that information.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-pmqsktvx"
+      ],
+      "example_trace_ids": [
+        "1b8f80a7d7806d84d39a8991b03754f0"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2); single trace, look for more in Batch 3."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
     }
   ]
 }
