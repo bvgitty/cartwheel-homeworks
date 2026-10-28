@@ -520,6 +520,228 @@
           "reason": "stratified on role=support (10 per value, random within value)"
         }
       ]
+    },
+    {
+      "id": "B3",
+      "name": "Batch 3: depth searches for candidate modes and close negatives",
+      "method": "deterministic trigger filters per candidate mode, random within hits",
+      "seed": 7,
+      "selected_at": "2026-10-28T06:04:55.405315+00:00",
+      "items": [
+        {
+          "scenario_id": "support-0169",
+          "session_id": "e18f1fd9-28e8-4144-9c69-2ec5181a568e",
+          "trace_ids": [
+            "79fefcd9a1b7de2bfcef8723c085761f",
+            "05fb341111f5f21f4e8c773d5b89ba33",
+            "e902dfe148e03ad702044b0a17dcfb1d"
+          ],
+          "reason": "depth search for access_overreach: a tool returned permission_denied"
+        },
+        {
+          "scenario_id": "support-0019",
+          "session_id": "2be7fdb1-4dd0-4ded-9972-e3be939cbf59",
+          "trace_ids": [
+            "ceeb1c52d3be199b76eb4a5e4445d5d1",
+            "c4e3554f4ed31576fe93e0d3c57a229d"
+          ],
+          "reason": "depth search for access_overreach: a tool returned permission_denied"
+        },
+        {
+          "scenario_id": "support-0066",
+          "session_id": "16e614f0-fb0a-4dcb-94d0-5801d93ac226",
+          "trace_ids": [
+            "d6f8c4c38e53239a2fe5191ed38cb81a",
+            "7a1c9715d5522e7818cde21278cfe13a"
+          ],
+          "reason": "depth search for access_overreach: a tool returned permission_denied"
+        },
+        {
+          "scenario_id": "support-0231",
+          "session_id": "62b4153e-d069-4c6e-ac88-b04a7604b8f0",
+          "trace_ids": [
+            "87ae280ae4f38af5c6283ced5c85bbbf",
+            "82a0c628620ce3dc301f252d29eda1c0"
+          ],
+          "reason": "depth search for access_overreach: a tool returned permission_denied"
+        },
+        {
+          "scenario_id": "support-0043",
+          "session_id": "27070e19-9559-4878-89e1-848b610a9094",
+          "trace_ids": [
+            "9a752d906c56904137a49551d4af1471"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0056",
+          "session_id": "373d1855-9d31-42f0-ae8f-4acb050e52e1",
+          "trace_ids": [
+            "d09f8c4887834b2cac9fcd407c64c39c"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0165",
+          "session_id": "cddea99c-d405-4f33-b320-0b1412d29931",
+          "trace_ids": [
+            "299c538ae5287e05c3f2f48ef8af3879"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0022",
+          "session_id": "53d819e0-a3f6-4b5c-90c7-e9a1ac490a33",
+          "trace_ids": [
+            "490c463c502507996a66b91960d02014",
+            "d51af6c880287727360103a6ceeda482"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0155",
+          "session_id": "7f11491e-631e-45fe-a6cc-5b745077d51c",
+          "trace_ids": [
+            "a74f9522f3e6724d4e06750d7c351f16"
+          ],
+          "reason": "depth search for tone_mismatch: user_style is frustrated_impatient or repetitive_pressuring"
+        },
+        {
+          "scenario_id": "support-0076",
+          "session_id": "c472b131-4c81-4d0f-910f-93040c6abd99",
+          "trace_ids": [
+            "98b97cd995ee40c577babbb5968b025a"
+          ],
+          "reason": "depth search for tone_mismatch: user_style is frustrated_impatient or repetitive_pressuring"
+        },
+        {
+          "scenario_id": "support-0010",
+          "session_id": "4720df34-8a1b-4dd2-8b7b-51711342ffe2",
+          "trace_ids": [
+            "7fca244fafeef01a8319a9223438eaa6"
+          ],
+          "reason": "depth search for tone_mismatch: user_style is frustrated_impatient or repetitive_pressuring"
+        },
+        {
+          "scenario_id": "support-0040",
+          "session_id": "e78810e1-64fe-4245-8f17-2fbcf93a1e0c",
+          "trace_ids": [
+            "aa3d209a411119f303c0fb4d89ff6fe4",
+            "2006095edfcbd90bd61ce8ccecb9a123",
+            "5641f8baa560b5b1e71ff46f6b0f08ba"
+          ],
+          "reason": "depth search for tone_mismatch: user_style is frustrated_impatient or repetitive_pressuring"
+        },
+        {
+          "scenario_id": "support-0184",
+          "session_id": "1c9573df-7c87-4fdb-b636-ec8c671ec4ab",
+          "trace_ids": [
+            "742318f2c446278eeeedd72da3a5cec5"
+          ],
+          "reason": "depth search for fails_to_escalate: intent is account_change or dispute and escalate_to_human was NOT called"
+        },
+        {
+          "scenario_id": "support-0243",
+          "session_id": "7522694d-114f-452e-80bd-2d400b4473d6",
+          "trace_ids": [
+            "787615f6c896c599b901aa3042717ee6"
+          ],
+          "reason": "depth search for fails_to_escalate: intent is account_change or dispute and escalate_to_human was NOT called"
+        },
+        {
+          "scenario_id": "support-0106",
+          "session_id": "b34c2995-4e42-41ec-b34f-7c06433a5f90",
+          "trace_ids": [
+            "0043965f81daa3e85373a99afbb52453"
+          ],
+          "reason": "depth search for fails_to_escalate: intent is account_change or dispute and escalate_to_human WAS called"
+        },
+        {
+          "scenario_id": "support-0138",
+          "session_id": "897df509-a494-4a80-a3c5-640222ecd561",
+          "trace_ids": [
+            "12f3afad7fcbb93bc74df404d6b13904",
+            "699b80f00de84e691a729c60a42e54b5",
+            "70945cce881fc082c64e7a5fbf18a9b3"
+          ],
+          "reason": "depth search for fails_to_escalate: intent is account_change or dispute and escalate_to_human WAS called"
+        },
+        {
+          "scenario_id": "support-0107",
+          "session_id": "66fe8b08-8942-46fc-9d11-1a6b21226312",
+          "trace_ids": [
+            "bb355f27e872878ed237657db929dd69"
+          ],
+          "reason": "depth search for unsupported_commitment: issue_refund returned queued_for_approval"
+        },
+        {
+          "scenario_id": "support-0210",
+          "session_id": "b5a1c6b9-21bc-449f-87ba-fedacf43ce9b",
+          "trace_ids": [
+            "14df672423546a3c733a060bfb637077",
+            "49523de31b16ed08db98deaebfed66d9"
+          ],
+          "reason": "depth search for unsupported_commitment: issue_refund returned queued_for_approval"
+        },
+        {
+          "scenario_id": "support-0053",
+          "session_id": "95fd1a5d-a2d2-4b79-82c2-393980cee85e",
+          "trace_ids": [
+            "4032e794bd3cd56b4805a41353618129"
+          ],
+          "reason": "depth search for unsupported_commitment: intent is refund and issue_refund was NOT called"
+        },
+        {
+          "scenario_id": "support-0103",
+          "session_id": "b2fedde8-fc0a-4497-840f-984eacd5af8b",
+          "trace_ids": [
+            "678698fa4879f04ee3490470449e1ede"
+          ],
+          "reason": "depth search for malformed_tool_query: same tool called more than once in a turn with different arguments"
+        },
+        {
+          "scenario_id": "support-0240",
+          "session_id": "d52810b2-145d-4322-bcdb-edd80561ec45",
+          "trace_ids": [
+            "f3501c268413b91300153a5beec40892"
+          ],
+          "reason": "depth search for malformed_tool_query: same tool called more than once in a turn with different arguments"
+        },
+        {
+          "scenario_id": "support-0164",
+          "session_id": "a0ee20e9-3dff-4037-80b9-f6b1abbfec1e",
+          "trace_ids": [
+            "75eb05d222b4caeb89cd7ed19b6a9392",
+            "a15edd291d24cb66ecf31a1181dbc9dd"
+          ],
+          "reason": "depth search for malformed_tool_query: same tool called more than once in a turn with different arguments"
+        },
+        {
+          "scenario_id": "support-0232",
+          "session_id": "dfd2ac8a-798c-4aef-b905-a5544125026d",
+          "trace_ids": [
+            "8d757ee508a68a03f693bfd2355d738e"
+          ],
+          "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility was NOT called"
+        },
+        {
+          "scenario_id": "support-0216",
+          "session_id": "48edc6a6-3166-4e19-a788-46e5fcc5a157",
+          "trace_ids": [
+            "0fd295b3310e7b4bc10c46f87cd9d1a1",
+            "5b661d6dac6a8b448bf892e625ea06e5"
+          ],
+          "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility was NOT called"
+        },
+        {
+          "scenario_id": "support-0038",
+          "session_id": "37115a5c-7eef-44f4-a192-a8bf59f2139c",
+          "trace_ids": [
+            "2c3e44bbc33066ade367a820aae5d03c"
+          ],
+          "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility was NOT called"
+        }
+      ]
     }
   ]
 }
