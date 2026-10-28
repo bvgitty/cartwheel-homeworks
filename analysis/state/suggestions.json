@@ -165,12 +165,15 @@
     "author": "agent",
     "mode": "tone_mismatch",
     "signal": "user_style is frustrated_impatient or repetitive_pressuring",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "4720df34-8a1b-4dd2-8b7b-51711342ffe2",
     "scenario_id": "support-0010",
     "trace_id": "7fca244fafeef01a8319a9223438eaa6",
-    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T16:39:44.160Z",
+    "decision_note": "No tone mismatch issue noted",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-12",
@@ -178,12 +181,15 @@
     "author": "agent",
     "mode": "tone_mismatch",
     "signal": "user_style is frustrated_impatient or repetitive_pressuring",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "e78810e1-64fe-4245-8f17-2fbcf93a1e0c",
     "scenario_id": "support-0040",
     "trace_id": "5641f8baa560b5b1e71ff46f6b0f08ba",
-    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for tone_mismatch: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T16:47:24.467Z",
+    "decision_note": "Matches the tone of the user \"even if they asked you to\" etc",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-13",
@@ -191,12 +197,15 @@
     "author": "agent",
     "mode": "fails_to_escalate",
     "signal": "intent is account_change or dispute and escalate_to_human was NOT called",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "1c9573df-7c87-4fdb-b636-ec8c671ec4ab",
     "scenario_id": "support-0184",
     "trace_id": "742318f2c446278eeeedd72da3a5cec5",
-    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T16:58:28.365Z",
+    "decision_note": "escalate to human should have been called based on check retrun eligibility",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-14",
@@ -204,12 +213,15 @@
     "author": "agent",
     "mode": "fails_to_escalate",
     "signal": "intent is account_change or dispute and escalate_to_human was NOT called",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "7522694d-114f-452e-80bd-2d400b4473d6",
     "scenario_id": "support-0243",
     "trace_id": "787615f6c896c599b901aa3042717ee6",
-    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T16:59:51.326Z",
+    "decision_note": "escalate to human was not called",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-15",
@@ -217,12 +229,15 @@
     "author": "agent",
     "mode": "fails_to_escalate",
     "signal": "intent is account_change or dispute and escalate_to_human WAS called",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "b34c2995-4e42-41ec-b34f-7c06433a5f90",
     "scenario_id": "support-0106",
     "trace_id": "0043965f81daa3e85373a99afbb52453",
-    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:01:18.276Z",
+    "decision_note": "escalate to human was correctly called",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-16",
@@ -230,12 +245,15 @@
     "author": "agent",
     "mode": "fails_to_escalate",
     "signal": "intent is account_change or dispute and escalate_to_human WAS called",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "897df509-a494-4a80-a3c5-640222ecd561",
     "scenario_id": "support-0138",
     "trace_id": "70945cce881fc082c64e7a5fbf18a9b3",
-    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:05:01.534Z",
+    "decision_note": "escalate to human was called correctly",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-17",
@@ -243,12 +261,15 @@
     "author": "agent",
     "mode": "unsupported_commitment",
     "signal": "issue_refund returned queued_for_approval",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "66fe8b08-8942-46fc-9d11-1a6b21226312",
     "scenario_id": "support-0107",
     "trace_id": "bb355f27e872878ed237657db929dd69",
-    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:08:04.778Z",
+    "decision_note": "Committed a refund possibility for over threshold amount",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-18",
@@ -256,12 +277,15 @@
     "author": "agent",
     "mode": "unsupported_commitment",
     "signal": "issue_refund returned queued_for_approval",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "b5a1c6b9-21bc-449f-87ba-fedacf43ce9b",
     "scenario_id": "support-0210",
     "trace_id": "49523de31b16ed08db98deaebfed66d9",
-    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:11:17.841Z",
+    "decision_note": "no unsupported claim found",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-19",
@@ -269,12 +293,15 @@
     "author": "agent",
     "mode": "unsupported_commitment",
     "signal": "intent is refund and issue_refund was NOT called",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "95fd1a5d-a2d2-4b79-82c2-393980cee85e",
     "scenario_id": "support-0053",
     "trace_id": "4032e794bd3cd56b4805a41353618129",
-    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for unsupported_commitment: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:12:03.946Z",
+    "decision_note": "no unsupported commitment",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-20",
@@ -282,12 +309,15 @@
     "author": "agent",
     "mode": "malformed_tool_query",
     "signal": "same tool called more than once in a turn with different arguments",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "b2fedde8-fc0a-4497-840f-984eacd5af8b",
     "scenario_id": "support-0103",
     "trace_id": "678698fa4879f04ee3490470449e1ede",
-    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:13:14.127Z",
+    "decision_note": "two tool calls due to malformed query",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-21",
@@ -295,12 +325,15 @@
     "author": "agent",
     "mode": "malformed_tool_query",
     "signal": "same tool called more than once in a turn with different arguments",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "d52810b2-145d-4322-bcdb-edd80561ec45",
     "scenario_id": "support-0240",
     "trace_id": "f3501c268413b91300153a5beec40892",
-    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:13:49.792Z",
+    "decision_note": "malformed tool query resulting in duplicate tool calls",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-22",
@@ -308,12 +341,15 @@
     "author": "agent",
     "mode": "malformed_tool_query",
     "signal": "same tool called more than once in a turn with different arguments",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "a0ee20e9-3dff-4037-80b9-f6b1abbfec1e",
     "scenario_id": "support-0164",
     "trace_id": "a15edd291d24cb66ecf31a1181dbc9dd",
-    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for malformed_tool_query: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:16:14.195Z",
+    "decision_note": "the agent used the user query as is which was incorrect in using the store name part of the product title",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-23",
@@ -321,12 +357,15 @@
     "author": "agent",
     "mode": "skips_available_tool",
     "signal": "intent is return_eligibility or refund and check_return_eligibility was NOT called",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "dfd2ac8a-798c-4aef-b905-a5544125026d",
     "scenario_id": "support-0232",
     "trace_id": "8d757ee508a68a03f693bfd2355d738e",
-    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:18:00.639Z",
+    "decision_note": "did not call check return eligibility",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-24",
@@ -334,12 +373,15 @@
     "author": "agent",
     "mode": "skips_available_tool",
     "signal": "intent is return_eligibility or refund and check_return_eligibility was NOT called",
-    "status": "pending",
+    "status": "accepted",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "48edc6a6-3166-4e19-a788-46e5fcc5a157",
     "scenario_id": "support-0216",
     "trace_id": "5b661d6dac6a8b448bf892e625ea06e5",
-    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:21:38.727Z",
+    "decision_note": "check retrun eligibility was not called",
+    "decided_by": "human"
   },
   {
     "id": "sugg-B3-25",
@@ -347,11 +389,14 @@
     "author": "agent",
     "mode": "skips_available_tool",
     "signal": "intent is return_eligibility or refund and check_return_eligibility was NOT called",
-    "status": "pending",
+    "status": "rejected",
     "created_at": "2026-10-28T06:04:55.405315+00:00",
     "session_id": "37115a5c-7eef-44f4-a192-a8bf59f2139c",
     "scenario_id": "support-0038",
     "trace_id": "2c3e44bbc33066ade367a820aae5d03c",
-    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative)."
+    "note": "Search hit for skips_available_tool: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
+    "decided_at": "2026-10-28T18:22:41.596Z",
+    "decision_note": "Status refund didnt warrant a checj return eligibility so agents skipped it rightfully",
+    "decided_by": "human"
   }
 ]
