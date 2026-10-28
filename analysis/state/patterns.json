@@ -316,7 +316,8 @@
       ],
       "close_negative_trace_ids": [
         "4032e794bd3cd56b4805a41353618129",
-        "49523de31b16ed08db98deaebfed66d9"
+        "49523de31b16ed08db98deaebfed66d9",
+        "98b97cd995ee40c577babbb5968b025a"
       ],
       "history": [
         {
@@ -333,6 +334,11 @@
           "ts": "2026-10-28T18:36:41.029056+00:00",
           "action": "revised",
           "note": "Round 3: exception hints (0022, 0056) moved here from denial_not_explained; ESC-1 clarified (queuing happens inside issue_refund). + 0107 (invented review timing, invented no-return policy)."
+        },
+        {
+          "ts": "2026-10-28T19:00:00+00:00",
+          "action": "revised",
+          "note": "Round 3: + close negative 0076 (offers an above-threshold refund without saying it needs approval; an offer is not a commitment)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"

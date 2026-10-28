@@ -1717,11 +1717,19 @@
       "msg_index": 5,
       "quote": "",
       "note": "amount greater than $100 needs approval, so it has to queue for escalation, cannot commit full refund",
-      "first_failure": true,
+      "first_failure": false,
       "spec_gap": false,
       "batch": "B3",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "amount greater than $100 needs approval, so it has to queue for escalation, cannot commit full refund",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-28T07:35:11.856Z"
+        }
+      ],
+      "edited_at": "2026-10-28T18:40:19.748Z"
     },
     {
       "id": "ann-1tc4u3p9",
@@ -1904,8 +1912,8 @@
       "turn": 0,
       "msg_index": 5,
       "quote": "",
-      "note": "Issue refund shouldn't have been called. it should have been escalate dto human. though it is not a failure as per spec",
-      "first_failure": false,
+      "note": "\"tool call correct per ESC-1; reply invents review timing and no-return policy.\"",
+      "first_failure": true,
       "spec_gap": false,
       "batch": "B3",
       "status": "active",
@@ -1915,9 +1923,15 @@
           "first_failure": true,
           "spec_gap": false,
           "ts": "2026-10-28T18:06:32.510Z"
+        },
+        {
+          "note": "Issue refund shouldn't have been called. it should have been escalate dto human. though it is not a failure as per spec",
+          "first_failure": false,
+          "spec_gap": false,
+          "ts": "2026-10-28T18:25:48.254Z"
         }
       ],
-      "edited_at": "2026-10-28T18:25:48.254Z"
+      "edited_at": "2026-10-28T18:41:40.521Z"
     },
     {
       "id": "ann-40lffbgv",

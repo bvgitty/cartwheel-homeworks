@@ -742,6 +742,136 @@
           "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility was NOT called"
         }
       ]
+    },
+    {
+      "id": "B4",
+      "name": "Batch 4: final uniform saturation check",
+      "method": "15 uniform",
+      "seed": 4,
+      "selected_at": "2026-10-28T18:42:44.000078+00:00",
+      "items": [
+        {
+          "scenario_id": "support-0241",
+          "session_id": "ec923164-3c70-463e-b05a-e3cd3bb374d9",
+          "trace_ids": [
+            "3267d3cd8d544f7bc24bd0a175b9f759"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0167",
+          "session_id": "b51c9a50-2cdd-448c-bad2-1ca933ba8db8",
+          "trace_ids": [
+            "73fa749db68b4f49958646b62909f2f8"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0175",
+          "session_id": "ffb8de8a-c358-46fe-be56-90f62adafda6",
+          "trace_ids": [
+            "8512cb4717e8195ee7f8a657222b3736"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0223",
+          "session_id": "84ff17a2-9e40-4c37-bc70-1bdbf42bd4f4",
+          "trace_ids": [
+            "bb4e4de095064aac6894869deae3d853"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0024",
+          "session_id": "19a56c1e-7f42-4cab-adc0-0058e7a220b9",
+          "trace_ids": [
+            "13602d8a8b001c895da8715d084a3125"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0060",
+          "session_id": "927e8bfe-ab9e-46c9-8f23-85f6f75a0d22",
+          "trace_ids": [
+            "6c9c23e8f007e819510c58dd2e246720",
+            "538d783cb3e08918ae18dd08f24c7703"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0061",
+          "session_id": "52548529-bd61-4583-a1a9-ab26823211ba",
+          "trace_ids": [
+            "1c4a0e693d018e6edb9d6ba41c690a2e"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0194",
+          "session_id": "67d42a2f-dba9-46b9-9c9e-d2ab912a035b",
+          "trace_ids": [
+            "647682d09044a37ccc4258d8cae42536"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0182",
+          "session_id": "c375372b-13e0-4795-a4ed-05ac8341a17d",
+          "trace_ids": [
+            "d9901873870763180be01747f463c0c4"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0187",
+          "session_id": "ce1c916d-d82d-4500-aad7-54099c17210a",
+          "trace_ids": [
+            "77253873bbab9ba337ab6a5c729ae5c7"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0246",
+          "session_id": "b504bfcd-c201-4a94-970c-b1e9a10a9d3e",
+          "trace_ids": [
+            "68500f0f368af67562ec30cc6f96ee9e"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0166",
+          "session_id": "3f768ae3-5abc-4d5f-ba90-7ad4d748e7f4",
+          "trace_ids": [
+            "e7e77a0762e83e6c0f88eb83ab889c7b"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0247",
+          "session_id": "2d6ca883-3bd6-4d20-bbec-6fd40aba57cf",
+          "trace_ids": [
+            "f964857a231f89f24cdbc3faab1f4f3b"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0034",
+          "session_id": "1e1c85fd-22de-4e9b-bc97-880fb604b91c",
+          "trace_ids": [
+            "3d68eab09744fd20ae477684f31190c8"
+          ],
+          "reason": "uniform random (seed 4)"
+        },
+        {
+          "scenario_id": "support-0071",
+          "session_id": "7b681128-54fb-4f5e-b309-56289f173b04",
+          "trace_ids": [
+            "1a43bbaf5d71467346095613ec494bf9"
+          ],
+          "reason": "uniform random (seed 4)"
+        }
+      ]
     }
   ]
 }
