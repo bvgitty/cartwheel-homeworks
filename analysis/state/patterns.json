@@ -35,7 +35,7 @@
       "name": "skips_available_tool",
       "status": "candidate",
       "evaluator_type": "llm_judge",
-      "requirement_source": "System prompt tool guidance; RESP-3",
+      "requirement_source": "RESP-6 (SPEC revision), RESP-3",
       "definition": "Fail if the agent guesses, asks the user, or stops when a call to an available tool (e.g. check_return_eligibility, list_orders) would have answered the question.",
       "boundary": "Pass if the tool was called and its result was used, even if the reply is otherwise weak. Missing tools that do not exist are spec gaps, not this mode.",
       "nearest_mode": "",
@@ -89,6 +89,11 @@
           "ts": "2026-10-29T02:25:05.614206+00:00",
           "action": "extended",
           "note": "B5: close negatives 0035 (policy found and used), 0208 (right tools called; failure is denial_not_explained)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: new RESP-6 (call the read tool before guessing or asking), motivated by ann-774vbtr9 (0042), ann-33dsxjcs (0247), ann-17xsqv0s (0175)."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
@@ -324,7 +329,7 @@
       "name": "unsupported_commitment",
       "status": "candidate",
       "evaluator_type": "llm_judge",
-      "requirement_source": "RESP-2, ESC-1, SCOPE-2",
+      "requirement_source": "RESP-2, ESC-1 (clarified), ESC-5 (SPEC revision), SCOPE-2",
       "definition": "Fail if the reply commits to an outcome, follow-up or action (refund, correction, resolution, delivery timing, interception) that no tool result or policy supports.",
       "boundary": "Pass if the reply describes only what the tools returned (e.g. 'queued for approval, a human will follow up') or opens a ticket to investigate without promising the result. Hinting at exceptions or options outside policy ('you may have options outside the standard window') is a Fail. Calling issue_refund above the threshold is correct per ESC-1 (the tool queues it); the failure is only in what the reply promises.",
       "nearest_mode": "",
@@ -419,6 +424,11 @@
           "ts": "2026-10-29T02:49:15.995432+00:00",
           "action": "extended",
           "note": "Pre-labeling check: + support-0056 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: ESC-1 clarified (issue_refund queues, no extra escalate_to_human; reply must not promise approval), motivated by ann-lzfusqsg (0110), ann-ikje54a9 (0225). New ESC-5: 24-hour response time may be stated, resolution timing may not (label decision 2026-10-28 on 0066, 0105, 0014)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
@@ -427,7 +437,7 @@
       "name": "confusing_reply",
       "status": "candidate",
       "evaluator_type": "llm_judge",
-      "requirement_source": "RESP-5 (direct language)",
+      "requirement_source": "RESP-5 (direct language; brevity added by SPEC revision)",
       "definition": "Fail if the reply obscures the decision, its reason, or the next step: vague or contradictory wording, unrequested detail that changes or muddles the picture, or re-asking something already settled.",
       "boundary": "Plain length or verbosity is a Pass, logged as a spec gap (SPEC has no brevity rule). Harmless extra reassurance is a Pass. Fail only when the extra content confuses or changes the decision. A missing denial reason is denial_not_explained.",
       "nearest_mode": "",
@@ -473,6 +483,11 @@
           "ts": "2026-10-29T02:45:06.493805+00:00",
           "action": "renamed",
           "note": "Renamed from verbose_or_unrequested_detail after the AgentDebug comparison: the re-ask clause (0140) is a memory/retrieval failure in AgentDebug, not verbosity; since round 3 the Fail line is confusion, so the name now says so. Length alone stays a Pass (spec gap)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: RESP-5 now asks for brief replies, motivated by spec-gap notes ann-5numnldv (0007), ann-hdzzwob9 (0106), ann-7e9mr1vv (0138), ann-xum76jkg (0061). Labels were made under the earlier RESP-5, so length alone stayed a Pass here; brevity is a candidate future mode."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
@@ -481,7 +496,7 @@
       "name": "malformed_tool_query",
       "status": "candidate",
       "evaluator_type": "llm_judge",
-      "requirement_source": "Product decision (efficiency); not in SPEC yet, candidate SPEC addition",
+      "requirement_source": "RESP-6 (SPEC revision: arguments in their intended field)",
       "definition": "Fail if the agent passes wrong or misplaced arguments to a tool (e.g. store name in the product field) so that it needs extra calls to get a result one well-formed call would return.",
       "boundary": "Pass if the first call is well formed, even when it returns nothing. Pass if the misplaced argument comes from the user's own ambiguous wording (e.g. a store name the user did not mark as a store) and the agent passed it on as given. Not calling a tool at all is skips_available_tool.",
       "nearest_mode": "",
@@ -526,6 +541,11 @@
           "ts": "2026-10-29T02:49:15.995432+00:00",
           "action": "extended",
           "note": "Pre-labeling check: + support-0216 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: RESP-6 now requires each argument in its intended field (find_order gets only the product description), motivated by ann-rng8ixu1 (0103), ann-ir5ngqdn (0167), ann-07m8jsw2 (0216). Same requirement as skips_available_tool, separate mode: no call vs. a badly formed call."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
