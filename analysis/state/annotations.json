@@ -2092,6 +2092,346 @@
       "batch": "B3",
       "status": "active",
       "history": []
+    },
+    {
+      "id": "ann-3otk9rw2",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:12:43.588Z",
+      "session_id": "ec923164-3c70-463e-b05a-e3cd3bb374d9",
+      "scenario_id": "support-0241",
+      "trace_id": "3267d3cd8d544f7bc24bd0a175b9f759",
+      "trace_ids": [
+        "3267d3cd8d544f7bc24bd0a175b9f759"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-ir5ngqdn",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:13:33.297Z",
+      "session_id": "b51c9a50-2cdd-448c-bad2-1ca933ba8db8",
+      "scenario_id": "support-0167",
+      "trace_id": "73fa749db68b4f49958646b62909f2f8",
+      "turn": 0,
+      "msg_index": 1,
+      "quote": "",
+      "note": "malformed tool call. store name in product field.",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-17xsqv0s",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:16:02.275Z",
+      "session_id": "ffb8de8a-c358-46fe-be56-90f62adafda6",
+      "scenario_id": "support-0175",
+      "trace_id": "8512cb4717e8195ee7f8a657222b3736",
+      "turn": 0,
+      "msg_index": 1,
+      "quote": "",
+      "note": "There is a policy note about payouts and the agent missed to call help center to review and share that with the user.",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-uto20pa7",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:18:13.055Z",
+      "session_id": "84ff17a2-9e40-4c37-bc70-1bdbf42bd4f4",
+      "scenario_id": "support-0223",
+      "trace_id": "bb4e4de095064aac6894869deae3d853",
+      "turn": 0,
+      "msg_index": 1,
+      "quote": "",
+      "note": "This is another malformed query due to user query being vague.",
+      "first_failure": false,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-ejjbruvh",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:18:24.455Z",
+      "session_id": "84ff17a2-9e40-4c37-bc70-1bdbf42bd4f4",
+      "scenario_id": "support-0223",
+      "trace_id": "bb4e4de095064aac6894869deae3d853",
+      "trace_ids": [
+        "bb4e4de095064aac6894869deae3d853"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-hr3xrztn",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:30:14.424Z",
+      "session_id": "19a56c1e-7f42-4cab-adc0-0058e7a220b9",
+      "scenario_id": "support-0024",
+      "trace_id": "13602d8a8b001c895da8715d084a3125",
+      "trace_ids": [
+        "13602d8a8b001c895da8715d084a3125"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-kzod4cvc",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:31:27.275Z",
+      "session_id": "927e8bfe-ab9e-46c9-8f23-85f6f75a0d22",
+      "scenario_id": "support-0060",
+      "trace_id": "538d783cb3e08918ae18dd08f24c7703",
+      "trace_ids": [
+        "6c9c23e8f007e819510c58dd2e246720",
+        "538d783cb3e08918ae18dd08f24c7703"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-xum76jkg",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:32:56.280Z",
+      "session_id": "52548529-bd61-4583-a1a9-ab26823211ba",
+      "scenario_id": "support-0061",
+      "trace_id": "1c4a0e693d018e6edb9d6ba41c690a2e",
+      "turn": 0,
+      "msg_index": 3,
+      "quote": "",
+      "note": "This additional line was not needed as the user didnt ask about returns at all. \" The order is no longer eligible for returns since it's already been refunded.\" verbose",
+      "first_failure": false,
+      "spec_gap": true,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-q9kixxyr",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:33:01.465Z",
+      "session_id": "52548529-bd61-4583-a1a9-ab26823211ba",
+      "scenario_id": "support-0061",
+      "trace_id": "1c4a0e693d018e6edb9d6ba41c690a2e",
+      "trace_ids": [
+        "1c4a0e693d018e6edb9d6ba41c690a2e"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-trlfp1vv",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:33:50.621Z",
+      "session_id": "67d42a2f-dba9-46b9-9c9e-d2ab912a035b",
+      "scenario_id": "support-0194",
+      "trace_id": "647682d09044a37ccc4258d8cae42536",
+      "trace_ids": [
+        "647682d09044a37ccc4258d8cae42536"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-gqszhiw2",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:34:04.881Z",
+      "session_id": "c375372b-13e0-4795-a4ed-05ac8341a17d",
+      "scenario_id": "support-0182",
+      "trace_id": "d9901873870763180be01747f463c0c4",
+      "trace_ids": [
+        "d9901873870763180be01747f463c0c4"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-2hsg4iyc",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:34:26.621Z",
+      "session_id": "ce1c916d-d82d-4500-aad7-54099c17210a",
+      "scenario_id": "support-0187",
+      "trace_id": "77253873bbab9ba337ab6a5c729ae5c7",
+      "trace_ids": [
+        "77253873bbab9ba337ab6a5c729ae5c7"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-uamjg2xl",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:35:04.134Z",
+      "session_id": "b504bfcd-c201-4a94-970c-b1e9a10a9d3e",
+      "scenario_id": "support-0246",
+      "trace_id": "68500f0f368af67562ec30cc6f96ee9e",
+      "trace_ids": [
+        "68500f0f368af67562ec30cc6f96ee9e"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-dzm4n6x3",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:41:52.733Z",
+      "session_id": "3f768ae3-5abc-4d5f-ba90-7ad4d748e7f4",
+      "scenario_id": "support-0166",
+      "trace_id": "e7e77a0762e83e6c0f88eb83ab889c7b",
+      "trace_ids": [
+        "e7e77a0762e83e6c0f88eb83ab889c7b"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-w83vquz6",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:42:23.419Z",
+      "session_id": "2d6ca883-3bd6-4d20-bbec-6fd40aba57cf",
+      "scenario_id": "support-0247",
+      "trace_id": "f964857a231f89f24cdbc3faab1f4f3b",
+      "turn": 0,
+      "msg_index": 1,
+      "quote": "",
+      "note": "malformed query due to vague user query",
+      "first_failure": false,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-33dsxjcs",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:43:35.663Z",
+      "session_id": "2d6ca883-3bd6-4d20-bbec-6fd40aba57cf",
+      "scenario_id": "support-0247",
+      "trace_id": "f964857a231f89f24cdbc3faab1f4f3b",
+      "turn": 0,
+      "msg_index": 5,
+      "quote": "",
+      "note": "Lack of tool call . we have get order and find order tools to give the name of the order. why ask the user that question?",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-bihk6380",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:47:31.571Z",
+      "session_id": "1e1c85fd-22de-4e9b-bc97-880fb604b91c",
+      "scenario_id": "support-0034",
+      "trace_id": "3d68eab09744fd20ae477684f31190c8",
+      "turn": 0,
+      "msg_index": 3,
+      "quote": "",
+      "note": "Talk to the carrier is no where covered in the spec of system prompt. do not make up things or commit out of scope. point 1 and 3 are the same. repetitive. support tickets does not provide expedited options. again wrong commitment.",
+      "first_failure": false,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": [
+        {
+          "note": "Talk to the carrier is no where covered in the spec of system prompt. do not make up things or commit out of scope. point 1 and 3 are the same. repetitive. support tickets does not provide expedited options. again wrong commitment.  And finally check_return_eligibility not called",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-29T01:47:31.571Z"
+        }
+      ],
+      "edited_at": "2026-10-29T01:47:53.308Z"
+    },
+    {
+      "id": "ann-tqhj7veb",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T01:48:07.226Z",
+      "session_id": "1e1c85fd-22de-4e9b-bc97-880fb604b91c",
+      "scenario_id": "support-0034",
+      "trace_id": "3d68eab09744fd20ae477684f31190c8",
+      "turn": 0,
+      "msg_index": 1,
+      "quote": "",
+      "note": "check_return_eligibility not called",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-09d4q781",
+      "kind": "no_failure",
+      "author": "human",
+      "ts": "2026-10-29T01:48:44.490Z",
+      "session_id": "7b681128-54fb-4f5e-b309-56289f173b04",
+      "scenario_id": "support-0071",
+      "trace_id": "1a43bbaf5d71467346095613ec494bf9",
+      "trace_ids": [
+        "1a43bbaf5d71467346095613ec494bf9"
+      ],
+      "note": "no failure observed",
+      "first_failure": false,
+      "batch": "B4",
+      "status": "active",
+      "history": []
     }
   ]
 }
