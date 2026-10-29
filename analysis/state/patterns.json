@@ -44,7 +44,9 @@
         "ann-cmwh5eg5",
         "ann-ul56g50q",
         "ann-pngnh55h",
-        "ann-8szk9xv7"
+        "ann-8szk9xv7",
+        "ann-17xsqv0s",
+        "ann-33dsxjcs"
       ],
       "example_trace_ids": [
         "229ea9c4d87b9ecc1e87068bfc2bcbdb",
@@ -53,7 +55,9 @@
         "6d5b67cc629a6d76f909796e2dfb1944",
         "10467096b35793def6eb04a7f5c14aeb",
         "8d757ee508a68a03f693bfd2355d738e",
-        "5b661d6dac6a8b448bf892e625ea06e5"
+        "5b661d6dac6a8b448bf892e625ea06e5",
+        "8512cb4717e8195ee7f8a657222b3736",
+        "f964857a231f89f24cdbc3faab1f4f3b"
       ],
       "close_negative_trace_ids": [
         "2c3e44bbc33066ade367a820aae5d03c"
@@ -73,6 +77,11 @@
           "ts": "2026-10-28T18:36:41.029056+00:00",
           "action": "revised",
           "note": "Round 3: + Batch 3 close negatives."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0175 (no help-center search for payout timing; not an escalation trigger, so not fails_to_escalate), + 0247 (asked user instead of find_order)."
         }
       ],
       "created_at": "2026-10-27T22:01:44.452221+00:00"
@@ -302,7 +311,8 @@
         "ann-fm1bxkvb",
         "ann-ctlg5zl2",
         "ann-zb55cn45",
-        "ann-r7jaxw6j"
+        "ann-r7jaxw6j",
+        "ann-bihk6380"
       ],
       "example_trace_ids": [
         "b62178d3d997d83540d18ae1f318ddbd",
@@ -312,7 +322,8 @@
         "584e66a77e0a1fcc0dcb6de3d7d5f72f",
         "6725cd5dd43fc4fcc6fd89722a9ddc13",
         "558da6e77e7a55f1cd10d37bc4c14c13",
-        "bb355f27e872878ed237657db929dd69"
+        "bb355f27e872878ed237657db929dd69",
+        "3d68eab09744fd20ae477684f31190c8"
       ],
       "close_negative_trace_ids": [
         "4032e794bd3cd56b4805a41353618129",
@@ -339,6 +350,11 @@
           "ts": "2026-10-28T19:00:00+00:00",
           "action": "revised",
           "note": "Round 3: + close negative 0076 (offers an above-threshold refund without saying it needs approval; an offer is not a commitment)."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0034 (carrier interception, 'expedited options' via ticket)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
@@ -391,17 +407,21 @@
       "annotation_ids": [
         "ann-skhrpx5y",
         "ann-p7tr59hj",
-        "ann-3jnxi3zx"
+        "ann-3jnxi3zx",
+        "ann-ir5ngqdn"
       ],
       "example_trace_ids": [
         "46c3c48c7b9ec35f854fc21b5b69e548",
         "408affeebe640f9af3b156ec723369bc",
         "935294e2bfb733c4bfafd9c6d877f5cf",
         "678698fa4879f04ee3490470449e1ede",
-        "f3501c268413b91300153a5beec40892"
+        "f3501c268413b91300153a5beec40892",
+        "73fa749db68b4f49958646b62909f2f8"
       ],
       "close_negative_trace_ids": [
-        "a15edd291d24cb66ecf31a1181dbc9dd"
+        "a15edd291d24cb66ecf31a1181dbc9dd",
+        "bb4e4de095064aac6894869deae3d853",
+        "f964857a231f89f24cdbc3faab1f4f3b"
       ],
       "history": [
         {
@@ -413,6 +433,11 @@
           "ts": "2026-10-28T18:36:41.029056+00:00",
           "action": "revised",
           "note": "Round 3: user ambiguity is a Pass (0164 close negative). + 0103, 0240."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0167; close negatives 0223, 0247 (vague user wording)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
