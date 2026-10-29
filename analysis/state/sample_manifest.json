@@ -872,6 +872,75 @@
           "reason": "uniform random (seed 4)"
         }
       ]
+    },
+    {
+      "id": "B5",
+      "name": "Batch 5: depth search round 2 for thin modes and close negatives",
+      "method": "deterministic trigger filters per candidate mode, random within hits",
+      "seed": 7,
+      "selected_at": "2026-10-29T01:58:29.196793+00:00",
+      "items": [
+        {
+          "scenario_id": "support-0124",
+          "session_id": "eee80181-215c-4db4-b781-d1e18d0b0774",
+          "trace_ids": [
+            "3bddaf2c01c27c9061e80a92d65ca57e",
+            "7918f49c2cb4ecd05366e03274b1fe15",
+            "40edb0e17fea3846dcabe975b1f2f91d"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0072",
+          "session_id": "291b1584-4a77-4ddf-bf62-78c80ebc402a",
+          "trace_ids": [
+            "2a6368aa912241d873997f3570ad1016"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0139",
+          "session_id": "4c3c2dbd-7514-49c3-b192-1acbda1f78cc",
+          "trace_ids": [
+            "8f09f8e36f43fc4aa79b5f5387a71b61"
+          ],
+          "reason": "depth search for denial_not_explained: check_return_eligibility returned eligible=false"
+        },
+        {
+          "scenario_id": "support-0080",
+          "session_id": "f3e4ba46-f85c-44c8-937f-dd704649b686",
+          "trace_ids": [
+            "a7065490ee65e44bc15dd49965bae4ee"
+          ],
+          "reason": "depth search for verbose_or_unrequested_detail: an assistant reply is over 1200 characters"
+        },
+        {
+          "scenario_id": "support-0035",
+          "session_id": "ee014959-813e-4613-913d-2a0fb441954b",
+          "trace_ids": [
+            "024e39b4324f60e21234840d9fbb260e"
+          ],
+          "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility WAS called"
+        },
+        {
+          "scenario_id": "support-0208",
+          "session_id": "2439bd9b-1c56-46f3-b96e-ab79c7a5b550",
+          "trace_ids": [
+            "76fb7b7634d9a75d14a0180879ca19c0"
+          ],
+          "reason": "depth search for skips_available_tool: intent is return_eligibility or refund and check_return_eligibility WAS called"
+        },
+        {
+          "scenario_id": "support-0111",
+          "session_id": "216a2e2f-a60c-404f-b355-8249367f4410",
+          "trace_ids": [
+            "7635be3f0286ef23c299ff4b9c52687b",
+            "6aef3cfb3c5f7654e6c1165e274b7526",
+            "b1425747bd9f2e2a982c008517305f64"
+          ],
+          "reason": "depth search for fails_to_escalate: intent is account_change or dispute and escalate_to_human WAS called"
+        }
+      ]
     }
   ]
 }

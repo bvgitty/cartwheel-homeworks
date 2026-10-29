@@ -1,4 +1,4 @@
-"""Batch 3: depth searches for candidate modes and close negatives.
+"""Depth searches for candidate modes and close negatives (Batch 3, Batch 5).
 
 Each search is a deterministic filter over sessions not yet in any batch. A
 filter finds traces where a mode's *trigger* is present; it does not know
@@ -6,7 +6,8 @@ whether the agent handled the trigger well. Every pick becomes a pending
 `search_hit` suggestion that the reviewer accepts (failure present) or rejects
 with the boundary that excludes it (often a close negative).
 
-Usage: uv run python -m analysis.review_app.depth_search B3
+Usage: uv run python -m analysis.review_app.depth_search B3   (round 1)
+       uv run python -m analysis.review_app.depth_search B5   (round 2)
 """
 
 from __future__ import annotations
@@ -73,6 +74,31 @@ SEARCHES: list[tuple[str, str, Callable[[dict[str, Any]], bool], int]] = [
 ]
 
 
+def _longest_reply(s: dict[str, Any]) -> int:
+    return max((len(m.get("text") or "") for m in _msgs(s, "assistant")), default=0)
+
+
+# Round 2, after the round-3 definitions: positives for the three modes with
+# only two, and close negatives where a mode has fewer than three.
+SEARCHES_R2: list[tuple[str, str, Callable[[dict[str, Any]], bool], int]] = [
+    ("denial_not_explained", "check_return_eligibility returned eligible=false",
+     lambda s: any(r.get("eligible") is False for r in _results(s, "check_return_eligibility")), 3),
+    ("access_overreach", "a tool returned permission_denied",
+     lambda s: any(r.get("error") == "permission_denied" for r in _results(s)), 3),
+    ("verbose_or_unrequested_detail", "an assistant reply is over 1200 characters",
+     lambda s: _longest_reply(s) > 1200, 3),
+    ("skips_available_tool", "intent is return_eligibility or refund and check_return_eligibility WAS called",
+     lambda s: s["tuple"].get("intent") in ("return_eligibility", "refund") and _called(s, "check_return_eligibility"), 2),
+    ("fails_to_escalate", "intent is account_change or dispute and escalate_to_human WAS called",
+     lambda s: s["tuple"].get("intent") in ("account_change", "dispute") and _called(s, "escalate_to_human"), 1),
+]
+
+ROUNDS = {
+    "B3": ("Batch 3: depth searches for candidate modes and close negatives", SEARCHES),
+    "B5": ("Batch 5: depth search round 2 for thin modes and close negatives", SEARCHES_R2),
+}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("batch_id")
@@ -82,13 +108,16 @@ def main() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     if any(b["id"] == args.batch_id for b in manifest["batches"]):
         raise SystemExit(f"batch {args.batch_id} already exists; pick a new id")
+    if args.batch_id not in ROUNDS:
+        raise SystemExit(f"no search round defined for {args.batch_id}; known: {', '.join(ROUNDS)}")
+    batch_name, searches = ROUNDS[args.batch_id]
     used = {it["scenario_id"] for b in manifest["batches"] for it in b["items"]}
     pool = [s for s in sessions if s["scenario_id"] not in used]
 
     rng = random.Random(SEED)
     now = datetime.now(timezone.utc).isoformat()
     items, suggestions = [], json.loads(SUGGESTIONS.read_text(encoding="utf-8"))
-    for mode, signal, keep, k in SEARCHES:
+    for mode, signal, keep, k in searches:
         hits = [s for s in pool if keep(s) and s["scenario_id"] not in {i["scenario_id"] for i in items}]
         picks = rng.sample(hits, min(k, len(hits)))
         print(f"{mode:30} {len(hits):3} hits, took {len(picks)}  ({signal})")
@@ -105,7 +134,7 @@ def main() -> None:
                         "reject with the boundary that excludes it if the agent handled it (close negative).",
             })
 
-    manifest["batches"].append({"id": args.batch_id, "name": "Batch 3: depth searches for candidate modes and close negatives",
+    manifest["batches"].append({"id": args.batch_id, "name": batch_name,
                                 "method": "deterministic trigger filters per candidate mode, random within hits",
                                 "seed": SEED, "selected_at": now, "items": items})
     MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
