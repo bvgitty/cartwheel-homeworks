@@ -538,11 +538,18 @@
       "msg_index": 1,
       "quote": "",
       "note": "Too verbose. state the reason and simple next steps.",
-      "first_failure": true,
-      "spec_gap": false,
+      "first_failure": false,
+      "spec_gap": true,
       "batch": "B1",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "Too verbose. state the reason and simple next steps.",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-29T01:57:51.620257+00:00"
+        }
+      ]
     },
     {
       "id": "ann-goilw7au",
@@ -1103,11 +1110,18 @@
       "msg_index": 1,
       "quote": "",
       "note": "Too much unnecessary detail.  Just repeat that a human will follow up and do not add any additional information or match user tone.",
-      "first_failure": true,
-      "spec_gap": false,
+      "first_failure": false,
+      "spec_gap": true,
       "batch": "B2",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "Too much unnecessary detail.  Just repeat that a human will follow up and do not add any additional information or match user tone.",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-29T01:57:51.620257+00:00"
+        }
+      ]
     },
     {
       "id": "ann-grpkjf05",
@@ -1494,11 +1508,18 @@
       "msg_index": 3,
       "quote": "",
       "note": "uncalled for information: Also note: any refunds issued during the week are deducted from the next payout.",
-      "first_failure": true,
-      "spec_gap": false,
+      "first_failure": false,
+      "spec_gap": true,
       "batch": "B2",
       "status": "active",
-      "history": []
+      "history": [
+        {
+          "note": "uncalled for information: Also note: any refunds issued during the week are deducted from the next payout.",
+          "first_failure": true,
+          "spec_gap": false,
+          "ts": "2026-10-29T01:57:51.620257+00:00"
+        }
+      ]
     },
     {
       "id": "ann-knfh0v5y",

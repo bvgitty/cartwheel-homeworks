@@ -375,13 +375,14 @@
         "ann-bw8bhprl"
       ],
       "example_trace_ids": [
-        "3e0719044ba29ee157b1166706318046",
         "236efa310982b6b840867c76d57faa15",
-        "9a485107096419e1c7a9d4078ed38227",
-        "7f2a627ca97bd29e389b60e2a4167353",
-        "f1919c4193d3011cdf21bc73a543d680"
+        "9a485107096419e1c7a9d4078ed38227"
       ],
-      "close_negative_trace_ids": [],
+      "close_negative_trace_ids": [
+        "3e0719044ba29ee157b1166706318046",
+        "f1919c4193d3011cdf21bc73a543d680",
+        "7f2a627ca97bd29e389b60e2a4167353"
+      ],
       "history": [
         {
           "ts": "2026-10-28T05:56:34.387139+00:00",
@@ -392,6 +393,11 @@
           "ts": "2026-10-28T18:36:41.029056+00:00",
           "action": "revised",
           "note": "Round 3: verbosity alone is a spec gap, not a failure (0106, 0138 re-coded); confusion is the Fail line."
+        },
+        {
+          "ts": "2026-10-29T01:57:51.620257+00:00",
+          "action": "revised",
+          "note": "Recheck under round-3 rule: 0007, 0251, 0088 were length-only (now Pass, spec gap, close negatives); 0140 (re-asks settled question) and 0137 (confusing ask for the price) stay Fail."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"

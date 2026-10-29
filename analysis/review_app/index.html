@@ -776,6 +776,8 @@ function render() {
 document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => switchView(b.dataset.view));
 $("batchsel").onchange = (e) => { S.batch = e.target.value; buildList(); S.cur = 0; go(0); };
 $("jump").onkeydown = (e) => { if (e.key === "Enter") gotoScenario(e.target.value.trim()); };
+// Deep link: http://localhost:8020/#support-0140 opens that session.
+window.addEventListener("hashchange", () => gotoScenario(decodeURIComponent(location.hash.slice(1))));
 document.addEventListener("keydown", (e) => {
   if (S.view !== "review" || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
   if (e.key === "ArrowRight" || e.key === "j") go(S.cur + 1);
@@ -805,6 +807,7 @@ async function init() {
     applyState(st);
     if (!reviewSet().length) S.batch = "all";
     renderBatchSel(); buildList(); go(0);
+    if (location.hash.length > 1) gotoScenario(decodeURIComponent(location.hash.slice(1)));
     status(`${S.sessions.length} sessions · cache ${fmtTime(cache.built_at)} · Langfuse sync ${S.langfuse ? "on" : "OFF"}`, !S.langfuse);
   } catch (e) { status("load failed: " + e.message, true); }
 }
