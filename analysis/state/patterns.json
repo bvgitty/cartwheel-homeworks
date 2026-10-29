@@ -437,6 +437,11 @@
           "ts": "2026-10-29T01:57:51.620257+00:00",
           "action": "revised",
           "note": "Recheck under round-3 rule: 0007, 0251, 0088 were length-only (now Pass, spec gap, close negatives); 0140 (re-asks settled question) and 0137 (confusing ask for the price) stay Fail."
+        },
+        {
+          "ts": "2026-10-29T02:37:54.651103+00:00",
+          "action": "extended",
+          "note": "B5: + 0080. Evidence is vagueness, not length: 'a certain threshold' and '$120 is on the larger side' muddle why approval is needed (consistent with the round-3 rule; length alone stays a Pass)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
