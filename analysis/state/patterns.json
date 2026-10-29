@@ -99,7 +99,7 @@
       "evaluator_type": "llm_judge",
       "requirement_source": "RESP-4",
       "definition": "Fail if a refusal or escalation reply omits the policy and the reason for the decision.",
-      "boundary": "Pass if the reason and policy are stated even when the user disagrees. Hinting that an exception may be possible is unsupported_commitment, not this mode. A reply that adds confusing detail belongs to verbose_or_unrequested_detail.",
+      "boundary": "Pass if the reason and policy are stated even when the user disagrees. Hinting that an exception may be possible is unsupported_commitment, not this mode. A reply that adds confusing detail belongs to confusing_reply.",
       "nearest_mode": "",
       "annotation_ids": [
         "ann-34gviftu",
@@ -393,16 +393,21 @@
           "ts": "2026-10-29T02:33:42.281195+00:00",
           "action": "extended",
           "note": "B5: + 0111 turn 0 (exception hint on a dispute outside the window)."
+        },
+        {
+          "ts": "2026-10-29T02:45:06.493805+00:00",
+          "action": "revised",
+          "note": "AgentDebug comparison: spans Outcome Misinterpretation (queued refund read as done) and Hallucination (invented exceptions, timing). Kept merged: one product change (state only what tools returned or policy says) fixes both."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
     },
     {
-      "name": "verbose_or_unrequested_detail",
+      "name": "confusing_reply",
       "status": "candidate",
       "evaluator_type": "llm_judge",
       "requirement_source": "RESP-5 (direct language)",
-      "definition": "Fail if the reply adds information the user didn't ask for that changes or confuses the decision, or re-asks something already settled.",
+      "definition": "Fail if the reply obscures the decision, its reason, or the next step: vague or contradictory wording, unrequested detail that changes or muddles the picture, or re-asking something already settled.",
       "boundary": "Plain length or verbosity is a Pass, logged as a spec gap (SPEC has no brevity rule). Harmless extra reassurance is a Pass. Fail only when the extra content confuses or changes the decision. A missing denial reason is denial_not_explained.",
       "nearest_mode": "",
       "annotation_ids": [
@@ -442,6 +447,11 @@
           "ts": "2026-10-29T02:37:54.651103+00:00",
           "action": "extended",
           "note": "B5: + 0080. Evidence is vagueness, not length: 'a certain threshold' and '$120 is on the larger side' muddle why approval is needed (consistent with the round-3 rule; length alone stays a Pass)."
+        },
+        {
+          "ts": "2026-10-29T02:45:06.493805+00:00",
+          "action": "renamed",
+          "note": "Renamed from verbose_or_unrequested_detail after the AgentDebug comparison: the re-ask clause (0140) is a memory/retrieval failure in AgentDebug, not verbosity; since round 3 the Fail line is confusion, so the name now says so. Length alone stays a Pass (spec gap)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
