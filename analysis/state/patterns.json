@@ -271,7 +271,7 @@
       "evaluator_type": "llm_judge",
       "requirement_source": "ESC-1..ESC-4; system prompt escalation guidance",
       "definition": "Fail if the case meets an escalation trigger (ESC-1 to ESC-4, e.g. account change, ineligible return the user contests, dispute) and the agent does not call escalate_to_human, including when it sends the user to the store, merchant or another channel instead.",
-      "boundary": "Pass if escalate_to_human is called and the reply says a human will follow up. Cases with no escalation trigger are Pass even if escalation would have been friendlier.",
+      "boundary": "Pass if escalate_to_human is called and the reply says a human will follow up. Cases with no escalation trigger are Pass even if escalation would have been friendlier. Asking the user to confirm before escalating, then escalating in a later turn, is a Pass.",
       "nearest_mode": "",
       "annotation_ids": [
         "ann-dxc2a6wq",
@@ -289,12 +289,12 @@
         "1da2337da9eb9b5e120bdc76ffbc2a88",
         "f630c51b7071815f5f5a3706f8ef44a1",
         "742318f2c446278eeeedd72da3a5cec5",
-        "787615f6c896c599b901aa3042717ee6",
-        "b1425747bd9f2e2a982c008517305f64"
+        "787615f6c896c599b901aa3042717ee6"
       ],
       "close_negative_trace_ids": [
         "0043965f81daa3e85373a99afbb52453",
-        "70945cce881fc082c64e7a5fbf18a9b3"
+        "70945cce881fc082c64e7a5fbf18a9b3",
+        "b1425747bd9f2e2a982c008517305f64"
       ],
       "history": [
         {
@@ -311,6 +311,11 @@
           "ts": "2026-10-28T18:36:41.029056+00:00",
           "action": "revised",
           "note": "Round 3: + Batch 3 close negatives."
+        },
+        {
+          "ts": "2026-10-29T02:26:54.555694+00:00",
+          "action": "revised",
+          "note": "B5: 0111 rejected (accept was a misclick): escalated in turn 2 after asking consent; boundary now says delayed-with-consent escalation is a Pass. Close negative."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"

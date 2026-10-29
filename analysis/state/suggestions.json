@@ -501,14 +501,14 @@
     "author": "agent",
     "mode": "fails_to_escalate",
     "signal": "intent is account_change or dispute and escalate_to_human WAS called",
-    "status": "accepted",
+    "status": "rejected",
     "created_at": "2026-10-29T01:58:29.196793+00:00",
     "session_id": "216a2e2f-a60c-404f-b355-8249367f4410",
     "scenario_id": "support-0111",
     "trace_id": "b1425747bd9f2e2a982c008517305f64",
     "note": "Search hit for fails_to_escalate: the trigger is present. Accept if the failure is present; reject with the boundary that excludes it if the agent handled it (close negative).",
-    "decided_at": "2026-10-29T02:23:52.792Z",
-    "decision_note": "It did escalate but too a few more turns before it did.",
+    "decided_at": "2026-10-29T02:26:54.555694+00:00",
+    "decision_note": "It did escalate (turn 2, after asking the user to confirm). It did escalate but too a few more turns before it did. [accept was a misclick]",
     "decided_by": "human"
   }
 ]
