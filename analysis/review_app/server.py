@@ -147,6 +147,7 @@ class Handler(BaseHTTPRequestHandler):
                     **{name: _read_state(name) for name in STATE_FILES},
                     "manifest": _state.read_json(_state.state_path("sample_manifest.json"), default={}),
                     "labels": _live_labels(),
+                    "drafts": _state.read_json(_state.state_path("label_drafts.json"), default={}),
                     "langfuse": langfuse_io.is_configured(),
                 }
             )

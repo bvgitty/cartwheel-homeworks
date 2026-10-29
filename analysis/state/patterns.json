@@ -338,7 +338,10 @@
         "ann-r7jaxw6j",
         "ann-bihk6380",
         "ann-lloiv9cb",
-        "ann-b5x0111a"
+        "ann-b5x0111a",
+        "ann-ms91x348",
+        "ann-hsrcl97c",
+        "ann-3o78s9dt"
       ],
       "example_trace_ids": [
         "b62178d3d997d83540d18ae1f318ddbd",
@@ -351,7 +354,10 @@
         "bb355f27e872878ed237657db929dd69",
         "3d68eab09744fd20ae477684f31190c8",
         "8f09f8e36f43fc4aa79b5f5387a71b61",
-        "7635be3f0286ef23c299ff4b9c52687b"
+        "7635be3f0286ef23c299ff4b9c52687b",
+        "7fca244fafeef01a8319a9223438eaa6",
+        "d51af6c880287727360103a6ceeda482",
+        "d09f8c4887834b2cac9fcd407c64c39c"
       ],
       "close_negative_trace_ids": [
         "4032e794bd3cd56b4805a41353618129",
@@ -398,6 +404,21 @@
           "ts": "2026-10-29T02:45:06.493805+00:00",
           "action": "revised",
           "note": "AgentDebug comparison: spans Outcome Misinterpretation (queued refund read as done) and Hallucination (invented exceptions, timing). Kept merged: one product change (state only what tools returned or policy says) fixes both."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0010 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0022 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0056 (B3 open code names this mode; was not linked)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
@@ -468,7 +489,8 @@
         "ann-skhrpx5y",
         "ann-p7tr59hj",
         "ann-3jnxi3zx",
-        "ann-ir5ngqdn"
+        "ann-ir5ngqdn",
+        "ann-07m8jsw2"
       ],
       "example_trace_ids": [
         "46c3c48c7b9ec35f854fc21b5b69e548",
@@ -476,7 +498,8 @@
         "935294e2bfb733c4bfafd9c6d877f5cf",
         "678698fa4879f04ee3490470449e1ede",
         "f3501c268413b91300153a5beec40892",
-        "73fa749db68b4f49958646b62909f2f8"
+        "73fa749db68b4f49958646b62909f2f8",
+        "0fd295b3310e7b4bc10c46f87cd9d1a1"
       ],
       "close_negative_trace_ids": [
         "a15edd291d24cb66ecf31a1181dbc9dd",
@@ -498,6 +521,11 @@
           "ts": "2026-10-29T01:53:35.274900+00:00",
           "action": "extended",
           "note": "B4: + 0167; close negatives 0223, 0247 (vague user wording)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0216 (B3 open code names this mode; was not linked)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"

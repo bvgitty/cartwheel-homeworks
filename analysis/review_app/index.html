@@ -230,6 +230,7 @@ function applyState(st) {
   S.suggestions = Array.isArray(st.suggestions) ? st.suggestions : [];
   S.manifest = st.manifest || {};
   S.labels = st.labels || {};
+  S.drafts = (st.drafts && st.drafts.drafts) || {};
   S.langfuse = !!st.langfuse;
 }
 
@@ -657,52 +658,80 @@ async function saveMode(mi) {
 }
 
 /* ---------- label view ---------- */
-function labelModes() { return S.patterns.modes.filter((m) => m.name && m.status !== "rejected"); }
+// Final modes only; merged and rejected modes keep their history but get no labels.
+function labelModes() { return S.patterns.modes.filter((m) => m.name && (m.status === "candidate" || m.status === "confirmed")); }
+S.pending = {};  // trace_id -> {mode: 0|1}, unsaved flips
+function cellValue(mode, tid) {
+  const p = (S.pending[tid] || {})[mode]; if (p !== undefined) return { v: p, state: "pending" };
+  const cur = (S.labels[mode] || {})[tid]; if (cur) return { v: cur.label, state: "saved" };
+  const d = (S.drafts[mode] || {})[tid]; return { v: d ? d.label : 0, state: "draft", basis: d ? d.basis : "unchecked" };
+}
+function rowSaved(tid, modes) { return modes.every((m) => (S.labels[m.name] || {})[tid] && cellValue(m.name, tid).state === "saved"); }
 function renderLabel() {
   const modes = labelModes();
   const sessions = reviewSet().map((id) => S.byScenario[id]).filter(Boolean);
   if (!modes.length || !sessions.length) { $("labelpage").innerHTML = `<p class="dim">Labeling needs at least one mode (Taxonomy) and a review set (sample manifest).</p>`; return; }
-  const missing = (tid) => modes.filter((m) => !(S.labels[m.name] || {})[tid]).length;
   let rows = "";
   for (const s of sessions) {
-    const turns = s.turns.map((t, i) => ({ t, i })).filter(({ t }) => S.labelFilter === "all" || missing(t.trace_id) > 0);
+    const turns = s.turns.map((t, i) => ({ t, i })).filter(({ t }) => S.labelFilter === "all" || !rowSaved(t.trace_id, modes));
     if (!turns.length) continue;
-    rows += `<tr class="sess"><td colspan="${modes.length + 1}"><a class="lnk" data-goto="${esc(s.scenario_id)}">${esc(s.scenario_id)}</a> <span class="dim">${esc(s.role)} · ${s.n_turns} turn(s) · ${esc((batchOf(s.scenario_id) || { batch: {} }).batch.id || "")}</span></td></tr>`;
+    rows += `<tr class="sess"><td colspan="${modes.length + 2}"><a class="lnk" href="/#${esc(s.scenario_id)}" target="_blank">${esc(s.scenario_id)} ↗</a> <span class="dim">${esc(s.role)} · ${s.n_turns} turn(s) · ${esc((batchOf(s.scenario_id) || { batch: {} }).batch.id || "")}</span></td></tr>`;
     for (const { t, i } of turns) {
-      rows += `<tr><td class="mono">turn ${i + 1} · ${t.trace_id.slice(0, 12)}</td>${modes.map((m) => {
-        const cur = (S.labels[m.name] || {})[t.trace_id];
-        const v = cur ? cur.label : null;
+      const tid = t.trace_id, saved = rowSaved(tid, modes);
+      rows += `<tr><td class="mono">turn ${i + 1} · ${tid.slice(0, 8)}</td>${modes.map((m) => {
+        const c = cellValue(m.name, tid), cur = (S.labels[m.name] || {})[tid], d = (S.drafts[m.name] || {})[tid];
+        const ev = (cur && cur.evidence) || (d && d.evidence) || "";
+        const tip = c.state === "draft" ? `draft (${c.basis})${ev ? ": " + ev : ""}` : c.state === "pending" ? "changed, not saved" : `saved${ev ? ": " + ev : ""}`;
         const sync = cur ? (cur.langfuse === "ok" ? `<span class="sync ok" title="written to Langfuse">●</span>` : `<span class="sync local" title="${esc(cur.langfuse || "local only")}">●</span>`) : "";
-        return `<td class="cell" title="${esc(cur && cur.evidence || "")}"><button class="${v === 0 ? "pass" : ""}" data-l="0" data-t="${t.trace_id}" data-m="${esc(m.name)}" data-s="${esc(s.scenario_id)}">Pass</button>
-          <button class="${v === 1 ? "fail" : ""}" data-l="1" data-t="${t.trace_id}" data-m="${esc(m.name)}" data-s="${esc(s.scenario_id)}">Fail</button> ${sync}</td>`;
-      }).join("")}</tr>`;
+        const style = c.state === "saved" ? "" : "border-style:dashed;" + (c.state === "pending" ? "outline:2px solid var(--accent, #36c);" : "opacity:.55;");
+        const marker = c.state === "draft" && c.basis !== "unchecked" ? "*" : "";
+        return `<td class="cell" title="${esc(tip)}"><button class="${c.v === 1 ? "fail" : "pass"}" style="${style}" data-flip="${esc(m.name)}" data-t="${tid}">${c.v === 1 ? "Fail" : "Pass"}${marker}</button> ${sync}</td>`;
+      }).join("")}<td style="white-space:nowrap"><input class="rowev" data-t="${tid}" placeholder="evidence for any Fail you flip" style="width:200px">
+        <button data-save="${tid}">${saved ? "Saved ✓" : "Save row"}</button></td></tr>`;
     }
   }
-  const total = sessions.reduce((n, s) => n + s.turns.length, 0) * modes.length;
-  const done = modes.reduce((n, m) => n + Object.keys(S.labels[m.name] || {}).filter((t) => S.byTrace[t] && reviewSet().includes(S.byTrace[t].session.scenario_id)).length, 0);
+  const allTids = sessions.flatMap((s) => s.turns.map((t) => t.trace_id));
+  const done = allTids.filter((tid) => rowSaved(tid, modes)).length;
   $("labelpage").innerHTML = `<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
-      <b>${done} / ${total}</b><span class="dim">trace × mode judgments · Fail = failure present (stored as 1) · Langfuse sync ${S.langfuse ? "on" : "<b style='color:var(--bad)'>OFF</b>"}</span>
-      <span class="spacer"></span><select id="labelfilter"><option value="all">all traces</option><option value="incomplete"${S.labelFilter === "incomplete" ? " selected" : ""}>incomplete only</option></select></div>
-    <table><thead><tr><th>trace</th>${modes.map((m) => `<th title="${esc(m.definition)}">${esc(m.name)}${m.status === "candidate" ? ' <span class="dim">(candidate)</span>' : ""}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table>`;
+      <b>${done} / ${allTids.length}</b><span class="dim">traces saved (${modes.length} judgments each) · dashed = draft, not yet a label · * = drafted from your notes · click a cell to flip · Fail = failure present (1) · Langfuse sync ${S.langfuse ? "on" : "<b style='color:var(--bad)'>OFF</b>"}</span>
+      <span class="spacer"></span><select id="labelfilter"><option value="incomplete">unsaved only</option><option value="all"${S.labelFilter === "all" ? " selected" : ""}>all traces</option></select></div>
+    <table><thead><tr><th>trace</th>${modes.map((m) => `<th title="${esc(m.definition + "\n\nBoundary: " + m.boundary)}">${esc(m.name)}</th>`).join("")}<th></th></tr></thead><tbody>${rows}</tbody></table>`;
   $("labelfilter").onchange = (e) => { S.labelFilter = e.target.value; renderLabel(); };
-  document.querySelectorAll("#labelpage [data-goto]").forEach((a) => a.onclick = () => gotoScenario(a.dataset.goto));
-  document.querySelectorAll("#labelpage [data-l]").forEach((b) => b.onclick = () => setLabel(b));
+  document.querySelectorAll("#labelpage [data-flip]").forEach((b) => b.onclick = () => {
+    const tid = b.dataset.t, mode = b.dataset.flip;
+    S.pending[tid] = S.pending[tid] || {}; S.pending[tid][mode] = cellValue(mode, tid).v === 1 ? 0 : 1;
+    const cur = (S.labels[mode] || {})[tid];
+    if (cur && cur.label === S.pending[tid][mode]) delete S.pending[tid][mode];  // flipped back to the saved value
+    renderLabel();
+  });
+  document.querySelectorAll("#labelpage [data-save]").forEach((b) => b.onclick = () => saveRow(b.dataset.save));
 }
-async function setLabel(b) {
-  const label = +b.dataset.l, mode = b.dataset.m, tid = b.dataset.t;
-  const cur = (S.labels[mode] || {})[tid];
-  if (cur && cur.label === label) return;
-  const evidence = prompt(label === 1 ? `Fail (${mode} present): evidence, e.g. the tool result or reply text` : `Pass (${mode} absent): note (optional; useful for close negatives)`, cur ? cur.evidence : "");
-  if (evidence === null) return;
-  const sess = S.byTrace[tid].session;
+// Writes every mode for one trace; unchanged saved labels are skipped. Evidence
+// for a Fail comes from the draft (your note) unless you flipped it, then from the row box.
+async function saveRow(tid) {
+  const modes = labelModes(), sess = S.byTrace[tid].session;
+  const rowEv = (document.querySelector(`.rowev[data-t="${tid}"]`) || {}).value || "";
+  const writes = [];
+  for (const m of modes) {
+    const c = cellValue(m.name, tid), cur = (S.labels[m.name] || {})[tid], d = (S.drafts[m.name] || {})[tid];
+    if (cur && cur.label === c.v && c.state === "saved") continue;
+    const fromDraft = d && d.label === c.v ? d.evidence : "";
+    const evidence = (c.state === "pending" ? rowEv.trim() : "") || fromDraft || (cur && cur.label === c.v ? cur.evidence : "");
+    if (c.v === 1 && !evidence) { status(`${m.name} is Fail: add evidence in the row box (the reply text or tool result)`, true); return; }
+    writes.push({ mode: m.name, label: c.v, evidence });
+  }
   try {
-    const rec = await api("/api/label", { mode, trace_id: tid, label, evidence, session_id: sess.session_id, scenario_id: sess.scenario_id });
-    S.labels[mode] = S.labels[mode] || {}; S.labels[mode][tid] = rec;
-    status(rec.langfuse === "ok" ? "label saved + Langfuse score written" : "label saved locally; Langfuse: " + rec.langfuse, rec.langfuse !== "ok");
+    let lf = "ok";
+    for (const w of writes) {
+      const rec = await api("/api/label", { ...w, trace_id: tid, session_id: sess.session_id, scenario_id: sess.scenario_id });
+      S.labels[w.mode] = S.labels[w.mode] || {}; S.labels[w.mode][tid] = rec;
+      if (rec.langfuse !== "ok") lf = rec.langfuse;
+    }
+    delete S.pending[tid];
+    status(`${tid.slice(0, 8)}: ${writes.length} label(s) saved` + (lf === "ok" ? " + Langfuse scores" : "; Langfuse: " + lf), lf !== "ok");
   } catch (e) { status(e.message, true); }
   renderLabel();
 }
-
 /* ---------- progress view ---------- */
 function renderProgress() {
   const rs = reviewSet(), sessions = rs.map((id) => S.byScenario[id]).filter(Boolean);
