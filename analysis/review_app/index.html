@@ -523,18 +523,19 @@ function renderSuggestions() {
       <div>${esc(g.note)}</div>
       ${g.signal ? `<div class="dim" style="font-size:12px">signal: ${esc(g.signal)}</div>` : ""}
       ${g.decision_note ? `<div class="dim" style="font-size:12px">your decision: ${esc(g.decision_note)}</div>` : ""}
-      ${(g.status || "pending") === "pending" ? `<div class="acts" style="display:flex;gap:6px;margin-top:4px"><button data-act="accept">Accept</button><button data-act="reject">Reject</button></div>` : ""}
+      ${(g.status || "pending") === "pending" ? `<div class="acts" style="display:flex;gap:6px;margin-top:4px"><input class="why" style="flex:1" placeholder="Why? (required to reject: the boundary or evidence that excludes it)"><button data-act="accept">Accept</button><button data-act="reject">Reject</button></div>` : ""}
     </div>`).join("") : `<div class="dim">None for this session.</div>`;
   document.querySelectorAll("#suggs .sugg").forEach((el) => {
     const id = el.dataset.id;
     const acc = el.querySelector('[data-act="accept"]'), rej = el.querySelector('[data-act="reject"]');
-    if (acc) acc.onclick = () => decide(id, true);
-    if (rej) rej.onclick = () => decide(id, false);
+    const why = () => el.querySelector(".why").value.trim();
+    if (acc) acc.onclick = () => decide(id, true, why());
+    if (rej) rej.onclick = () => decide(id, false, why());
   });
 }
-async function decide(id, accept) {
-  const why = prompt(accept ? "Accept: why does it apply? (optional)" : "Reject: which boundary or evidence excludes it? (required)", "");
-  if (why === null || (!accept && !why.trim())) return;
+// Reason comes from an inline box, not prompt(): embedded browsers (e.g. VS Code's) block dialogs.
+async function decide(id, accept, why) {
+  if (!accept && !why) { status("Reject needs a reason: which boundary or evidence excludes it?", true); return; }
   const g = S.suggestions.find((x) => x.id === id);
   await mutate("suggestions", (d) => { const x = d.find((y) => y.id === id); x.status = accept ? "accepted" : "rejected"; x.decided_at = now(); x.decision_note = why; x.decided_by = "human"; });
   if (accept && g.kind === "open_code") {
