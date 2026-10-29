@@ -126,7 +126,7 @@
   .assign button.on { background: var(--note); border-color: var(--note); color: #fff; }
   table { border-collapse: collapse; width: 100%; background: var(--panel); }
   th, td { border: 1px solid var(--line); padding: 4px 8px; text-align: left; vertical-align: middle; font-size: 13px; }
-  th { position: sticky; top: 49px; background: var(--panel); z-index: 2; }
+  th { position: sticky; top: var(--top-h, 49px); background: var(--panel); z-index: 2; }
   td.cell { white-space: nowrap; text-align: center; }
   td.cell button { padding: 0 8px; font-size: 12px; }
   td.cell button.pass { background: var(--agent-bg); color: var(--ok); border-color: var(--ok); font-weight: 700; }
@@ -806,6 +806,9 @@ function render() {
 document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => switchView(b.dataset.view));
 $("batchsel").onchange = (e) => { S.batch = e.target.value; buildList(); S.cur = 0; go(0); };
 $("jump").onkeydown = (e) => { if (e.key === "Enter") gotoScenario(e.target.value.trim()); };
+// Sticky table headers sit just below the top bar, whose height changes when it wraps.
+const topBar = document.querySelector("header.top");
+new ResizeObserver(() => document.documentElement.style.setProperty("--top-h", topBar.offsetHeight + "px")).observe(topBar);
 // Deep link: http://localhost:8020/#support-0140 opens that session.
 window.addEventListener("hashchange", () => gotoScenario(decodeURIComponent(location.hash.slice(1))));
 document.addEventListener("keydown", (e) => {
