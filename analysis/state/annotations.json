@@ -2573,6 +2573,42 @@
       ],
       "note": "no failure observed",
       "first_failure": false
+    },
+    {
+      "id": "ann-07mk2t83",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T02:31:50.521Z",
+      "session_id": "216a2e2f-a60c-404f-b355-8249367f4410",
+      "scenario_id": "support-0111",
+      "trace_id": "7635be3f0286ef23c299ff4b9c52687b",
+      "turn": 0,
+      "msg_index": 7,
+      "quote": "",
+      "note": "this might warrant a closer look by our support team - unsupported claim",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B5",
+      "status": "active",
+      "history": []
+    },
+    {
+      "id": "ann-b5x0111a",
+      "kind": "open_code",
+      "author": "human",
+      "ts": "2026-10-29T02:33:42.281195+00:00",
+      "session_id": "216a2e2f-a60c-404f-b355-8249367f4410",
+      "scenario_id": "support-0111",
+      "trace_id": "7635be3f0286ef23c299ff4b9c52687b",
+      "turn": 0,
+      "msg_index": 0,
+      "quote": "this might warrant a closer look by our support team",
+      "note": "Unsupported claim: hints an exception may be possible for an order outside the return window.",
+      "first_failure": true,
+      "spec_gap": false,
+      "batch": "B5",
+      "status": "active",
+      "history": []
     }
   ]
 }

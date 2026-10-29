@@ -337,7 +337,8 @@
         "ann-zb55cn45",
         "ann-r7jaxw6j",
         "ann-bihk6380",
-        "ann-lloiv9cb"
+        "ann-lloiv9cb",
+        "ann-b5x0111a"
       ],
       "example_trace_ids": [
         "b62178d3d997d83540d18ae1f318ddbd",
@@ -349,7 +350,8 @@
         "558da6e77e7a55f1cd10d37bc4c14c13",
         "bb355f27e872878ed237657db929dd69",
         "3d68eab09744fd20ae477684f31190c8",
-        "8f09f8e36f43fc4aa79b5f5387a71b61"
+        "8f09f8e36f43fc4aa79b5f5387a71b61",
+        "7635be3f0286ef23c299ff4b9c52687b"
       ],
       "close_negative_trace_ids": [
         "4032e794bd3cd56b4805a41353618129",
@@ -386,6 +388,11 @@
           "ts": "2026-10-29T02:25:05.614206+00:00",
           "action": "extended",
           "note": "B5: + 0139 (promises a 'second look')."
+        },
+        {
+          "ts": "2026-10-29T02:33:42.281195+00:00",
+          "action": "extended",
+          "note": "B5: + 0111 turn 0 (exception hint on a dispute outside the window)."
         }
       ],
       "created_at": "2026-10-28T05:56:34.387139+00:00"
