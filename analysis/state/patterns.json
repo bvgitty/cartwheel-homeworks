@@ -1,1 +1,593 @@
-{"modes": []}
+{
+  "modes": [
+    {
+      "name": "deflects_instead_of_escalating",
+      "status": "merged",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-3, ESC-4",
+      "definition": "Fail if the agent tells the user to contact the store, merchant or another support channel for an issue it should escalate itself (open a ticket and say a human will follow up).",
+      "boundary": "Pass if the agent escalates and also mentions the merchant as context. Pointing to the store for things outside SCOPE-1 is not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-dxc2a6wq",
+        "ann-yi2fuaoq"
+      ],
+      "example_trace_ids": [
+        "6cb5126076af88604beab932916b9c94",
+        "c0ba1dfbb0477344b0e2a221b26c8289"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into fails_to_escalate. Batch 2 showed missing escalations without any deflection; deflection is a sub-case."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "skips_available_tool",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-6 (SPEC revision), RESP-3",
+      "definition": "Fail if the agent guesses, asks the user, or stops when a call to an available tool (e.g. check_return_eligibility, list_orders) would have answered the question.",
+      "boundary": "Pass if the tool was called and its result was used, even if the reply is otherwise weak. Missing tools that do not exist are spec gaps, not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-774vbtr9",
+        "ann-cmwh5eg5",
+        "ann-ul56g50q",
+        "ann-pngnh55h",
+        "ann-8szk9xv7",
+        "ann-17xsqv0s",
+        "ann-33dsxjcs"
+      ],
+      "example_trace_ids": [
+        "229ea9c4d87b9ecc1e87068bfc2bcbdb",
+        "c8a507aaaf4c7c3d1f6e392e4dda2324",
+        "435a2b18b455f975550b5f6e85037cfa",
+        "6d5b67cc629a6d76f909796e2dfb1944",
+        "10467096b35793def6eb04a7f5c14aeb",
+        "8d757ee508a68a03f693bfd2355d738e",
+        "5b661d6dac6a8b448bf892e625ea06e5",
+        "8512cb4717e8195ee7f8a657222b3736",
+        "f964857a231f89f24cdbc3faab1f4f3b"
+      ],
+      "close_negative_trace_ids": [
+        "2c3e44bbc33066ade367a820aae5d03c",
+        "024e39b4324f60e21234840d9fbb260e",
+        "76fb7b7634d9a75d14a0180879ca19c0"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "extended",
+          "note": "Round 2: + support-0105, support-0234."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: + Batch 3 close negatives."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0175 (no help-center search for payout timing; not an escalation trigger, so not fails_to_escalate), + 0247 (asked user instead of find_order)."
+        },
+        {
+          "ts": "2026-10-29T02:25:05.614206+00:00",
+          "action": "extended",
+          "note": "B5: close negatives 0035 (policy found and used), 0208 (right tools called; failure is denial_not_explained)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: new RESP-6 (call the read tool before guessing or asking), motivated by ann-774vbtr9 (0042), ann-33dsxjcs (0247), ann-17xsqv0s (0175)."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "denial_not_explained",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-4",
+      "definition": "Fail if a refusal or escalation reply omits the policy and the reason for the decision.",
+      "boundary": "Pass if the reason and policy are stated even when the user disagrees. Hinting that an exception may be possible is unsupported_commitment, not this mode. A reply that adds confusing detail belongs to confusing_reply.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-34gviftu",
+        "ann-n8ple8tr",
+        "ann-4mqgnug1"
+      ],
+      "example_trace_ids": [
+        "522ee25660dc8049242928032142e51f",
+        "9a752d906c56904137a49551d4af1471",
+        "40edb0e17fea3846dcabe975b1f2f91d",
+        "76fb7b7634d9a75d14a0180879ca19c0"
+      ],
+      "close_negative_trace_ids": [
+        "d51af6c880287727360103a6ceeda482",
+        "d09f8c4887834b2cac9fcd407c64c39c",
+        "299c538ae5287e05c3f2f48ef8af3879",
+        "2a6368aa912241d873997f3570ad1016",
+        "8f09f8e36f43fc4aa79b5f5387a71b61"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: dropped 'implies an exception may be granted' (0022, 0056 state the reason clearly; the exception hint is unsupported_commitment). + 0043."
+        },
+        {
+          "ts": "2026-10-29T02:25:05.614206+00:00",
+          "action": "extended",
+          "note": "B5: + 0124, + 0208 (eligibility denial reason not passed to user); close negatives 0072, 0139."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "promises_queued_refund",
+      "status": "merged",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-1, RESP-2",
+      "definition": "Fail if the agent promises or confirms a refund that is above the auto-approve threshold or that the tool only queued.",
+      "boundary": "Pass if the agent says the refund is queued for approval and a human will follow up.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-ikje54a9",
+        "ann-lzfusqsg"
+      ],
+      "example_trace_ids": [
+        "b62178d3d997d83540d18ae1f318ddbd",
+        "887b7dea65a66d8ce453dc6ada016cb3"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into unsupported_commitment. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "acts_on_unverified_claim",
+      "status": "merged",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-3",
+      "definition": "Fail if the agent commits to an outcome (correction, refund, change) based only on the user's assertion, with no tool evidence supporting it.",
+      "boundary": "Pass if the agent opens a ticket to investigate the claim without promising the outcome.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-6sworoev"
+      ],
+      "example_trace_ids": [
+        "78d05d397b6c5c969896aa58fbd453bb"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Merged into unsupported_commitment. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "tone_mismatch",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5",
+      "definition": "Fail if the reply's tone conflicts with the user's evident emotional state (cheerful openers to a frustrated user, mirroring hostile phrasing).",
+      "boundary": "Pass if the tone is neutral-respectful. Missing a personal greeting is a spec gap, not this mode.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5fn59h5g",
+        "ann-fvc0ej2r"
+      ],
+      "example_trace_ids": [
+        "f5d31e646306154d2a023d54eb5b7b34",
+        "6cb5126076af88604beab932916b9c94",
+        "5641f8baa560b5b1e71ff46f6b0f08ba"
+      ],
+      "close_negative_trace_ids": [
+        "7fca244fafeef01a8319a9223438eaa6",
+        "98b97cd995ee40c577babbb5968b025a",
+        "a74f9522f3e6724d4e06750d7c351f16"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: + Batch 3 close negatives."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "unclear_reply",
+      "status": "merged",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5",
+      "definition": "Fail if, after reading the reply, the user cannot tell the decision/reason and the next step, or the agent re-asks something already settled.",
+      "boundary": "Pass if the reply is long but the decision and next step are clear. A missing denial reason is denial_not_explained.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5numnldv",
+        "ann-1i7chj93"
+      ],
+      "example_trace_ids": [
+        "3e0719044ba29ee157b1166706318046",
+        "236efa310982b6b840867c76d57faa15"
+      ],
+      "close_negative_trace_ids": [],
+      "history": [
+        {
+          "ts": "2026-10-27T22:01:44.452221+00:00",
+          "action": "created",
+          "note": "Axial coding after Batch 1 (30 sessions)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "renamed",
+          "note": "Renamed to verbose_or_unrequested_detail with a new rule."
+        }
+      ],
+      "created_at": "2026-10-27T22:01:44.452221+00:00"
+    },
+    {
+      "name": "fails_to_escalate",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "ESC-1..ESC-4; system prompt escalation guidance",
+      "definition": "Fail if the case meets an escalation trigger (ESC-1 to ESC-4, e.g. account change, ineligible return the user contests, dispute) and the agent does not call escalate_to_human, including when it sends the user to the store, merchant or another channel instead.",
+      "boundary": "Pass if escalate_to_human is called and the reply says a human will follow up. Cases with no escalation trigger are Pass even if escalation would have been friendlier. Asking the user to confirm before escalating, then escalating in a later turn, is a Pass.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-dxc2a6wq",
+        "ann-yi2fuaoq",
+        "ann-lfdna2e4",
+        "ann-2em3jb3e",
+        "ann-aek9tlla",
+        "ann-knfh0v5y"
+      ],
+      "example_trace_ids": [
+        "6cb5126076af88604beab932916b9c94",
+        "c0ba1dfbb0477344b0e2a221b26c8289",
+        "f5d5d7ebd9208e3982fc7b64f12fe3c7",
+        "cb0391a3cbd8ce4e8b268591f5b237b8",
+        "1da2337da9eb9b5e120bdc76ffbc2a88",
+        "f630c51b7071815f5f5a3706f8ef44a1",
+        "742318f2c446278eeeedd72da3a5cec5",
+        "787615f6c896c599b901aa3042717ee6"
+      ],
+      "close_negative_trace_ids": [
+        "0043965f81daa3e85373a99afbb52453",
+        "70945cce881fc082c64e7a5fbf18a9b3",
+        "b1425747bd9f2e2a982c008517305f64"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Absorbed deflects_instead_of_escalating. Batch 2 showed missing escalations without any deflection; deflection is a sub-case."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: + Batch 3 close negatives."
+        },
+        {
+          "ts": "2026-10-29T02:26:54.555694+00:00",
+          "action": "revised",
+          "note": "B5: 0111 rejected (accept was a misclick): escalated in turn 2 after asking consent; boundary now says delayed-with-consent escalation is a Pass. Close negative."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "unsupported_commitment",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-2, ESC-1 (clarified), ESC-5 (SPEC revision), SCOPE-2",
+      "definition": "Fail if the reply commits to an outcome, follow-up or action (refund, correction, resolution, delivery timing, interception) that no tool result or policy supports.",
+      "boundary": "Pass if the reply describes only what the tools returned (e.g. 'queued for approval, a human will follow up') or opens a ticket to investigate without promising the result. Hinting at exceptions or options outside policy ('you may have options outside the standard window') is a Fail. Calling issue_refund above the threshold is correct per ESC-1 (the tool queues it); the failure is only in what the reply promises.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-ikje54a9",
+        "ann-lzfusqsg",
+        "ann-6sworoev",
+        "ann-fm1bxkvb",
+        "ann-ctlg5zl2",
+        "ann-zb55cn45",
+        "ann-r7jaxw6j",
+        "ann-bihk6380",
+        "ann-lloiv9cb",
+        "ann-b5x0111a",
+        "ann-ms91x348",
+        "ann-hsrcl97c",
+        "ann-3o78s9dt"
+      ],
+      "example_trace_ids": [
+        "b62178d3d997d83540d18ae1f318ddbd",
+        "887b7dea65a66d8ce453dc6ada016cb3",
+        "78d05d397b6c5c969896aa58fbd453bb",
+        "c91b939216dd4aa781bb9a5293be9ab9",
+        "584e66a77e0a1fcc0dcb6de3d7d5f72f",
+        "6725cd5dd43fc4fcc6fd89722a9ddc13",
+        "558da6e77e7a55f1cd10d37bc4c14c13",
+        "bb355f27e872878ed237657db929dd69",
+        "3d68eab09744fd20ae477684f31190c8",
+        "8f09f8e36f43fc4aa79b5f5387a71b61",
+        "7635be3f0286ef23c299ff4b9c52687b",
+        "7fca244fafeef01a8319a9223438eaa6",
+        "d51af6c880287727360103a6ceeda482",
+        "d09f8c4887834b2cac9fcd407c64c39c"
+      ],
+      "close_negative_trace_ids": [
+        "4032e794bd3cd56b4805a41353618129",
+        "49523de31b16ed08db98deaebfed66d9",
+        "98b97cd995ee40c577babbb5968b025a"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2)."
+        },
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "merged",
+          "note": "Absorbed promises_queued_refund, acts_on_unverified_claim. Batch 2 added promises beyond refunds (delivery follow-up, interception, dispute resolution); one rule covers all."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: exception hints (0022, 0056) moved here from denial_not_explained; ESC-1 clarified (queuing happens inside issue_refund). + 0107 (invented review timing, invented no-return policy)."
+        },
+        {
+          "ts": "2026-10-28T19:00:00+00:00",
+          "action": "revised",
+          "note": "Round 3: + close negative 0076 (offers an above-threshold refund without saying it needs approval; an offer is not a commitment)."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0034 (carrier interception, 'expedited options' via ticket)."
+        },
+        {
+          "ts": "2026-10-29T02:25:05.614206+00:00",
+          "action": "extended",
+          "note": "B5: + 0139 (promises a 'second look')."
+        },
+        {
+          "ts": "2026-10-29T02:33:42.281195+00:00",
+          "action": "extended",
+          "note": "B5: + 0111 turn 0 (exception hint on a dispute outside the window)."
+        },
+        {
+          "ts": "2026-10-29T02:45:06.493805+00:00",
+          "action": "revised",
+          "note": "AgentDebug comparison: spans Outcome Misinterpretation (queued refund read as done) and Hallucination (invented exceptions, timing). Kept merged: one product change (state only what tools returned or policy says) fixes both."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0010 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0022 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0056 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: ESC-1 clarified (issue_refund queues, no extra escalate_to_human; reply must not promise approval), motivated by ann-lzfusqsg (0110), ann-ikje54a9 (0225). New ESC-5: 24-hour response time may be stated, resolution timing may not (label decision 2026-10-28 on 0066, 0105, 0014)."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "confusing_reply",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-5 (direct language; brevity added by SPEC revision)",
+      "definition": "Fail if the reply obscures the decision, its reason, or the next step: vague or contradictory wording, unrequested detail that changes or muddles the picture, or re-asking something already settled.",
+      "boundary": "Plain length or verbosity is a Pass, logged as a spec gap (SPEC has no brevity rule). Harmless extra reassurance is a Pass. Fail only when the extra content confuses or changes the decision. A missing denial reason is denial_not_explained.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-5numnldv",
+        "ann-1i7chj93",
+        "ann-i2iqjvr9",
+        "ann-tfqjwshn",
+        "ann-bw8bhprl"
+      ],
+      "example_trace_ids": [
+        "236efa310982b6b840867c76d57faa15",
+        "9a485107096419e1c7a9d4078ed38227",
+        "a7065490ee65e44bc15dd49965bae4ee"
+      ],
+      "close_negative_trace_ids": [
+        "3e0719044ba29ee157b1166706318046",
+        "f1919c4193d3011cdf21bc73a543d680",
+        "7f2a627ca97bd29e389b60e2a4167353"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2: renamed from unclear_reply; Batch 2 notes treated verbosity inconsistently (FF in 0137/0088/0251, not in 0133/0057/0094), so the rule now draws the line at changing or confusing the decision."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: verbosity alone is a spec gap, not a failure (0106, 0138 re-coded); confusion is the Fail line."
+        },
+        {
+          "ts": "2026-10-29T01:57:51.620257+00:00",
+          "action": "revised",
+          "note": "Recheck under round-3 rule: 0007, 0251, 0088 were length-only (now Pass, spec gap, close negatives); 0140 (re-asks settled question) and 0137 (confusing ask for the price) stay Fail."
+        },
+        {
+          "ts": "2026-10-29T02:37:54.651103+00:00",
+          "action": "extended",
+          "note": "B5: + 0080. Evidence is vagueness, not length: 'a certain threshold' and '$120 is on the larger side' muddle why approval is needed (consistent with the round-3 rule; length alone stays a Pass)."
+        },
+        {
+          "ts": "2026-10-29T02:45:06.493805+00:00",
+          "action": "renamed",
+          "note": "Renamed from verbose_or_unrequested_detail after the AgentDebug comparison: the re-ask clause (0140) is a memory/retrieval failure in AgentDebug, not verbosity; since round 3 the Fail line is confusion, so the name now says so. Length alone stays a Pass (spec gap)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: RESP-5 now asks for brief replies, motivated by spec-gap notes ann-5numnldv (0007), ann-hdzzwob9 (0106), ann-7e9mr1vv (0138), ann-xum76jkg (0061). Labels were made under the earlier RESP-5, so length alone stayed a Pass here; brevity is a candidate future mode."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "malformed_tool_query",
+      "status": "candidate",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "RESP-6 (SPEC revision: arguments in their intended field)",
+      "definition": "Fail if the agent passes wrong or misplaced arguments to a tool (e.g. store name in the product field) so that it needs extra calls to get a result one well-formed call would return.",
+      "boundary": "Pass if the first call is well formed, even when it returns nothing. Pass if the misplaced argument comes from the user's own ambiguous wording (e.g. a store name the user did not mark as a store) and the agent passed it on as given. Not calling a tool at all is skips_available_tool.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-skhrpx5y",
+        "ann-p7tr59hj",
+        "ann-3jnxi3zx",
+        "ann-ir5ngqdn",
+        "ann-07m8jsw2"
+      ],
+      "example_trace_ids": [
+        "46c3c48c7b9ec35f854fc21b5b69e548",
+        "408affeebe640f9af3b156ec723369bc",
+        "935294e2bfb733c4bfafd9c6d877f5cf",
+        "678698fa4879f04ee3490470449e1ede",
+        "f3501c268413b91300153a5beec40892",
+        "73fa749db68b4f49958646b62909f2f8",
+        "0fd295b3310e7b4bc10c46f87cd9d1a1"
+      ],
+      "close_negative_trace_ids": [
+        "a15edd291d24cb66ecf31a1181dbc9dd",
+        "bb4e4de095064aac6894869deae3d853",
+        "f964857a231f89f24cdbc3faab1f4f3b"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2). Harmless to the final answer, but kept as a mode: Balaji wants unnecessary tool calls fixed via the prompt."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: user ambiguity is a Pass (0164 close negative). + 0103, 0240."
+        },
+        {
+          "ts": "2026-10-29T01:53:35.274900+00:00",
+          "action": "extended",
+          "note": "B4: + 0167; close negatives 0223, 0247 (vague user wording)."
+        },
+        {
+          "ts": "2026-10-29T02:49:15.995432+00:00",
+          "action": "extended",
+          "note": "Pre-labeling check: + support-0216 (B3 open code names this mode; was not linked)."
+        },
+        {
+          "ts": "2026-10-29T07:13:06.419147+00:00",
+          "action": "revised",
+          "note": "SPEC revision: RESP-6 now requires each argument in its intended field (find_order gets only the product description), motivated by ann-rng8ixu1 (0103), ann-ir5ngqdn (0167), ann-07m8jsw2 (0216). Same requirement as skips_available_tool, separate mode: no call vs. a badly formed call."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    },
+    {
+      "name": "access_overreach",
+      "status": "rejected",
+      "evaluator_type": "llm_judge",
+      "requirement_source": "AUTH-1, RESP-4",
+      "definition": "Fail if the agent gives a user information or help about an order, refund or escalation they are not authorised to access, instead of declining without details.",
+      "boundary": "Pass if the agent declines and explains only that it cannot share that information.",
+      "nearest_mode": "",
+      "annotation_ids": [
+        "ann-pmqsktvx"
+      ],
+      "example_trace_ids": [
+        "1b8f80a7d7806d84d39a8991b03754f0",
+        "7a1c9715d5522e7818cde21278cfe13a"
+      ],
+      "close_negative_trace_ids": [
+        "c4e3554f4ed31576fe93e0d3c57a229d",
+        "e902dfe148e03ad702044b0a17dcfb1d",
+        "82a0c628620ce3dc301f252d29eda1c0"
+      ],
+      "history": [
+        {
+          "ts": "2026-10-28T05:56:34.387139+00:00",
+          "action": "created",
+          "note": "Round 2 (after Batch 2); single trace, look for more in Batch 3."
+        },
+        {
+          "ts": "2026-10-28T18:36:41.029056+00:00",
+          "action": "revised",
+          "note": "Round 3: kept as a low-frequency mode; Batch 3 depth search found 0 new failures and 3 close negatives (0019, 0169, 0231)."
+        },
+        {
+          "ts": "2026-10-29T00:00:00+00:00",
+          "action": "rejected",
+          "note": "Dropped as a final mode: only 2 positives and the permission_denied pool is exhausted (Batch 5 search: 0 hits). Low-frequency observation; target with synthetic scenarios in HW5."
+        }
+      ],
+      "created_at": "2026-10-28T05:56:34.387139+00:00"
+    }
+  ]
+}

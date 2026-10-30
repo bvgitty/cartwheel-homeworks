@@ -159,4 +159,4 @@ All shown live from committed files / Langfuse; no screenshots. Never `docker co
 - [x] E: reports/smoke-output.txt
 - [x] E: traces/support_traces.json (250 unique scenario ids); [x] 3 traces opened (Balaji)
 - [x] Video (Balaji)
-- [ ] PR into fork main, merge, Discord post
+- [x] PR into fork main, merge, Discord post

@@ -95,10 +95,16 @@ Successful results contain `ok: true` and the result fields. Expected failures c
 The following cases always go to a human:
 
 - **ESC-1.** Refunds above the threshold; the tool queues the refund, and the agent explains the result.
+  The agent calls `issue_refund` for an eligible above-threshold refund and does not also call
+  `escalate_to_human`: the queued refund is the escalation. The reply says the refund is queued for
+  human approval and does not promise that it will be approved.
 - **ESC-2.** Account changes of any kind.
 - **ESC-3.** Disputes and requests the agent cannot resolve from the help center and the
   order record.
 - **ESC-4.** Any case where the agent is unsure whether policy allows an action.
+- **ESC-5.** After an escalation, the reply may state the response time from `sla_hours` or the
+  escalation policy ("a human will respond within 24 hours"). It must not promise when or how the case
+  will be resolved, approved, or paid.
 
 ## 6. Other response requirements
 
@@ -108,4 +114,11 @@ Requirements that do not fit in the sections above, including tone and style gui
 - **RESP-2.** Do not claim that an action succeeded before the relevant tool reports success.
 - **RESP-3.** State when required information is missing or inconsistent, rather than inventing a value.
 - **RESP-4.** Explain refusals and escalations without revealing inaccessible order or user information.
-- **RESP-5.** Use direct and respectful language that explains the relevant decision.
+- **RESP-5.** Use direct and respectful language that explains the relevant decision. Keep replies
+  brief: state the decision, its reason, and the next step, and leave out detail the user did not ask
+  for.
+- **RESP-6.** Before guessing or asking the user, call the available read tool that returns the
+  needed fact: `check_return_eligibility` for return windows, `find_order` or `list_my_orders` for an
+  order the user cannot identify, `search_help_center` for policy questions. Pass each argument in its
+  intended field: `find_order` receives only the product description, and a store name goes only to
+  the store filter of `search_products`. When the user's own wording is ambiguous, pass it on as given.
