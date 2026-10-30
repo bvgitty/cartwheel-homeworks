@@ -1,5 +1,7 @@
 # HW4 review summary: Cartwheel failure taxonomy
 
+*AI Evals for Engineers & PMs, Module 2. Branch `hw4-taxonomy`. Video: https://www.loom.com/share/064520be3aa549718813fc8af71d15f0*
+
 ## Reviewed sample
 
 **Source.** Live Langfuse traces from my Homework 3 run. The population is the 250 final HW3

@@ -260,7 +260,8 @@ function renderBatchSel() {
 /* ---------- annotations ---------- */
 const active = (a) => a.status !== "retracted";
 function sessionNotes(sessionId) { return S.annotations.filter((a) => a.session_id === sessionId && active(a)); }
-function isReviewed(sessionId) { return sessionNotes(sessionId).some((a) => a.kind === "no_failure" || a.first_failure); }
+// Any active note counts: a session re-coded to spec gap or close negative was still read.
+function isReviewed(sessionId) { return sessionNotes(sessionId).some((a) => active(a) && (a.kind === "no_failure" || a.kind === "open_code")); }
 function hasFirstFailure(sessionId) { return sessionNotes(sessionId).some((a) => a.first_failure); }
 
 /* ---------- review view ---------- */
@@ -587,10 +588,10 @@ function renderTaxonomy() {
   const shown = codes.filter((a) => S.codeFilter === "all"
     || (S.codeFilter === "gaps" ? a.spec_gap : !a.spec_gap && !assigned.has(a.id)));
   const modeCards = modes.map((m, mi) => `
-    <div class="mode${m.status === "rejected" ? " rejected" : ""}" data-mi="${mi}">
+    <div class="mode${m.status === "rejected" || m.status === "merged" ? " rejected" : ""}" data-mi="${mi}">
       <div class="grid">
         <label>name</label><input data-f="name" value="${esc(m.name)}" placeholder="snake_case_name">
-        <label>status</label><select data-f="status">${["candidate", "confirmed", "rejected"].map((x) => `<option${m.status === x ? " selected" : ""}>${x}</option>`).join("")}</select>
+        <label>status</label><select data-f="status">${["candidate", "confirmed", "merged", "rejected"].map((x) => `<option${m.status === x ? " selected" : ""}>${x}</option>`).join("")}</select>
         <label>evaluator</label><select data-f="evaluator_type">${["llm_judge", "code"].map((x) => `<option${m.evaluator_type === x ? " selected" : ""}>${x}</option>`).join("")}</select>
         <label>requirement</label><input data-f="requirement_source" value="${esc(m.requirement_source)}" placeholder="SPEC.md id, e.g. RESP-2, or 'SPEC revision: …'">
         <label>definition</label><textarea data-f="definition" rows="3" placeholder="Fail when … ; Pass when …">${esc(m.definition)}</textarea>
@@ -601,12 +602,12 @@ function renderTaxonomy() {
         <label>close negatives (${m.close_negative_trace_ids.length})</label><div>${m.close_negative_trace_ids.map((t) => traceChip(t, m.name, "close_negative_trace_ids")).join("")}
           <input data-add="close_negative_trace_ids" placeholder="+ trace id or support-0001" size="20"></div>
         <label>supporting notes (${(m.annotation_ids || []).length})</label><div>${(m.annotation_ids || []).map((id) => { const a = S.annotations.find((x) => x.id === id); return a ? `<div class="note" style="cursor:default"><span class="dim mono">${esc(a.scenario_id)}</span> ${esc(a.note)}</div>` : ""; }).join("") || '<span class="dim">assign open codes from the right-hand list</span>'}</div>
-        <label>revisions (${m.history.length})</label><div>${m.history.map((h) => `<div class="dim" style="font-size:12px">${fmtTime(h.ts)} · ${esc(h.field)}: “${esc(h.from)}” → “${esc(h.to)}”${h.reason ? " · because " + esc(h.reason) : ""}</div>`).join("") || '<span class="dim">none yet</span>'}</div>
+        <label>revisions (${m.history.length})</label><div>${m.history.map((h) => `<div class="dim" style="font-size:12px">${fmtTime(h.ts)} · ${h.field ? `${esc(h.field)}: “${esc(h.from)}” → “${esc(h.to)}”${h.reason ? " · because " + esc(h.reason) : ""}` : `${esc(h.action)}: ${esc(h.note)}`}</div>`).join("") || '<span class="dim">none yet</span>'}</div>
       </div>
       <div style="margin-top:8px;display:flex;gap:6px"><button class="primary" data-save="${mi}">Save mode</button></div>
     </div>`).join("");
   $("taxpage").innerHTML = `<div class="tax">
-    <div><div style="display:flex;justify-content:space-between;align-items:center"><h2>Failure modes (${modes.filter((m) => m.status !== "rejected").length} active)</h2><button id="addmode">+ New mode</button></div>
+    <div><div style="display:flex;justify-content:space-between;align-items:center"><h2>Failure modes (${modes.filter((m) => m.status !== "rejected" && m.status !== "merged").length} active)</h2><button id="addmode">+ New mode</button></div>
       ${modeCards || '<p class="dim">No modes yet. Axial coding starts after the first review batch: group open codes that one product change would fix.</p>'}</div>
     <div><div style="display:flex;justify-content:space-between;align-items:center"><h2>Open codes (${shown.length} of ${codes.length})</h2>
       <select id="codefilter"><option value="unassigned"${S.codeFilter === "unassigned" ? " selected" : ""}>unassigned failures</option><option value="gaps"${S.codeFilter === "gaps" ? " selected" : ""}>spec gaps</option><option value="all"${S.codeFilter === "all" ? " selected" : ""}>all</option></select></div>
