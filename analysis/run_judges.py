@@ -4,20 +4,29 @@ Each step is a function, run from the repo root:
 
     uv run --env-file .env python -m analysis.run_judges candidates
 
-Steps: ``collect_candidates`` (Part A, one enrich batch for the review app).
+Steps:
+
+- ``candidates``: Part A, one enrich batch for the review app.
+- ``labels``: export HW5 labels (1 = Pass, 0 = Fail) from the review app's label log.
+- ``inputs``: Part B, one judge input record per labeled conversation.
+- ``split``: Part B, 20/40/40 train/dev/test split (run once).
 """
 
 from __future__ import annotations
 
 import json
 import sys
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from pathlib import Path
 
-from analysis.helpers import _state, next_to_label
+from analysis.helpers import _state, next_to_label, split_labels
+from analysis.helpers.normalization import normalize_trace
 from analysis.review_app.build_cache import CACHE
 
 MODE = "unsupported_commitment"
 TRACE_EXPORT = "traces/support_traces.json"
+INPUTS = Path("analysis/state/hw5_trace_inputs.json")
 
 
 def collect_candidates(batch_id: str = "H1", k: int = 25) -> list[dict]:
@@ -61,6 +70,106 @@ def collect_candidates(batch_id: str = "H1", k: int = 25) -> list[dict]:
     return items
 
 
+def _hw4_labels(mode: str = MODE) -> dict[str, dict]:
+    """Live label per trace from the review app's append-only log (1 = Fail)."""
+    live = {}
+    for row in _state.read_jsonl(_state.state_path("labels", f"{mode}.jsonl")):
+        if not row.get("superseded_by"):
+            live[row["trace_id"]] = row
+    return live
+
+
+def export_labels(mode: str = MODE) -> Path:
+    """Write the HW5 label file with Pass = 1, Fail = 0.
+
+    The review app keeps writing HW4-convention labels (1 = failure present) to
+    ``labels/<mode>.jsonl``; that log stays the source of truth, so rerun this
+    after any label flip. The helpers read the HW5 file once it exists.
+    """
+    rows = [
+        {
+            "trace_id": r["trace_id"],
+            "label": 1 - int(r["label"]),
+            "evidence": r.get("evidence", ""),
+            "session_id": r.get("session_id"),
+            "scenario_id": r.get("scenario_id"),
+            "source": r.get("source", "human"),
+            "ts": r["ts"],
+            "hw4_label_id": r["label_id"],
+        }
+        for r in _hw4_labels(mode).values()
+    ]
+    path = _state.state_path("hw5_labels", f"{mode}.jsonl")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
+    return path
+
+
+def _sessions() -> dict[str, list[dict]]:
+    """Normalized HW3 turn-traces grouped by session, in turn order."""
+    raw = json.loads(Path(TRACE_EXPORT).read_text(encoding="utf-8"))["traces"]
+    by_session = defaultdict(list)
+    for record in sorted(raw, key=lambda r: r["timestamp"]):
+        trace = normalize_trace(record)
+        by_session[trace["meta"]["session_id"]].append(trace)
+    return by_session
+
+
+def _judge_message(message: dict) -> dict:
+    """Keep role and text or tool data. ``_flatten`` renders a tool call by its
+    arguments only, so the tool name goes in front of them for the judge."""
+    message = dict(message)
+    if message.get("role") == "tool_call":
+        args = message.get("arguments")
+        args = args if isinstance(args, str) else json.dumps(args, ensure_ascii=False)
+        message["arguments"] = f"{message['name']} {args}"
+    return message
+
+
+def prepare_inputs(mode: str = MODE) -> list[dict]:
+    """One judge input per labeled conversation, saved to ``hw5_trace_inputs.json``.
+
+    The evaluated turn is the session's first Fail turn, else its last turn.
+    Cartwheel writes one trace per turn, so the earlier turns are stitched in
+    front as context; the reply to judge is the final assistant message. Only
+    ``trace_id`` and the messages are written: no labels, notes or scenario data.
+    """
+    labels = _hw4_labels(mode)
+    records = []
+    for traces in _sessions().values():
+        labeled = [t for t in traces if t["trace_id"] in labels]
+        if not labeled:
+            continue
+        if len(labeled) != len(traces):
+            raise ValueError(f"session {traces[0]['meta']['session_id']} is partly labeled")
+        fails = [t for t in traces if labels[t["trace_id"]]["label"] == 1]
+        target = fails[0] if fails else traces[-1]
+        upto = traces[: traces.index(target) + 1]
+        messages = [_judge_message(m) for t in upto for m in t["trace"]]
+        if messages[-1]["role"] != "assistant":
+            raise ValueError(f"trace {target['trace_id']} does not end with a reply")
+        records.append({"trace_id": target["trace_id"], "trace": messages})
+    INPUTS.write_text(json.dumps(records, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    return records
+
+
+def split_data(mode: str = MODE) -> dict[str, list[str]]:
+    """Stratified 20/40/40 split over the input records (run once)."""
+    records = json.loads(INPUTS.read_text(encoding="utf-8"))
+    return split_labels(
+        mode,
+        fractions=(0.20, 0.40, 0.40),
+        seed=7,
+        min_per_class=10,
+        eligible_trace_ids=[record["trace_id"] for record in records],
+    )
+
+
+def _class_counts(trace_ids: list[str], mode: str = MODE) -> Counter:
+    labels = _hw4_labels(mode)
+    return Counter("Fail" if labels[t]["label"] == 1 else "Pass" for t in trace_ids)
+
+
 if __name__ == "__main__":
     step = sys.argv[1] if len(sys.argv) > 1 else ""
     if step == "candidates":
@@ -68,5 +177,13 @@ if __name__ == "__main__":
         print(f"{len(picked)} sessions, {sum(len(i['trace_ids']) for i in picked)} traces")
         for item in picked:
             print(f"  {item['scenario_id']}  {len(item['trace_ids'])}t  {item['reason']}")
+    elif step == "labels":
+        print(export_labels())
+    elif step == "inputs":
+        records = prepare_inputs()
+        print(f"{len(records)} records: {dict(_class_counts([r['trace_id'] for r in records]))}")
+    elif step == "split":
+        for name, ids in split_data().items():
+            print(f"{name}: {len(ids)} {dict(_class_counts(ids))}")
     else:
-        raise SystemExit("usage: python -m analysis.run_judges candidates")
+        raise SystemExit("usage: python -m analysis.run_judges candidates|labels|inputs|split")
