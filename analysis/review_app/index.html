@@ -661,6 +661,9 @@ async function saveMode(mi) {
 /* ---------- label view ---------- */
 // Final modes only; merged and rejected modes keep their history but get no labels.
 function labelModes() { return S.patterns.modes.filter((m) => m.name && (m.status === "candidate" || m.status === "confirmed")); }
+// HW5 labels one mode at a time; saving a row then writes only that mode.
+S.labelMode = "";
+function shownLabelModes() { return labelModes().filter((m) => !S.labelMode || m.name === S.labelMode); }
 S.pending = {};  // trace_id -> {mode: 0|1}, unsaved flips
 function cellValue(mode, tid) {
   const p = (S.pending[tid] || {})[mode]; if (p !== undefined) return { v: p, state: "pending" };
@@ -669,7 +672,7 @@ function cellValue(mode, tid) {
 }
 function rowSaved(tid, modes) { return modes.every((m) => (S.labels[m.name] || {})[tid] && cellValue(m.name, tid).state === "saved"); }
 function renderLabel() {
-  const modes = labelModes();
+  const modes = shownLabelModes();
   const sessions = reviewSet().map((id) => S.byScenario[id]).filter(Boolean);
   if (!modes.length || !sessions.length) { $("labelpage").innerHTML = `<p class="dim">Labeling needs at least one mode (Taxonomy) and a review set (sample manifest).</p>`; return; }
   let rows = "";
@@ -695,9 +698,10 @@ function renderLabel() {
   const done = allTids.filter((tid) => rowSaved(tid, modes)).length;
   $("labelpage").innerHTML = `<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
       <b>${done} / ${allTids.length}</b><span class="dim">traces saved (${modes.length} judgments each) · dashed = draft, not yet a label · * = drafted from your notes · click a cell to flip · Fail = failure present (1) · Langfuse sync ${S.langfuse ? "on" : "<b style='color:var(--bad)'>OFF</b>"}</span>
-      <span class="spacer"></span><select id="labelfilter"><option value="incomplete">unsaved only</option><option value="all"${S.labelFilter === "all" ? " selected" : ""}>all traces</option></select></div>
+      <span class="spacer"></span><select id="labelmode"><option value="">all modes</option>${labelModes().map((m) => `<option${S.labelMode === m.name ? " selected" : ""}>${esc(m.name)}</option>`).join("")}</select><select id="labelfilter"><option value="incomplete">unsaved only</option><option value="all"${S.labelFilter === "all" ? " selected" : ""}>all traces</option></select></div>
     <table><thead><tr><th>trace</th>${modes.map((m) => `<th title="${esc(m.definition + "\n\nBoundary: " + m.boundary)}">${esc(m.name)}</th>`).join("")}<th></th></tr></thead><tbody>${rows}</tbody></table>`;
   $("labelfilter").onchange = (e) => { S.labelFilter = e.target.value; renderLabel(); };
+  $("labelmode").onchange = (e) => { S.labelMode = e.target.value; renderLabel(); };
   document.querySelectorAll("#labelpage [data-flip]").forEach((b) => b.onclick = () => {
     const tid = b.dataset.t, mode = b.dataset.flip;
     S.pending[tid] = S.pending[tid] || {}; S.pending[tid][mode] = cellValue(mode, tid).v === 1 ? 0 : 1;
@@ -710,7 +714,7 @@ function renderLabel() {
 // Writes every mode for one trace; unchanged saved labels are skipped. Evidence
 // for a Fail comes from the draft (your note) unless you flipped it, then from the row box.
 async function saveRow(tid) {
-  const modes = labelModes(), sess = S.byTrace[tid].session;
+  const modes = shownLabelModes(), sess = S.byTrace[tid].session;
   const rowEv = (document.querySelector(`.rowev[data-t="${tid}"]`) || {}).value || "";
   const writes = [];
   for (const m of modes) {
