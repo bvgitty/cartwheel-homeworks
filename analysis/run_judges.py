@@ -10,23 +10,30 @@ Steps:
 - ``labels``: export HW5 labels (1 = Pass, 0 = Fail) from the review app's label log.
 - ``inputs``: Part B, one judge input record per labeled conversation.
 - ``split``: Part B, 20/40/40 train/dev/test split (run once).
+- ``dev <prompt_path>``: Part C, register a prompt version and score it on dev (paid).
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from analysis.helpers import _state, next_to_label, split_labels
+from analysis.helpers import _state, judge_alignment, next_to_label, register_judge, run_judge, split_labels
 from analysis.helpers.normalization import normalize_trace
 from analysis.review_app.build_cache import CACHE
 
 MODE = "unsupported_commitment"
 TRACE_EXPORT = "traces/support_traces.json"
 INPUTS = Path("analysis/state/hw5_trace_inputs.json")
+REPORT = Path("analysis/report")
+JUDGE_MODEL = "gpt-4o-mini"
+
+# Judge runs read the saved inputs, never a fresh Langfuse fetch.
+os.environ.setdefault("CARTWHEEL_JUDGE_TRACE_SOURCE", str(INPUTS.resolve()))
 
 
 def collect_candidates(batch_id: str = "H1", k: int = 25) -> list[dict]:
@@ -165,6 +172,29 @@ def split_data(mode: str = MODE) -> dict[str, list[str]]:
     )
 
 
+def run_development(mode: str, prompt_path: str) -> dict:
+    """Register a prompt version, judge the dev split, and save its metrics.
+
+    Each call registers a new version. To resume an interrupted run, call
+    ``run_judge`` and ``judge_alignment`` on the same judge id instead.
+    """
+    record = register_judge(
+        mode=mode,
+        prompt_text=Path(prompt_path).read_text(encoding="utf-8"),
+        judge_model=JUDGE_MODEL,
+    )
+    return score_dev(record["judge_id"], prompt_path)
+
+
+def score_dev(judge_id: str, prompt_path: str = "") -> dict:
+    """Run (or resume) a judge on dev and write ``report/dev-<judge_id>.json``."""
+    run_judge(judge_id, split="dev", batch_size=10)
+    development = judge_alignment(judge_id, split="dev")
+    development.update(model=JUDGE_MODEL, prompt_path=prompt_path)
+    (REPORT / f"dev-{judge_id}.json").write_text(json.dumps(development, indent=2) + "\n", encoding="utf-8")
+    return development
+
+
 def _class_counts(trace_ids: list[str], mode: str = MODE) -> Counter:
     labels = _hw4_labels(mode)
     return Counter("Fail" if labels[t]["label"] == 1 else "Pass" for t in trace_ids)
@@ -185,5 +215,9 @@ if __name__ == "__main__":
     elif step == "split":
         for name, ids in split_data().items():
             print(f"{name}: {len(ids)} {dict(_class_counts(ids))}")
+    elif step == "dev":
+        dev = run_development(MODE, sys.argv[2])
+        print(f"{dev['judge_id']}: TPR {dev['tpr']} {dev['tpr_interval']}  TNR {dev['tnr']} {dev['tnr_interval']}")
+        print(f"TP {dev['tp']} FN {dev['fn']} TN {dev['tn']} FP {dev['fp']}  disagreements {len(dev['disagreements'])}")
     else:
-        raise SystemExit("usage: python -m analysis.run_judges candidates|labels|inputs|split")
+        raise SystemExit("usage: python -m analysis.run_judges candidates|labels|inputs|split|dev <prompt>")
