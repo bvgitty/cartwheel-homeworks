@@ -148,6 +148,7 @@
     <button data-view="taxonomy">Taxonomy</button>
     <button data-view="label">Label</button>
     <button data-view="progress">Progress</button>
+    <button data-view="judge">Judge</button>
   </div>
   <select id="batchsel" title="Which sessions to step through"></select>
   <input id="jump" placeholder="jump: support-0251" size="16" />
@@ -168,6 +169,7 @@
 <section id="v-taxonomy" class="view"><div class="page" id="taxpage"></div></section>
 <section id="v-label" class="view"><div class="page" id="labelpage"></div></section>
 <section id="v-progress" class="view"><div class="page" id="progpage"></div></section>
+<section id="v-judge" class="view"><div class="page" id="judgepage"></div></section>
 
 <button id="selbtn">+ note on selection</button>
 <div class="modal" id="modal"><div class="inner" id="modalbody"></div></div>
@@ -232,6 +234,8 @@ function applyState(st) {
   S.labels = st.labels || {};
   S.drafts = (st.drafts && st.drafts.drafts) || {};
   S.langfuse = !!st.langfuse;
+  S.judges = st.judges || [];
+  S.hw5 = st.hw5_disagreements && Array.isArray(st.hw5_disagreements.reviews) ? st.hw5_disagreements : { reviews: [] };
 }
 
 /* ---------- review set and batches ---------- */
@@ -737,6 +741,82 @@ async function saveRow(tid) {
   } catch (e) { status(e.message, true); }
   renderLabel();
 }
+/* ---------- judge view (HW5) ---------- */
+// Human labels use the HW4 convention (1 = Fail); judge verdicts arrive as Pass/Fail.
+// Metrics treat Pass as the positive class and recompute live after a label flip.
+S.judgeId = ""; S.judgeFilter = "disagree";
+const DECISIONS = ["judge wrong (fix prompt)", "label wrong (fix label)", "definition unclear (clarify boundary)"];
+function wilson(k, n) {
+  if (!n) return "–";
+  const z = 1.96, p = k / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d;
+  const m = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d;
+  return `${Math.max(0, c - m).toFixed(2)}–${Math.min(1, c + m).toFixed(2)}`;
+}
+function latestReview(jid, tid) {
+  const rows = S.hw5.reviews.filter((r) => r.judge_id === jid && r.trace_id === tid);
+  return rows[rows.length - 1];
+}
+function renderJudge() {
+  const page = $("judgepage");
+  if (!S.judges.length) { page.innerHTML = `<p class="dim">No HW5 judge runs yet (analysis.run_judges dev).</p>`; return; }
+  const j = S.judges.find((x) => x.judge_id === S.judgeId) || S.judges[S.judges.length - 1];
+  S.judgeId = j.judge_id;
+  const labels = S.labels[j.mode] || {};
+  const rows = Object.entries(j.verdicts).filter(([, v]) => v.split === "dev").map(([tid, v]) => {
+    const human = labels[tid] ? (labels[tid].label === 1 ? "Fail" : "Pass") : "?";
+    return { tid, v, human, agree: human === v.result, sess: (S.byTrace[tid] || {}).session };
+  });
+  const c = { tp: 0, fn: 0, tn: 0, fp: 0 };
+  for (const r of rows) {
+    if (r.human === "Pass") c[r.v.result === "Pass" ? "tp" : "fn"]++;
+    else if (r.human === "Fail") c[r.v.result === "Fail" ? "tn" : "fp"]++;
+  }
+  const shown = rows.filter((r) => S.judgeFilter === "all" || !r.agree)
+    .sort((a, b) => (a.agree - b.agree) || a.human.localeCompare(b.human) || ((a.sess || {}).scenario_id || "").localeCompare((b.sess || {}).scenario_id || ""));
+  const decided = rows.filter((r) => !r.agree && latestReview(j.judge_id, r.tid)).length;
+  page.innerHTML = `<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+      <select id="judgesel">${S.judges.map((x) => `<option${x.judge_id === j.judge_id ? " selected" : ""}>${esc(x.judge_id)}</option>`).join("")}</select>
+      <span class="dim">${esc(j.status || "")} · dev n=${rows.length}</span>
+      <b>TPR ${c.tp}/${c.tp + c.fn} (${wilson(c.tp, c.tp + c.fn)})</b>
+      <b>TNR ${c.tn}/${c.tn + c.fp} (${wilson(c.tn, c.tn + c.fp)})</b>
+      <span class="dim">TP ${c.tp} · FN ${c.fn} · TN ${c.tn} · FP ${c.fp} · decided ${decided}/${c.fn + c.fp} · live from current labels, Pass = positive</span>
+      <span class="spacer"></span>
+      <select id="judgefilter"><option value="disagree">disagreements</option><option value="all"${S.judgeFilter === "all" ? " selected" : ""}>all dev</option></select></div>
+    <table><thead><tr><th>trace</th><th>human</th><th>judge</th><th style="width:38%">judge critique</th><th>your evidence</th><th>decision</th></tr></thead><tbody>${shown.map((r) => {
+      const rev = latestReview(j.judge_id, r.tid), sid = (r.sess || {}).scenario_id || r.tid.slice(0, 8);
+      const kind = r.agree ? "" : r.human === "Pass" ? "false Fail" : "missed failure";
+      return `<tr><td><a class="lnk" href="/#${esc(sid)}" target="_blank">${esc(sid)} ↗</a><div class="dim">${esc(kind)}</div></td>
+        <td><button class="${r.human === "Fail" ? "fail" : "pass"}" data-jflip="${r.tid}" title="flip the human label (evidence box is used as the reason)">${r.human}</button></td>
+        <td><b class="${r.v.result === "Fail" ? "bad" : ""}">${r.v.result}</b></td>
+        <td style="white-space:pre-wrap">${esc(r.v.critique)}</td>
+        <td>${esc((labels[r.tid] || {}).evidence || "")}</td>
+        <td>${r.agree ? "" : `<select data-jdec="${r.tid}"><option value="">decide…</option>${DECISIONS.map((d) => `<option${rev && rev.decision === d ? " selected" : ""}>${esc(d)}</option>`).join("")}</select>
+          <input data-jnote="${r.tid}" placeholder="why (and evidence if you flip)" value="${esc((rev && rev.note) || "")}" style="width:100%;margin-top:4px">
+          <button data-jsave="${r.tid}">${rev ? "Saved ✓" : "Save"}</button>`}</td></tr>`;
+    }).join("")}</tbody></table>`;
+  $("judgesel").onchange = (e) => { S.judgeId = e.target.value; renderJudge(); };
+  $("judgefilter").onchange = (e) => { S.judgeFilter = e.target.value; renderJudge(); };
+  page.querySelectorAll("[data-jsave]").forEach((b) => b.onclick = async () => {
+    const tid = b.dataset.jsave, decision = page.querySelector(`[data-jdec="${tid}"]`).value;
+    const note = page.querySelector(`[data-jnote="${tid}"]`).value.trim();
+    if (!decision) { status("pick a decision first", true); return; }
+    await mutate("hw5_disagreements", (d) => { d.reviews = d.reviews || []; d.reviews.push({ judge_id: j.judge_id, trace_id: tid, scenario_id: (S.byTrace[tid] || { session: {} }).session.scenario_id, decision, note, ts: now() }); });
+    status("decision saved"); renderJudge();
+  });
+  page.querySelectorAll("[data-jflip]").forEach((b) => b.onclick = async () => {
+    const tid = b.dataset.jflip, sess = S.byTrace[tid].session, cur = labels[tid];
+    const next = cur && cur.label === 1 ? 0 : 1, note = page.querySelector(`[data-jnote="${tid}"]`);
+    const evidence = note ? note.value.trim() : "";
+    if (next === 1 && !evidence) { status("flipping to Fail needs evidence: type it in the decision box", true); return; }
+    try {
+      const rec = await api("/api/label", { mode: j.mode, label: next, evidence, trace_id: tid, session_id: sess.session_id, scenario_id: sess.scenario_id });
+      S.labels[j.mode][tid] = rec;
+      status(`${sess.scenario_id}: label now ${next === 1 ? "Fail" : "Pass"}` + (rec.langfuse === "ok" ? " + Langfuse" : "; Langfuse: " + rec.langfuse) + " · tell Claude to re-export HW5 labels");
+    } catch (e) { status(e.message, true); }
+    renderJudge();
+  });
+}
+
 /* ---------- progress view ---------- */
 function renderProgress() {
   const rs = reviewSet(), sessions = rs.map((id) => S.byScenario[id]).filter(Boolean);
@@ -806,6 +886,7 @@ function render() {
   if (S.view === "review") renderReview();
   else if (S.view === "taxonomy") renderTaxonomy();
   else if (S.view === "label") renderLabel();
+  else if (S.view === "judge") renderJudge();
   else renderProgress();
 }
 document.querySelectorAll(".tabs button").forEach((b) => b.onclick = () => switchView(b.dataset.view));

@@ -1,0 +1,42 @@
+{
+  "judge_id": "unsupported_commitment-v0",
+  "split": "dev",
+  "tpr": 0.5833,
+  "tnr": 0.8235,
+  "tpr_interval": [
+    0.422,
+    0.7286
+  ],
+  "tnr_interval": [
+    0.5897,
+    0.9381
+  ],
+  "agreement": 0.6604,
+  "tp": 21,
+  "fn": 15,
+  "tn": 14,
+  "fp": 3,
+  "n": 53,
+  "disagreements": [
+    "0043965f81daa3e85373a99afbb52453",
+    "024e39b4324f60e21234840d9fbb260e",
+    "0fd295b3310e7b4bc10c46f87cd9d1a1",
+    "2a6368aa912241d873997f3570ad1016",
+    "408affeebe640f9af3b156ec723369bc",
+    "538d783cb3e08918ae18dd08f24c7703",
+    "7635be3f0286ef23c299ff4b9c52687b",
+    "7a1c9715d5522e7818cde21278cfe13a",
+    "855acb99f6c5c3040726ff44d71b19b0",
+    "87eb1128a032f0922b1629a7d6398032",
+    "8f09f8e36f43fc4aa79b5f5387a71b61",
+    "935294e2bfb733c4bfafd9c6d877f5cf",
+    "9a485107096419e1c7a9d4078ed38227",
+    "9a752d906c56904137a49551d4af1471",
+    "a7065490ee65e44bc15dd49965bae4ee",
+    "c7467f72816d688f91a0ac1f0b3f8ea3",
+    "f5d5d7ebd9208e3982fc7b64f12fe3c7",
+    "f630c51b7071815f5f5a3706f8ef44a1"
+  ],
+  "model": "gpt-4o-mini",
+  "prompt_path": "analysis/prompts/unsupported_commitment-v0.txt"
+}
