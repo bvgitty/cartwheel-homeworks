@@ -11,6 +11,7 @@ Steps:
 - ``inputs``: Part B, one judge input record per labeled conversation.
 - ``split``: Part B, 20/40/40 train/dev/test split (run once).
 - ``dev <prompt_path>``: Part C, register a prompt version and score it on dev (paid).
+- ``test <judge_id>``: Part D, freeze the chosen judge and score test once (paid).
 """
 
 from __future__ import annotations
@@ -22,7 +23,15 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-from analysis.helpers import _state, judge_alignment, next_to_label, register_judge, run_judge, split_labels
+from analysis.helpers import (
+    _state,
+    freeze_judge,
+    judge_alignment,
+    next_to_label,
+    register_judge,
+    run_judge,
+    split_labels,
+)
 from analysis.helpers.normalization import normalize_trace
 from analysis.review_app.build_cache import CACHE
 
@@ -195,6 +204,24 @@ def score_dev(judge_id: str, prompt_path: str = "") -> dict:
     return development
 
 
+def run_test(judge_id: str) -> dict:
+    """Part D: freeze the chosen judge, score the test split once, save the metrics.
+
+    Freezing makes the prompt immutable. If the run is interrupted, resume with
+    ``run_judge`` and ``judge_alignment`` on the same id; never freeze again.
+    """
+    freeze_judge(judge_id)
+    run_judge(judge_id, split="test", batch_size=10)
+    test = judge_alignment(judge_id, split="test")
+    test.update(model=JUDGE_MODEL, class_counts=dict(_class_counts(_split_ids("test"))))
+    (REPORT / f"test-{judge_id}.json").write_text(json.dumps(test, indent=2) + "\n", encoding="utf-8")
+    return test
+
+
+def _split_ids(split: str, mode: str = MODE) -> list[str]:
+    return _state.read_json(_state.state_path("splits.json"))[mode][split]
+
+
 def _class_counts(trace_ids: list[str], mode: str = MODE) -> Counter:
     labels = _hw4_labels(mode)
     return Counter("Fail" if labels[t]["label"] == 1 else "Pass" for t in trace_ids)
@@ -219,5 +246,9 @@ if __name__ == "__main__":
         dev = run_development(MODE, sys.argv[2])
         print(f"{dev['judge_id']}: TPR {dev['tpr']} {dev['tpr_interval']}  TNR {dev['tnr']} {dev['tnr_interval']}")
         print(f"TP {dev['tp']} FN {dev['fn']} TN {dev['tn']} FP {dev['fp']}  disagreements {len(dev['disagreements'])}")
+    elif step == "test":
+        test = run_test(sys.argv[2])
+        print(f"{test['judge_id']}: TPR {test['tpr']} {test['tpr_interval']}  TNR {test['tnr']} {test['tnr_interval']}")
+        print(f"TP {test['tp']} FN {test['fn']} TN {test['tn']} FP {test['fp']}  classes {test['class_counts']}")
     else:
-        raise SystemExit("usage: python -m analysis.run_judges candidates|labels|inputs|split|dev <prompt>")
+        raise SystemExit("usage: python -m analysis.run_judges candidates|labels|inputs|split|dev <prompt>|test <judge_id>")
