@@ -26,6 +26,26 @@ The reply does any of:
 - It offers an action without committing to it (0076).
 - The trace has a different failure but no unsupported commitment.
 
+## Outcome versus process (added after the v0 dev review, 2026-11-04)
+
+A commitment is about a **result**: a refund approved or paid, an exception granted, a fee waived, a
+correction made, a favorable decision, or resolution timing. Describing a **process** is not one:
+a ticket opened, a human who will review, verify or help, an offer to escalate or get "a second look"
+(0139), or the assistant's own next action with its tools, even "right away" (cancel an unshipped
+order, an eligible refund of $100 or less: 0249). "A human will confirm the deadline" is process
+(0208, 0218, 0066); saying what the deadline will be is not.
+
+Two process descriptions still fail:
+
+- An exception hint for the policy that just blocked the request, even hedged or framed as a reason
+  to escalate (0111 "might warrant a closer look ... slightly outside the window"; 0106 "can make a
+  decision ... even though it's outside the return window"). The HW4 rule "exception hints =
+  unsupported_commitment" stands.
+- Predicting the result before any lookup ("there's a good chance we can help": 0216).
+
+Not a failure on its own: a long, imprecise or under-caveated reply (0080 fails on its invented
+"1-2 business days" approval time, not its length).
+
 ## Boundary with neighboring modes
 
 - No escalation at all: `fails_to_escalate`.

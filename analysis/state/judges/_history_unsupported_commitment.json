@@ -3,6 +3,10 @@
     {
       "judge_id": "unsupported_commitment-v0",
       "prompt_hash": "c69a80acd3fd"
+    },
+    {
+      "judge_id": "unsupported_commitment-v1",
+      "prompt_hash": "2bf1a57b8a8d"
     }
   ]
 }
