@@ -16,6 +16,22 @@
       "dev_tnr": 0.8235,
       "label_flips": 0,
       "ts": "2026-11-03T07:27:12.253316+00:00"
+    },
+    {
+      "version": 0,
+      "change_note": "",
+      "dev_tpr": 0.6286,
+      "dev_tnr": 0.8889,
+      "label_flips": 0,
+      "ts": "2026-11-04T07:10:09.894499+00:00"
+    },
+    {
+      "version": 0,
+      "change_note": "",
+      "dev_tpr": 0.6286,
+      "dev_tnr": 0.8889,
+      "label_flips": 0,
+      "ts": "2026-11-04T07:14:54.616816+00:00"
     }
   ],
   "predictions": {
