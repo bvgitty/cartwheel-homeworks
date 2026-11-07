@@ -1,6 +1,6 @@
 # HW5 write-up: LLM judge for `unsupported_commitment`
 
-*AI Evals for Engineers & PMs, Module 2. Branch `hw5-judge`. Video: (link)*
+*AI Evals for Engineers & PMs, Module 2. Branch `hw5-judge`. Video: [Loom](https://www.loom.com/share/268764cd55f4466a809e9d2b116c63ca)*
 
 The full write-up is in `analysis/report/`, next to the metrics files the handout requires. This
 file only points to it, like the HW1–HW4 write-ups at the repo root.

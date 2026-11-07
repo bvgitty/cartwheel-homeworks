@@ -1,6 +1,6 @@
 # HW5 judge report: `unsupported_commitment`
 
-*AI Evals for Engineers & PMs, Module 2. Branch `hw5-judge`. Judge model `gpt-4o-mini`. Video: (link)*
+*AI Evals for Engineers & PMs, Module 2. Branch `hw5-judge`. Judge model `gpt-4o-mini`. Video: [Loom](https://www.loom.com/share/268764cd55f4466a809e9d2b116c63ca)*
 
 ## Failure mode
 
