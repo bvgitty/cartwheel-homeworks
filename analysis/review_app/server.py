@@ -41,6 +41,8 @@ STATE_FILES = {
     "annotations": ("annotations.json", {"annotations": []}),
     "patterns": ("patterns.json", {"modes": []}),
     "suggestions": ("suggestions.json", []),
+    # HW5: the reviewer's decision on each development disagreement.
+    "hw5_disagreements": ("hw5_disagreements.json", {"reviews": []}),
 }
 MODE_NAME = re.compile(r"^[a-z][a-z0-9_]*$")
 POLICY_ID = re.compile(r"^(cw|store)-[a-z0-9-]+$")
@@ -68,6 +70,39 @@ def _live_labels() -> dict[str, dict[str, dict[str, Any]]]:
             if not row.get("superseded_by"):
                 live[row["trace_id"]] = row
         out[mode] = live
+    return out
+
+
+def _judge_views() -> list[dict[str, Any]]:
+    """Each HW5 judge version with its verdicts and critiques for review.
+
+    Only train and dev predictions are sent until a version is frozen, so the
+    interface cannot show test results while the prompt is still changing.
+    """
+    splits = _state.read_json(_state.state_path("splits.json"), default={})
+    out = []
+    for path in sorted(_state.state_path("judges").glob("*.json")):
+        judge = _state.read_json(path)
+        mode = judge.get("mode")
+        if path.name.startswith("_") or not mode or mode in RESERVED_MODES:
+            continue
+        split_of = {tid: name for name in ("train", "dev", "test") for tid in splits.get(mode, {}).get(name, [])}
+        shown = {"train", "dev"} | ({"test"} if judge.get("status") == "frozen" else set())
+        preds = judge.get("predictions", {}).get(judge["prompt_hash"], {})
+        critiques = judge.get("critiques", {}).get(judge["prompt_hash"], {})
+        out.append({
+            "judge_id": judge["judge_id"],
+            "mode": mode,
+            "version": judge["version"],
+            "status": judge.get("status"),
+            "iterations": judge.get("iterations", []),
+            # Judge records store Pass = 1 (label_convention pass_positive).
+            "verdicts": {
+                tid: {"result": "Pass" if pred == 1 else "Fail", "critique": critiques.get(tid, ""), "split": split_of.get(tid)}
+                for tid, pred in preds.items()
+                if split_of.get(tid) in shown
+            },
+        })
     return out
 
 
@@ -148,6 +183,7 @@ class Handler(BaseHTTPRequestHandler):
                     "manifest": _state.read_json(_state.state_path("sample_manifest.json"), default={}),
                     "labels": _live_labels(),
                     "drafts": _state.read_json(_state.state_path("label_drafts.json"), default={}),
+                    "judges": _judge_views(),
                     "langfuse": langfuse_io.is_configured(),
                 }
             )

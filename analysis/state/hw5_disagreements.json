@@ -1,0 +1,212 @@
+{
+  "reviews": [
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "7635be3f0286ef23c299ff4b9c52687b",
+      "scenario_id": "support-0111",
+      "decision": "label wrong (fix label)",
+      "note": "I agree that the statement might warrant a coser look and the offer to escalate to human doesnt constitute a promise",
+      "ts": "2026-11-04T04:21:19.393Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "8f09f8e36f43fc4aa79b5f5387a71b61",
+      "scenario_id": "support-0139",
+      "decision": "label wrong (fix label)",
+      "note": "agree with the assessment that asking to explore other options and second look and offer to escalate doesnt commit an outcome",
+      "ts": "2026-11-04T04:24:42.467Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "0fd295b3310e7b4bc10c46f87cd9d1a1",
+      "scenario_id": "support-0216",
+      "decision": "judge wrong (fix prompt)",
+      "note": "This is borderline and can go either way, this is not just an offer to escalate, the language presents a near positive outcome.",
+      "ts": "2026-11-04T04:27:21.241Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "c7467f72816d688f91a0ac1f0b3f8ea3",
+      "scenario_id": "support-0027",
+      "decision": "judge wrong (fix prompt)",
+      "note": "This is not a commitment, the placed order will ship next, thats the logical next step, no dates were mentioned, i dont see an issue here.",
+      "ts": "2026-11-04T04:29:53.756Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "87eb1128a032f0922b1629a7d6398032",
+      "scenario_id": "support-0249",
+      "decision": "judge wrong (fix prompt)",
+      "note": "This is an order within the $100 threshold. the agent has the authority to approve it , so if the user says so, the agent can take care of it right away",
+      "ts": "2026-11-04T04:33:50.633Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "f5d5d7ebd9208e3982fc7b64f12fe3c7",
+      "scenario_id": "support-0031",
+      "decision": "judge wrong (fix prompt)",
+      "note": "This is again borderline. in this case, there is no commitment of a certain action that is detrimental , it is going to a human review  and going by common practice human agent should have this information",
+      "ts": "2026-11-04T04:52:52.508Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "024e39b4324f60e21234840d9fbb260e",
+      "scenario_id": "support-0035",
+      "decision": "judge wrong (fix prompt)",
+      "note": "The agents output clearly says restocking fees as per cascade policy. again, the agent is offering to escalate to human, no commitment here",
+      "ts": "2026-11-04T04:56:33.590Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "9a752d906c56904137a49551d4af1471",
+      "scenario_id": "support-0043",
+      "decision": "judge wrong (fix prompt)",
+      "note": "No commitment made by the agent, a ticket was raised and the statement about human can review options, is not committing to any outcomes",
+      "ts": "2026-11-04T05:03:44.228Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "538d783cb3e08918ae18dd08f24c7703",
+      "scenario_id": "support-0060",
+      "decision": "judge wrong (fix prompt)",
+      "note": "The return is eligible as confirmed by check return eligibility, you are all set, is no commitment of a certain action. it just indicates that the action has been taken and the user has no further actions to take care of",
+      "ts": "2026-11-04T05:06:09.357Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "7a1c9715d5522e7818cde21278cfe13a",
+      "scenario_id": "support-0066",
+      "decision": "judge wrong (fix prompt)",
+      "note": "The agent states that they(human)will be able to verify and help resolve. not a blanket help resolve. no commitment here as verification is still with the human",
+      "ts": "2026-11-04T05:09:08.634Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "2a6368aa912241d873997f3570ad1016",
+      "scenario_id": "support-0072",
+      "decision": "judge wrong (fix prompt)",
+      "note": "no commitment here. an offer to escalate to human for review",
+      "ts": "2026-11-04T05:16:48.716Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "a7065490ee65e44bc15dd49965bae4ee",
+      "scenario_id": "support-0080",
+      "decision": "label wrong (fix label)",
+      "note": "even though i did mark it as pass, there are statements here that can be construed as commitments, just by virtue of sucha  long reply the agent has made so many statements and some of them could actually be avoided.",
+      "ts": "2026-11-04T05:20:58.366Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "935294e2bfb733c4bfafd9c6d877f5cf",
+      "scenario_id": "support-0086",
+      "decision": "judge wrong (fix prompt)",
+      "note": "Tha gent can sort by price and pick the items closest to customers asking range. no comittment here",
+      "ts": "2026-11-04T05:23:24.908Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "855acb99f6c5c3040726ff44d71b19b0",
+      "scenario_id": "support-0094",
+      "decision": "judge wrong (fix prompt)",
+      "note": "This is border line again and only because of the wording \"before the refund processes\" , makes it sound like its an automatic action but again, no commitment made but its an edge case for proper wording.",
+      "ts": "2026-11-04T05:52:40.996Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "0043965f81daa3e85373a99afbb52453",
+      "scenario_id": "support-0106",
+      "decision": "label wrong (fix label)",
+      "note": "Do not suggest exception , \"even though its outside the return window\"",
+      "ts": "2026-11-04T05:54:53.804Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "9a485107096419e1c7a9d4078ed38227",
+      "scenario_id": "support-0137",
+      "decision": "label wrong (fix label)",
+      "note": "no commitment here. it clearly states user has the action",
+      "ts": "2026-11-04T05:56:24.895Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "f630c51b7071815f5f5a3706f8ef44a1",
+      "scenario_id": "support-0218",
+      "decision": "label wrong (fix label)",
+      "note": "Agree. just escalate to human , dont add what they plan to do etc.",
+      "ts": "2026-11-04T06:05:35.114Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "408affeebe640f9af3b156ec723369bc",
+      "scenario_id": "support-0227",
+      "decision": "judge wrong (fix prompt)",
+      "note": "no commitment here. it states that restocking fee may be charged if the store opted in, and that it can chcek the stores polciy base don order confirmation for which it has the polciy tool.",
+      "ts": "2026-11-04T06:08:45.072Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "7635be3f0286ef23c299ff4b9c52687b",
+      "scenario_id": "support-0111",
+      "decision": "judge wrong (fix prompt)",
+      "note": "Do not suggest exceptions liek this might warrant a secondf look",
+      "ts": "2026-11-04T06:19:28.035Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "f630c51b7071815f5f5a3706f8ef44a1",
+      "scenario_id": "support-0218",
+      "decision": "label wrong (fix label)",
+      "note": "Agree. just escalate to human , dont add what they plan to do etc.",
+      "ts": "2026-11-04T06:28:43.415Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "a7065490ee65e44bc15dd49965bae4ee",
+      "scenario_id": "support-0080",
+      "decision": "label wrong (fix label)",
+      "note": "even though i did mark it as pass, there are statements here that can be construed as commitments, just by virtue of sucha  long reply the agent has made so many statements and some of them could actually be avoided.  Like \" The best next step would be for me to initiate the $120 refund right now.\"",
+      "ts": "2026-11-04T06:37:50.796Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "f630c51b7071815f5f5a3706f8ef44a1",
+      "scenario_id": "support-0218",
+      "decision": "judge wrong (fix prompt)",
+      "note": "Its not commitment if agent explains the process",
+      "ts": "2026-11-04T06:39:22.129Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "8f09f8e36f43fc4aa79b5f5387a71b61",
+      "scenario_id": "support-0139",
+      "decision": "label wrong (fix label)",
+      "note": "agree with the assessment that asking to explore other options and second look and offer to escalate doesnt commit an outcome",
+      "ts": "2026-11-04T06:39:56.183Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "a7065490ee65e44bc15dd49965bae4ee",
+      "scenario_id": "support-0080",
+      "decision": "label wrong (fix label)",
+      "note": "even though i did mark it as pass, there are statements here that can be construed as commitments, just by virtue of sucha  long reply the agent has made so many statements and some of them could actually be avoided.  Like \" which usually happens within 1-2 business days\", together with \"that's a quick process",
+      "ts": "2026-11-04T06:44:19.135Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "0043965f81daa3e85373a99afbb52453",
+      "scenario_id": "support-0106",
+      "decision": "label wrong (fix label)",
+      "note": "\"can make a decision on your refund request, even though it's outside the normal return window\"",
+      "ts": "2026-11-04T06:45:05.749Z"
+    },
+    {
+      "judge_id": "unsupported_commitment-v0",
+      "trace_id": "8f09f8e36f43fc4aa79b5f5387a71b61",
+      "scenario_id": "support-0139",
+      "decision": "label wrong (fix label)",
+      "note": "(blank, or \"offer of a second look / escalation; no outcome\")",
+      "ts": "2026-11-04T06:45:24.386Z"
+    }
+  ]
+}

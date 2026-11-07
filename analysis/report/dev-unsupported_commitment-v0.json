@@ -1,0 +1,39 @@
+{
+  "judge_id": "unsupported_commitment-v0",
+  "split": "dev",
+  "tpr": 0.6286,
+  "tnr": 0.8889,
+  "tpr_interval": [
+    0.4634,
+    0.7683
+  ],
+  "tnr_interval": [
+    0.672,
+    0.969
+  ],
+  "agreement": 0.717,
+  "tp": 22,
+  "fn": 13,
+  "tn": 16,
+  "fp": 2,
+  "n": 53,
+  "disagreements": [
+    "024e39b4324f60e21234840d9fbb260e",
+    "0fd295b3310e7b4bc10c46f87cd9d1a1",
+    "2a6368aa912241d873997f3570ad1016",
+    "408affeebe640f9af3b156ec723369bc",
+    "538d783cb3e08918ae18dd08f24c7703",
+    "7635be3f0286ef23c299ff4b9c52687b",
+    "7a1c9715d5522e7818cde21278cfe13a",
+    "855acb99f6c5c3040726ff44d71b19b0",
+    "87eb1128a032f0922b1629a7d6398032",
+    "935294e2bfb733c4bfafd9c6d877f5cf",
+    "9a485107096419e1c7a9d4078ed38227",
+    "9a752d906c56904137a49551d4af1471",
+    "c7467f72816d688f91a0ac1f0b3f8ea3",
+    "f5d5d7ebd9208e3982fc7b64f12fe3c7",
+    "f630c51b7071815f5f5a3706f8ef44a1"
+  ],
+  "model": "gpt-4o-mini",
+  "prompt_path": "analysis/prompts/unsupported_commitment-v0.txt"
+}
