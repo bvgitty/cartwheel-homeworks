@@ -6,6 +6,7 @@ import json
 import re
 import shutil
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
@@ -429,5 +430,20 @@ def export_tasks(
             _write_task(generated, case)
         if output_dir.exists():
             shutil.rmtree(output_dir)
-        generated.replace(output_dir)
+        _move_into_place(generated, output_dir)
     return [output_dir / case["id"] for case in cases]
+
+
+def _move_into_place(source: Path, target: Path) -> None:
+    """Rename ``source`` to ``target``, tolerating brief Windows file locks.
+
+    On Windows an antivirus or indexer scan of the freshly written files can
+    deny the rename for a moment. Retry, then fall back to copying.
+    """
+    for attempt in range(5):
+        try:
+            source.replace(target)
+            return
+        except PermissionError:
+            time.sleep(0.5 * (attempt + 1))
+    shutil.copytree(source, target)

@@ -10,7 +10,12 @@ from harbor_adapter.summary import summarize_job, write_github_summary
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("job_dir", type=Path)
+    parser.add_argument(
+        "job_dir",
+        type=Path,
+        nargs="+",
+        help="one Harbor job directory, or several whose trials are pooled",
+    )
     parser.add_argument("--cases", type=Path, default=None)
     parser.add_argument("--expected-attempts", type=int, default=None)
     parser.add_argument(

@@ -40,16 +40,60 @@ Review points for Balaji: e-005 tests ESC-1 through the DB, which is our HW4 dec
 over $100. e-008 and e-011 require the eligibility tool even when get_order could answer: is that the behavior
 you want to lock in? Is e-010's `reply_contains` too brittle ("two business days")?
 
+## Day 1 (2026-11-09)
+
+Decisions confirmed by Balaji: code checks only; keep e-001 and e-005 (a reply that only asks a clarifying question
+fails, matching the HW4 labels and ESC-3/ESC-1); e-008/e-011 require check_return_eligibility; e-010 checks
+`reply_contains "business day"` (was "2 business days"). Drafts moved to `cases.jsonl` (draft file removed).
+Fix: merchant cases need `input.store_id` (AuthContext raises without it): e-009 store 7, e-010 store 20.
+All 12 HW3 source conversations were single-turn, so Harbor's one-message run matches them (no followups).
+
 ## Day-1 checks
 
-- [ ] Smoke run one case (Windows exec bit on `test.sh`, known `test_harbor_adapter` failure). Fallback: WSL.
-- [ ] Confirm the Harbor world (`generate_world(scale="dev")`) matches `data/cartwheel.db` (orders above exist there with no refunds).
+- [x] Smoke run one case. Harbor 0.23.0 installed (`uv tool install`); Docker image builds and the agent runs on
+  Windows. First smoke run: `invalid x-api-key` (old key revoked; Balaji replaced it). `hw6-smoke2-e-006`: 1 trial,
+  0 exceptions, reward 0 (real: agent asked questions instead of escalating). Smoke runs are not baseline evidence.
+  The exec bit on test.sh does not matter (Harbor runs it with sh).
+
+## Baseline (`.harbor/jobs/hw6-baseline`, one job, 12 tasks x 5, approved 2026-11-09)
+
+- Adapter fix: Harbor 0.23.0's job result.json has no `trial_results` (per-trial result.json files only), so the
+  summarizer matched nothing. Added `load_trials()` in harbor_adapter/summary.py (falls back to per-trial files,
+  ordered by started_at); analysis.py uses it too. Upstream has no fix (checked upstream/main 2026-11-09).
+- First pass: 48 valid trials, 12 infra errors, all in the verifier (agent finished): 8 VerifierTimeoutError (uvx
+  downloads 123 packages per verifier; 4 concurrent > 300 s) and 4 RewardFileNotFoundError (DNS error), in groups of
+  4 = the concurrency. Backup of those 12 trial dirs + original config in the session scratchpad.
+- Fix (Balaji approved rerunning only the 12; no verdict existed, so not cherry-picking). `harbor jobs resume` does
+  not work for this: changing the timeout fails "trial config does not match", changing concurrency fails the
+  lock.json check (both failed before any run; the first one deleted the 12 errored dirs). Original config restored.
+  Used two fill-in jobs instead (-n 2, --verifier-timeout-multiplier 3): `hw6-baseline-fill1` (e-005..e-008 x1),
+  `hw6-baseline-fill2` (e-009..e-012 x2). `scripts/summarize_harbor_job.py` now takes several job dirs and pools them:
+  `... summarize_harbor_job.py .harbor/jobs/hw6-baseline .harbor/jobs/hw6-baseline-fill1 .harbor/jobs/hw6-baseline-fill2 --expected-attempts 5 --classify`.
+  Verifier timing at concurrency 4: 230-280 s of the 300 s limit; at the end of the job (fewer running) 120-135 s.
+- Fill-in jobs: 12/12 valid, 0 errors. Pooled baseline (60 valid trials), recorded by Balaji's decision "as observed":
+  regression e-007, e-011, e-012 (5/5); capability e-001, e-003, e-004, e-005, e-006, e-008, e-010 (0.0), e-002 (0.6),
+  e-009 (0.2). Both modes have a regression (e-007 escalate; e-011/e-012 tool). Every failed trial was read: all
+  are real instances of the mode (no broken checks). Video clip: e-009 says it can "search the product catalog"
+  and still claims it has no tool for listings. pass@3 vs pass^3 example: e-002 (3/5) = 1.00 vs 0.10.
+- Windows fix in harbor_adapter/export.py: `_move_into_place` retries the rename (Defender locks freshly written
+  files; WinError 5) and falls back to copytree. No effect on Linux.
+- CI note: use `--verifier-timeout-multiplier` in evals.yml too (verifier installs 123 packages per trial).
+- [x] Harbor world (`generate_world(scale="dev")`) matches `data/cartwheel.db`: all draft orders/users/stores exist, no refunds.
 - [ ] Enable Actions on the fork; add secret `ANTHROPIC_API_KEY` and variable `CARTWHEEL_MODEL`.
+
+## Next session (Part C)
+
+- Balaji: fork Settings -> Secrets and variables -> Actions: secret `ANTHROPIC_API_KEY` (new key), variable
+  `CARTWHEEL_MODEL` = `claude-haiku-4-5`; make sure Actions is enabled on the fork.
+- Claude: draft the `complete-evaluations` steps in .github/workflows/evals.yml (install harbor==0.23.0, export,
+  harbor run --n-attempts 5 --job-name hw6-evals, verifier timeout multiplier, summarize with if: always(),
+  upload .harbor/jobs/hw6-evals with if: always()). Each full CI run = 60 agent runs (~$1-3): ask before pushing.
+- Local Docker: Docker Desktop may need starting (`docker info`); Harbor needs `$env:PYTHONPATH = $PWD.Path`.
 
 ## Checklist
 
-- [ ] A: review drafts -> cases.jsonl; 60 baseline runs (approve first); classify (Balaji)
-- [ ] B: passk.py (Balaji types) + 3 supplied tests
+- [x] A: review drafts -> cases.jsonl; 60 baseline runs (approve first); classify (Balaji)
+- [x] B: passk.py (Balaji typed) + 3 supplied tests pass
 - [ ] C: evals.yml
 - [ ] D: regression push + revert on one PR; ci-runs.json
 - [ ] E: one capability case x15; eval_results/<id>-15.json
