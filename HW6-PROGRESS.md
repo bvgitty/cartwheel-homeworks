@@ -79,7 +79,7 @@ All 12 HW3 source conversations were single-turn, so Harbor's one-message run ma
   files; WinError 5) and falls back to copytree. No effect on Linux.
 - CI note: use `--verifier-timeout-multiplier` in evals.yml too (verifier installs 123 packages per trial).
 - [x] Harbor world (`generate_world(scale="dev")`) matches `data/cartwheel.db`: all draft orders/users/stores exist, no refunds.
-- [ ] Enable Actions on the fork; add secret `ANTHROPIC_API_KEY` and variable `CARTWHEEL_MODEL`.
+- [x] Enable Actions on the fork; add secret `ANTHROPIC_API_KEY` and variable `CARTWHEEL_MODEL`.
 
 ## Next session (Part C)
 
@@ -89,6 +89,16 @@ All 12 HW3 source conversations were single-turn, so Harbor's one-message run ma
   harbor run --n-attempts 5 --job-name hw6-evals, verifier timeout multiplier, summarize with if: always(),
   upload .harbor/jobs/hw6-evals with if: always()). Each full CI run = 60 agent runs (~$1-3): ask before pushing.
 - Local Docker: Docker Desktop may need starting (`docker info`); Harbor needs `$env:PYTHONPATH = $PWD.Path`.
+
+## Part C (2026-11-10)
+
+- evals.yml `complete-evaluations` steps drafted: install harbor 0.23.0 (+ uv tool bin on PATH), export, harbor run
+  (--n-attempts 5, --verifier-timeout-multiplier 3, -n default 4, --yes), summarize (if: always(); exit 1 = a
+  regression run failed or infra problem), upload .harbor/jobs/hw6-evals (if: always()). Export locally: 12 tasks.
+- Fork: Actions enabled; repo secret ANTHROPIC_API_KEY and repo variable CARTWHEEL_MODEL=claude-haiku-4-5 added
+  (verified by name, 2026-11-10).
+- Plan to save a paid run: Part C has no separate CI run. Open the PR with the regression commit already in it
+  (run 1 = regression), then revert (run 2). 2 x 60 = 120 agent runs on claude-haiku-4-5, 0 judge calls.
 
 ## Checklist
 
