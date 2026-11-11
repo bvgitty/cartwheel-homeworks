@@ -78,7 +78,11 @@ def analyze_capability_job(
     return {
         "case_id": case_id,
         "model": next(iter(models)),
-        "trial_order": "result.json trial_results order",
+        "trial_order": (
+            "result.json trial_results order"
+            if "trial_results" in json.loads((job_dir / "result.json").read_text())
+            else "per-trial result.json files ordered by started_at (Harbor 0.23.0)"
+        ),
         "trials": trial_records,
         "rewards": rewards,
         "n": len(rewards),

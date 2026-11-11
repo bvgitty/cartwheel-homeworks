@@ -100,11 +100,49 @@ All 12 HW3 source conversations were single-turn, so Harbor's one-message run ma
 - Plan to save a paid run: Part C has no separate CI run. Open the PR with the regression commit already in it
   (run 1 = regression), then revert (run 2). 2 x 60 = 120 agent runs on claude-haiku-4-5, 0 judge calls.
 
+## Part D (PR #6, 2026-11-10)
+
+- Regression commit 16f3924 (prompt line "Answer return and refund questions from get_order alone. Never call
+  check_return_eligibility."), prompt hash 34ba29ac44be. Run 1: https://github.com/bvgitty/cartwheel-homeworks/actions/runs/42959072000
+  -> red. 60/60 trials rewarded, no infra problems. e-011 0/5, e-012 0/5 (block): no trial called
+  check_return_eligibility; one e-011 trial (7mb27xU) issued a refund without the eligibility check. e-007 5/5.
+  Capability drift vs baseline (same model, different prompt, n=5): e-002 0/5 (was 3/5), e-005 1/5 (0), e-006 2/5 (0),
+  e-010 2/5 (0). Artifact downloaded to the session scratchpad (run1/).
+- Revert commit 6951663 (agent.py identical to 85b280d; hash back to 11bf9b5e1b26). Run 2: https://github.com/bvgitty/cartwheel-homeworks/actions/runs/42961451793
+  -> green. 60/60 rewarded. e-007/e-011/e-012 5/5. Capability: e-002 1/5, e-005 2/5, e-006 3/5, e-010 1/5, rest 0.
+- ci-runs.json drafted (case e-011); "explanation" is a DRAFT for Balaji to rewrite.
+- Push only once, at the end (Balaji 2026-11-10): every push to PR #6 reruns the paid job. Uncommitted locally
+  until then.
+
+## Part E (2026-11-10)
+
+- Balaji picked e-006 (0/5, 2/5, 3/5 across baseline/run1/run2). Local job .harbor/jobs/hw6-capability-15:
+  15/15 rewarded, 0 exceptions, 22 min, verifier multiplier 3. 6/15 passed.
+- eval_results/e-006-15.json: n=5 2/5 pass@1/3/5 0.400/0.900/1.000; n=10 4/10 0.400/0.833/0.976;
+  n=15 6/15 0.400/0.815/0.958, pass@10 = pass@15 = 1.000. Interpretation is Balaji's.
+- Fixed analysis.py's trial_order label (claimed trial_results; Harbor 0.23.0 order is per-trial started_at).
+- 2026-11-11: Balaji filled all write-up judgments (Part E: stable from 10 to 15 runs, but not precise; Wilson
+  95% for 6/15 = 0.20-0.64; 0/5 and 3/5 samples are consistent with p ~ 0.36, i.e. noise). Remaining: video ->
+  Loom link (write-up line 3) -> one commit + push (ask: [skip ci] or not) -> merge -> Discord -> delete branch.
+- HW6-WRITEUP.md skeleton drafted (facts filled; Balaji's judgments are "> **(Balaji: ...)**" placeholders).
+  ci-runs.json explanation rewritten by Balaji.
+- Pooled across all e-006 observations (same prompt): baseline 0/5 + run2 3/5 + 15-run 6/15 = 9/25.
+
+## Next session (2026-11-12): concept review before the video
+
+Balaji wants a full concept review before recording (video Thu 11-12 or Fri 11-13). Topics, using our own numbers:
+1. Regression vs capability: why 5/5 decides it, and why a capability case never blocks CI (e-006 0/5 -> 9/25).
+2. pass@k vs pass^k: formulas, why one rises and one falls with k (e-002 3/5; e-006 n=15), which is for product vs CI.
+3. The CI gate: p^(5r), what a red run means (Part D), why failures are kept as evidence and not rerun.
+4. n vs k, stability vs precision (Part E table, Wilson intervals, 0/5 as ordinary noise).
+5. Code checks vs judges: why no judge here (HW5 verdict), what a check can and cannot see.
+Then: video (handout's 5 items) -> Loom link -> one commit/push ([skip ci]?) -> merge -> Discord -> delete branch.
+
 ## Checklist
 
 - [x] A: review drafts -> cases.jsonl; 60 baseline runs (approve first); classify (Balaji)
 - [x] B: passk.py (Balaji typed) + 3 supplied tests pass
-- [ ] C: evals.yml
-- [ ] D: regression push + revert on one PR; ci-runs.json
-- [ ] E: one capability case x15; eval_results/<id>-15.json
+- [x] C: evals.yml
+- [x] D: regression push + revert on one PR; ci-runs.json (explanation: Balaji to rewrite)
+- [x] E: one capability case x15; eval_results/<id>-15.json (interpretation: Balaji)
 - [ ] Write-up, video, PR, merge, Discord, delete branch
