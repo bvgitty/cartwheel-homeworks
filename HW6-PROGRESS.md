@@ -136,7 +136,7 @@ Balaji wants a full concept review before recording (video Thu 11-12 or Fri 11-1
 3. The CI gate: p^(5r), what a red run means (Part D), why failures are kept as evidence and not rerun.
 4. n vs k, stability vs precision (Part E table, Wilson intervals, 0/5 as ordinary noise).
 5. Code checks vs judges: why no judge here (HW5 verdict), what a check can and cannot see.
-Then: video (handout's 5 items) -> Loom link -> one commit/push ([skip ci]?) -> merge -> Discord -> delete branch.
+Then: video (handout's 5 items) -> Loom link -> commit/push with [skip ci] (d7246e3 already pushed that way) -> merge -> Discord -> delete branch.
 
 ## Checklist
 
@@ -145,4 +145,5 @@ Then: video (handout's 5 items) -> Loom link -> one commit/push ([skip ci]?) -> 
 - [x] C: evals.yml
 - [x] D: regression push + revert on one PR; ci-runs.json (explanation: Balaji to rewrite)
 - [x] E: one capability case x15; eval_results/<id>-15.json (interpretation: Balaji)
-- [ ] Write-up, video, PR, merge, Discord, delete branch
+- [x] Write-up, video (https://www.loom.com/share/d7961984344f447ea68f85b3563fdf45, 2026-11-13), PR, merge
+- [ ] Discord (Balaji), delete branch

@@ -1,6 +1,6 @@
 # HW6 write-up: CI for agent evaluations
 
-*AI Evals for Engineers & PMs, Module 3. Branch `hw6-ci-evals`, PR [#6](https://github.com/bvgitty/cartwheel-homeworks/pull/6). Video: (link)*
+*AI Evals for Engineers & PMs, Module 3. Branch `hw6-ci-evals`, PR [#6](https://github.com/bvgitty/cartwheel-homeworks/pull/6). Video: [Loom](https://www.loom.com/share/d7961984344f447ea68f85b3563fdf45)*
 
 Agent model for every run in this homework: `claude-haiku-4-5`, prompt version `11bf9b5e1b26` (except the
 intentional regression, `34ba29ac44be`). No LLM judge: every case is decided by code checks.
