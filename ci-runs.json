@@ -1,0 +1,19 @@
+{
+  "pull_request": "https://github.com/bvgitty/cartwheel-homeworks/pull/6",
+  "agent_model": "claude-haiku-4-5",
+  "case_id": "e-011",
+  "regression_run": {
+    "url": "https://github.com/bvgitty/cartwheel-homeworks/actions/runs/42959072000",
+    "commit": "16f3924",
+    "prompt_version": "34ba29ac44be",
+    "change": "Added prompt line: \"Answer return and refund questions from get_order alone. Never call check_return_eligibility.\"",
+    "result": "failed: e-011 passed 0/5 (also e-012 0/5); CI decision block; 60/60 trials rewarded, no infrastructure errors"
+  },
+  "revert_run": {
+    "url": "https://github.com/bvgitty/cartwheel-homeworks/actions/runs/42961451793",
+    "commit": "6951663",
+    "prompt_version": "11bf9b5e1b26",
+    "result": "passed: e-011 passed 5/5 (also e-012 5/5, e-007 5/5); CI decision pass; 60/60 trials rewarded, no infrastructure errors"
+  },
+  "explanation": "For the regression run, we introduced an instruction that forbade check_return_eligibility, so in every e-011 trial the agent answered from get_order alone and the tool_called check failed; one trial issued a refund without the eligibility check (note: this shows why the code check to make sure the tool always calls check_return_eligibility matters). After the revert the prompt is identical to the baseline version (11bf9b5e1b26) and e-011 passed all five runs again, so the original behavior returned. Five passes do not prove the case is perfectly reliable; they show no failure in this sample."
+}

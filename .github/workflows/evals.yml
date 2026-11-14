@@ -36,9 +36,41 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uv sync
 
-      # Homework 6: install Harbor 0.23.0.
-      # Generate the classified tasks in eval_cases/cases.jsonl.
-      # Run five attempts per task in fresh Docker containers.
-      # Pass the agent and judge provider keys to Harbor.
-      # Summarize the job and upload the job files with `if: always()` so a
-      # failed regression keeps its evidence.
+      - name: Install Harbor 0.23.0
+        run: |
+          uv tool install 'harbor==0.23.0'
+          echo "$(uv tool dir --bin)" >> "$GITHUB_PATH"
+
+      # Rejects any case that is missing kind or baseline_pass_rate.
+      - name: Generate classified Harbor tasks
+        run: uv run python scripts/export_harbor_tasks.py
+
+      # Provider keys reach Harbor through the job env above; the agent adapter
+      # forwards only the key for CARTWHEEL_MODEL's provider into each container.
+      # The verifier installs its packages on every trial, so it gets 3x the
+      # default timeout (300 s was too short at concurrency 4 in the baseline).
+      - name: Run Harbor (5 attempts per task, fresh Docker containers)
+        run: |
+          harbor run \
+            -p .harbor/tasks \
+            -a harbor_adapter.agent:CartwheelAgent \
+            -m "$CARTWHEEL_MODEL" \
+            -e docker \
+            --n-attempts 5 \
+            --verifier-timeout-multiplier 3 \
+            --job-name hw6-evals \
+            --jobs-dir .harbor/jobs \
+            --yes
+
+      # Exits 1 when any run of a regression case fails (or a trial has no reward).
+      - name: Summarize and gate on regression cases
+        if: always()
+        run: uv run python scripts/summarize_harbor_job.py .harbor/jobs/hw6-evals --expected-attempts 5
+
+      - name: Upload Harbor job files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hw6-evals
+          path: .harbor/jobs/hw6-evals
+          if-no-files-found: warn

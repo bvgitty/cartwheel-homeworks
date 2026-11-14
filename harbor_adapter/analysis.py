@@ -8,7 +8,7 @@ from typing import Any
 
 from tests.eval.passk import pass_at_k
 
-from harbor_adapter.summary import _reward
+from harbor_adapter.summary import _reward, load_trials
 
 
 def analyze_capability_job(
@@ -18,13 +18,9 @@ def analyze_capability_job(
     expected_attempts: int = 15,
 ) -> dict[str, Any]:
     """Return ordered rewards and pass@k estimates for one capability case."""
-    result_path = job_dir / "result.json"
-    if not result_path.exists():
-        raise FileNotFoundError(f"Harbor result not found: {result_path}")
-    result = json.loads(result_path.read_text())
     trials = [
         trial
-        for trial in result.get("trial_results", [])
+        for trial in load_trials(job_dir)
         if str(trial.get("task_name", "")).endswith(case_id)
     ]
     if len(trials) != expected_attempts:
@@ -82,7 +78,11 @@ def analyze_capability_job(
     return {
         "case_id": case_id,
         "model": next(iter(models)),
-        "trial_order": "result.json trial_results order",
+        "trial_order": (
+            "result.json trial_results order"
+            if "trial_results" in json.loads((job_dir / "result.json").read_text())
+            else "per-trial result.json files ordered by started_at (Harbor 0.23.0)"
+        ),
         "trials": trial_records,
         "rewards": rewards,
         "n": len(rewards),
