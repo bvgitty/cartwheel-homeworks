@@ -61,10 +61,34 @@ Corrected failure rate that triggers a new error analysis. Starter suggests 0.15
 - Judge: claude-opus-4-6 on the union per period (10 random + risk-group traces). Count the risk group first.
 - Before / after / after-again (score idempotency; DocETL may serve the cache) + 1 manual workflow run.
 
+## Day 1 results (2026-11-17)
+
+Decisions (Balaji): judge = reference `unsupported_policy_claim-v3` (claude-opus-4-6); runner = self-hosted on
+this PC; threshold = **0.15** (chosen before any judge output). `hw5-reference.patch` applied (prompt + test report).
+Live Langfuse, before window 2026-10-23T04:16:00Z..05:05:00Z: 320 traces (whole HW3 run); 60 carry the 50
+monitoring ids (all 50 present), all `anthropic/claude-haiku-4-5`; session_id on all 60. run.py must filter the
+window to the 50 ids. Tool names are clean (`get_policy`, `search_help_center`, ...), so DEFAULT_RISK_GROUPS work.
+policy_lookup risk group: ~6-8 conversations in the before period (search_help_center 6 + get_policy 2 traces).
+Normalized text (`normalize_trace(...)["text"]`) carries tool results with `policy_id`s, which matches the judge
+prompt's "policy documents ... each with its doc id".
+
+## Next session (Part B)
+
+1. Balaji types `select_traces` in monitoring/sample.py from scratch (steps: validate rate/ids; k = max(1, round(rate*n));
+   random.Random(seed).sample; risk groups via dict comprehension in original order; to_judge = random first, then
+   groups, dedup by id with a seen set; don't mutate inputs). Test: `uv run pytest --runxfail tests/test_hw_holes.py -k hw7_sampling`.
+2. Claude writes monitoring/run.py (plumbing): Langfuse trace.list(from_timestamp, to_timestamp) -> normalize ->
+   filter to the 50 ids -> group by scenario id -> 50 records (id = final trace id, text = ordered turns, tools,
+   turn_count) -> select_traces -> show counts -> ask approval -> judge_sample on the union.
+3. Before Part B's judge run: start Docker Desktop + Langfuse (`docker compose -f observability/docker-compose.yml up -d`).
+
 ## Plan (one part at a time)
 
-- [ ] Day 1: decisions 1-3; checks above; apply hw5-reference.patch if reference judge.
-- [ ] A: after-period run (approve first); config.json with both UTC windows.
+- [x] Day 1: decisions 1-3; checks above; apply hw5-reference.patch if reference judge.
+- [x] A: after-period run (approve first); config.json with both UTC windows.
+      2026-11-18T06:23:51Z..06:32:03Z, 50/50 completed (scenarios/hw7-after-results.jsonl); Langfuse window =
+      60 traces, all 50 ids, all haiku-4-5. Opus 4.6 ping OK. Note: Langfuse reports the model as
+      `anthropic/claude-haiku-4-5`; run.py must strip the provider prefix when comparing to config "model".
 - [ ] B: select_traces (Balaji types: small, teaches sampling); run.py (Claude: plumbing); hw7_sampling test.
 - [ ] C: corrected_mode_prevalence (Balaji types: Rogan-Gladen + bootstrap); build_score_records; tests;
       run both periods (approve judge calls); history.jsonl; prevalence.svg; idempotency rerun.
