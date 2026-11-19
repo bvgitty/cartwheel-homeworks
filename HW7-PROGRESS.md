@@ -101,6 +101,16 @@ prompt's "policy documents ... each with its doc id".
       20 verdict / 11 risk_verdict / 2 prevalence, all unique ids. Results (both periods): random 3/10 flagged,
       raw 0.3, corrected 0.3169, CI [0, 0.77] / [0, 0.76]; risk policy_lookup 0/6 and 0/5. Flags: before
       0074, 0107, 0093; after 0043, 0250, 0238. Judge critiques are not saved by judge_sample.
-- [ ] D: monitor.yml (schedule + dispatch), secrets/variable, runner; Langfuse dashboard; one manual run.
+- [x] D: monitor.yml (schedule + dispatch), secrets/variable, runner; Langfuse dashboard; one manual run.
+      2026-11-18/19: monitor.yml (cron 02:00 UTC + workflow_dispatch, runs-on [self-hosted, Windows], artifact
+      if: always()). Merged to main early via PR #7 [skip ci] (dispatch needs the file on main; scheduled runs use
+      main's code, so they fail until the HW7 PR merges). Secrets LANGFUSE_PUBLIC_KEY/SECRET_KEY set (ANTHROPIC
+      from HW6); variable LANGFUSE_HOST=http://localhost:3000. Fork-PR approval = all_external_contributors.
+      Runner `cartwheel-pc` in C:\actions-runner (v2.338.2, checksum OK), not a service: start with
+      `cd C:\actions-runner; .\run.cmd`. Manual run 44471981964 green (3m21s): 30 conversations in the 24h tail,
+      6 random + 3 risk (1 both) = 8 judge calls, $0.04, raw 0.1667, corrected 0.1461 [0, 0.62], risk 0/3.
+      Zero path tested locally (--last-hours 1). Dashboard "HW7 monitor: unsupported_policy_claim": random verdict,
+      risk verdict, flagged traces (pivot: Score Name contains "verdict" AND value >= 1; 6 rows), corrected
+      prevalence; time-series bar charts. Score timestamps = write time; an updated score keeps its first timestamp.
 - [ ] E: monitoring/README.md (4 answers: Balaji).
 - [ ] Video (6 items), PR to fork main, merge, Discord, delete branch.
