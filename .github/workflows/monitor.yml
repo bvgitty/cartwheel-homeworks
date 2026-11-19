@@ -1,0 +1,60 @@
+name: monitor
+
+# Daily production monitor for unsupported_policy_claim (Homework 7).
+# Only schedule and manual triggers: this job runs on a self-hosted runner on
+# the student's PC (Langfuse is local), so it must never run code from a
+# pull request.
+on:
+  schedule:
+    - cron: "0 2 * * *" # 02:00 UTC daily (18:00 Pacific standard time)
+  workflow_dispatch:
+    inputs:
+      last_hours:
+        description: "Hours of traffic to monitor"
+        default: "24"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: sample, judge, correct, score
+    runs-on: [self-hosted, Windows]
+    timeout-minutes: 30
+    env:
+      # Langfuse to read traces and write scores; the frozen judge's provider key.
+      # No Cartwheel model key: the monitor only reads existing traces.
+      LANGFUSE_HOST: ${{ vars.LANGFUSE_HOST }}
+      LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+      LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      PYTHONUTF8: "1"
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install dependencies
+        run: uv sync
+
+      # Reads traces from the window, groups them by meta.session_id, samples,
+      # runs the frozen judge (--yes: no prompt in CI), corrects, writes scores.
+      # An empty window records a zero count and exits 0 without the judge.
+      - name: Run the monitor
+        run: uv run python -m monitoring.run --last-hours ${{ github.event.inputs.last_hours || '24' }} --yes
+
+      - name: Upload monitoring output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monitor-${{ github.run_id }}
+          path: |
+            monitoring/output/
+            monitoring/history.jsonl
+            monitoring/prevalence.svg
+          if-no-files-found: warn
