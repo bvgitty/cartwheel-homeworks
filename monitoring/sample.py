@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable
-
+import random
 
 def select_traces(
     traces: list[dict[str, Any]],
@@ -44,7 +44,34 @@ def select_traces(
         ValueError: if random_rate is outside (0, 1] or a trace has no "id".
     """
     ### YOUR CODE HERE (hw7)
-    raise NotImplementedError("hw7: implement select_traces")
+        # 1. Validate the inputs.
+    if not (0 < random_rate <= 1):          # the allowed range is (0, 1]
+        raise ValueError("random_rate must be in (0, 1]")
+    for trace in traces:
+        if not trace.get("id"):                    # the key every trace must carry
+            raise ValueError("every trace needs an id")
+
+    # 2. Uniform random sample (the ONLY input to the failure-rate estimate).
+    k = max(1, round(random_rate * len(traces)))  # at least one; rate x number of traces
+    random_sample = random.Random(seed).sample(traces, k)   # the seed; the list to draw from
+
+    # 3. Risk groups: every matching trace, in original order.
+    groups = {
+        name: [t for t in traces if rule(t)]       # call the group's rule on the trace
+        for name, rule in risk_groups.items()       # the dict method that gives (key, value) pairs
+    }
+
+    # 4. Union to judge: random first, then each group; one entry per id.
+    to_judge = []
+    seen = set()                                  # an empty set
+    for trace in random_sample + [t for members in groups.values() for t in members]:  # just the lists
+        if trace["id"] not in seen:
+            to_judge.append(trace)
+            seen.add(trace["id"])
+
+    # 5. The plan. Memberships live here, never on the trace dicts.
+    return {"random": random_sample, "risk_groups": groups, "to_judge": to_judge}
+
 
 
 # Each function identifies one risk group in the Cartwheel traces.

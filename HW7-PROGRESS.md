@@ -89,9 +89,18 @@ prompt's "policy documents ... each with its doc id".
       2026-11-18T06:23:51Z..06:32:03Z, 50/50 completed (scenarios/hw7-after-results.jsonl); Langfuse window =
       60 traces, all 50 ids, all haiku-4-5. Opus 4.6 ping OK. Note: Langfuse reports the model as
       `anthropic/claude-haiku-4-5`; run.py must strip the provider prefix when comparing to config "model".
-- [ ] B: select_traces (Balaji types: small, teaches sampling); run.py (Claude: plumbing); hw7_sampling test.
-- [ ] C: corrected_mode_prevalence (Balaji types: Rogan-Gladen + bootstrap); build_score_records; tests;
+- [x] B: select_traces (Balaji types: small, teaches sampling); run.py (Claude: plumbing); hw7_sampling test.
+      2026-11-18: dry runs: before 16 judge calls (10 random + 6 policy_lookup), after 15 (10 + 5), 0 overlap.
+      Per-period seed = sha256(label) (rerun reproduces sample; periods/days independent). Judge text = HW5
+      normalized text with tool names kept on tool lines. Approval gate: --dry-run / --yes / TTY prompt.
+- [x] C: corrected_mode_prevalence (Balaji types: Rogan-Gladen + bootstrap); build_score_records; tests;
       run both periods (approve judge calls); history.jsonl; prevalence.svg; idempotency rerun.
+      2026-11-18: all 3 hw7 tests pass. Opus cost $0.23 (before) + $0.21 (after); reruns $0.00 (DocETL cache).
+      Langfuse v3 rejected the trace-less prevalence score ("Bad request"): run.py now attaches it to a seeded
+      per-period monitor trace `hw7-monitor <label>` (tag hw7-monitor). Idempotency: after rerun left counts at
+      20 verdict / 11 risk_verdict / 2 prevalence, all unique ids. Results (both periods): random 3/10 flagged,
+      raw 0.3, corrected 0.3169, CI [0, 0.77] / [0, 0.76]; risk policy_lookup 0/6 and 0/5. Flags: before
+      0074, 0107, 0093; after 0043, 0250, 0238. Judge critiques are not saved by judge_sample.
 - [ ] D: monitor.yml (schedule + dispatch), secrets/variable, runner; Langfuse dashboard; one manual run.
 - [ ] E: monitoring/README.md (4 answers: Balaji).
 - [ ] Video (6 items), PR to fork main, merge, Discord, delete branch.
