@@ -112,7 +112,7 @@ prompt's "policy documents ... each with its doc id".
       Zero path tested locally (--last-hours 1). Dashboard "HW7 monitor: unsupported_policy_claim": random verdict,
       risk verdict, flagged traces (pivot: Score Name contains "verdict" AND value >= 1; 6 rows), corrected
       prevalence; time-series bar charts. Score timestamps = write time; an updated score keeps its first timestamp.
-- [ ] E: monitoring/README.md (4 answers: Balaji).
+- [x] E: monitoring/README.md (4 answers: Balaji; written from his verdicts, reviewed 2026-11-19).
       2026-11-19: flagged-trace review (Balaji's verdicts): **6/6 confirmed failures**. Judge input rebuilt via
       run.py's fetch_window -> build_conversations (no judge calls). Three patterns:
       1. Cancellation -> money claims with no source (0093 "won't be charged", 0250 refund to original payment in a
