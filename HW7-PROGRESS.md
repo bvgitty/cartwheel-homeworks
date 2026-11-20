@@ -113,4 +113,22 @@ prompt's "policy documents ... each with its doc id".
       risk verdict, flagged traces (pivot: Score Name contains "verdict" AND value >= 1; 6 rows), corrected
       prevalence; time-series bar charts. Score timestamps = write time; an updated score keeps its first timestamp.
 - [ ] E: monitoring/README.md (4 answers: Balaji).
+      2026-11-19: flagged-trace review (Balaji's verdicts): **6/6 confirmed failures**. Judge input rebuilt via
+      run.py's fetch_window -> build_conversations (no judge calls). Three patterns:
+      1. Cancellation -> money claims with no source (0093 "won't be charged", 0250 refund to original payment in a
+         few business days, 0238 buyer refund initiated). Fail, root cause = SPEC gap: cancel_order (TOOL-8) returns
+         only status and no help-center doc covers cancellation money. Fix: tool returns charge/refund outcome or a
+         cancellation policy doc + prompt line to use it.
+      2. True-ish but ungrounded facts (0074 "no review under $100": echoed the user's "$100", prompt never states
+         the amount; 0043 "outside the standard return window": skipped check_return_eligibility). Fail: prompt
+         says "policy answers come from the help center ... cite the policy id" (agent.py:64-70), so judge's
+         docs-only rule matches our own prompt. (Balaji first called these valid; revised after fact check.)
+         Design note: if a prompt stated policy explicitly, a docs-only judge would need revising.
+      3. Invented remedies/commitments (0107 keep the damaged item + review "within a few hours" vs ESC-5 24 h;
+         0043 "exception" hint). Fail under any reading.
+      All 6 lack get_policy/search_help_center -> the failure is claiming WITHOUT a lookup; the policy_lookup risk
+      group (0/11) watched the safe side. Better risk group: policy-sounding claim with no policy tool call.
+      Side note (not this mode): 0238 "buyer got wrong item" on an unshipped order, agent didn't notice.
+      Candidate HW6 eval cases: cancel a placed order (no money promise without a source); refund under $100
+      (no threshold claim without a doc); late return (must call check_return_eligibility before window claims).
 - [ ] Video (6 items), PR to fork main, merge, Discord, delete branch.
