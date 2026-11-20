@@ -14,6 +14,8 @@ replay/results/
 .harbor/
 # HW4 review cache, rebuilt from Langfuse by analysis.review_app.build_cache
 analysis/review_app/cache/
+# HW7 per-run monitor output (uploaded as a workflow artifact, not committed)
+monitoring/output/
 
 # Python
 __pycache__/
